@@ -1,0 +1,18 @@
+# Node modules
+node_modules/
+
+# CSS compilado (se genera automáticamente)
+public/assets/css/output.css
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de configuración local
+config.local.php
