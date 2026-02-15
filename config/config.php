@@ -27,7 +27,7 @@ define('APP_NAME', 'Formulario Socioeconómico');
 define('APP_URL', 'http://localhost');
 
 // Configuración de API
-define('API_BASE_URL', 'http://localhost:8000/api'); // Cambiar cuando tengas la URL real
+define('API_BASE_URL', 'http://localhost/BACKEND-SOCIOECONOMICO/public');
 define('API_TOKEN', ''); // Agregar token cuando sea necesario
 define('API_TIMEOUT', 30); // Timeout en segundos
 
