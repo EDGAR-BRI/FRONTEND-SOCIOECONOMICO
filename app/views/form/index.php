@@ -3,6 +3,7 @@
         <!-- Header -->
         <div class="card mb-6">
             <div class="text-center">
+
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">Formulario Socioeconómico</h1>
                 <p class="text-gray-600">IUJO Barquisimeto - Sistema de Registro</p>
             </div>
@@ -14,6 +15,7 @@
                 <p class="font-bold mb-2">Por favor corrija los siguientes errores:</p>
                 <ul class="list-disc list-inside">
                     <?php foreach ($errors as $error): ?>
+                        
                         <li><?php echo htmlspecialchars($error); ?></li>
                     <?php endforeach; ?>
                 </ul>
