@@ -94,6 +94,19 @@ class ApiService
     }
 
     /**
+     * Realiza una petición PATCH
+     * 
+     * @param string $endpoint Endpoint de la API
+     * @param array $data Datos a enviar
+     * @return array Respuesta de la API
+     */
+    public function patch($endpoint, $data = [])
+    {
+        $url = $this->buildUrl($endpoint);
+        return $this->request('PATCH', $url, $data);
+    }
+
+    /**
      * Construye la URL completa
      * 
      * @param string $endpoint Endpoint
