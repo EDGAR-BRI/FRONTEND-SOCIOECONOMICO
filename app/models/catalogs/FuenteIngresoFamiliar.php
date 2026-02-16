@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class FuenteIngresoFamiliar extends CatalogModel
 {
-    protected $resourceName = 'fuentes_ingreso_familiar';
+    protected $resourceName = 'fuente-ingreso';
 }

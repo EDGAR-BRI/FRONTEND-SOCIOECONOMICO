@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class CondicionLaboral extends CatalogModel
 {
-    protected $resourceName = 'condiciones_laborales';
+    protected $resourceName = 'condicion-laboral';
 }

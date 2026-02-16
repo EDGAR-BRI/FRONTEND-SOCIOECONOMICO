@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class SectorTrabajo extends CatalogModel
 {
-    protected $resourceName = 'sectores_trabajo';
+    protected $resourceName = 'sector-trabajo';
 }

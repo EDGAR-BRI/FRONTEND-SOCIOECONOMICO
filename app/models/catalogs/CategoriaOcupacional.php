@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class CategoriaOcupacional extends CatalogModel
 {
-    protected $resourceName = 'categorias_ocupacionales';
+    protected $resourceName = 'categoria-ocupacional';
 }

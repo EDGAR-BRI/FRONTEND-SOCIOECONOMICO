@@ -27,8 +27,8 @@
             <label for="nacionalidad_id" class="label-field">Nacionalidad <span class="text-red-500">*</span></label>
             <select id="nacionalidad_id" name="nacionalidad_id" required class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['nacionalidades'])): ?>
-                    <?php foreach ($catalogos['nacionalidades'] as $item): ?>
+                <?php if (isset($catalogos['nacionalidad'])): ?>
+                    <?php foreach ($catalogos['nacionalidad'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['nacionalidad_id']) && $old['nacionalidad_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -42,8 +42,8 @@
             <label for="sexo_id" class="label-field">Sexo <span class="text-red-500">*</span></label>
             <select id="sexo_id" name="sexo_id" required class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['sexos'])): ?>
-                    <?php foreach ($catalogos['sexos'] as $item): ?>
+                <?php if (isset($catalogos['sexo'])): ?>
+                    <?php foreach ($catalogos['sexo'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['sexo_id']) && $old['sexo_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -78,8 +78,8 @@
             <label for="estado_civil_id" class="label-field">Estado Civil <span class="text-red-500">*</span></label>
             <select id="estado_civil_id" name="estado_civil_id" required class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['estados_civiles'])): ?>
-                    <?php foreach ($catalogos['estados_civiles'] as $item): ?>
+                <?php if (isset($catalogos['estado_civil'])): ?>
+                    <?php foreach ($catalogos['estado_civil'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['estado_civil_id']) && $old['estado_civil_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>

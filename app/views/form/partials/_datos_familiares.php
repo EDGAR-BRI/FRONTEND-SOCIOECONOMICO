@@ -8,8 +8,8 @@
             <label for="nivel_educacion_padre_id" class="label-field">Nivel de Educación</label>
             <select id="nivel_educacion_padre_id" name="nivel_educacion_padre_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['niveles_educacion'])): ?>
-                    <?php foreach ($catalogos['niveles_educacion'] as $item): ?>
+                <?php if (isset($catalogos['nivel_educacion'])): ?>
+                    <?php foreach ($catalogos['nivel_educacion'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['nivel_educacion_padre_id']) && $old['nivel_educacion_padre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -41,8 +41,8 @@
             <label for="tipo_empresa_padre_id" class="label-field">Tipo de Empresa</label>
             <select id="tipo_empresa_padre_id" name="tipo_empresa_padre_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['tipos_empresa'])): ?>
-                    <?php foreach ($catalogos['tipos_empresa'] as $item): ?>
+                <?php if (isset($catalogos['tipo_empresa'])): ?>
+                    <?php foreach ($catalogos['tipo_empresa'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['tipo_empresa_padre_id']) && $old['tipo_empresa_padre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -56,8 +56,8 @@
             <label for="categoria_ocupacional_padre_id" class="label-field">Categoría Ocupacional</label>
             <select id="categoria_ocupacional_padre_id" name="categoria_ocupacional_padre_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['categorias_ocupacionales'])): ?>
-                    <?php foreach ($catalogos['categorias_ocupacionales'] as $item): ?>
+                <?php if (isset($catalogos['categoria_ocupacional'])): ?>
+                    <?php foreach ($catalogos['categoria_ocupacional'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['categoria_ocupacional_padre_id']) && $old['categoria_ocupacional_padre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -71,8 +71,8 @@
             <label for="sector_trabajo_padre_id" class="label-field">Sector de Trabajo</label>
             <select id="sector_trabajo_padre_id" name="sector_trabajo_padre_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['sectores_trabajo'])): ?>
-                    <?php foreach ($catalogos['sectores_trabajo'] as $item): ?>
+                <?php if (isset($catalogos['sector_trabajo'])): ?>
+                    <?php foreach ($catalogos['sector_trabajo'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['sector_trabajo_padre_id']) && $old['sector_trabajo_padre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -126,8 +126,8 @@
             <label for="nivel_educacion_madre_id" class="label-field">Nivel de Educación</label>
             <select id="nivel_educacion_madre_id" name="nivel_educacion_madre_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['niveles_educacion'])): ?>
-                    <?php foreach ($catalogos['niveles_educacion'] as $item): ?>
+                <?php if (isset($catalogos['nivel_educacion'])): ?>
+                    <?php foreach ($catalogos['nivel_educacion'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['nivel_educacion_madre_id']) && $old['nivel_educacion_madre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -159,8 +159,8 @@
             <label for="tipo_empresa_madre_id" class="label-field">Tipo de Empresa</label>
             <select id="tipo_empresa_madre_id" name="tipo_empresa_madre_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['tipos_empresa'])): ?>
-                    <?php foreach ($catalogos['tipos_empresa'] as $item): ?>
+                <?php if (isset($catalogos['tipo_empresa'])): ?>
+                    <?php foreach ($catalogos['tipo_empresa'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['tipo_empresa_madre_id']) && $old['tipo_empresa_madre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -174,8 +174,8 @@
             <label for="categoria_ocupacional_madre_id" class="label-field">Categoría Ocupacional</label>
             <select id="categoria_ocupacional_madre_id" name="categoria_ocupacional_madre_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['categorias_ocupacionales'])): ?>
-                    <?php foreach ($catalogos['categorias_ocupacionales'] as $item): ?>
+                <?php if (isset($catalogos['categoria_ocupacional'])): ?>
+                    <?php foreach ($catalogos['categoria_ocupacional'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['categoria_ocupacional_madre_id']) && $old['categoria_ocupacional_madre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -189,8 +189,8 @@
             <label for="sector_trabajo_madre_id" class="label-field">Sector de Trabajo</label>
             <select id="sector_trabajo_madre_id" name="sector_trabajo_madre_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['sectores_trabajo'])): ?>
-                    <?php foreach ($catalogos['sectores_trabajo'] as $item): ?>
+                <?php if (isset($catalogos['sector_trabajo'])): ?>
+                    <?php foreach ($catalogos['sector_trabajo'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['sector_trabajo_madre_id']) && $old['sector_trabajo_madre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>

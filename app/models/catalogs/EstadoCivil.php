@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class EstadoCivil extends CatalogModel
 {
-    protected $resourceName = 'estados_civiles';
+    protected $resourceName = 'estado-civil';
 }

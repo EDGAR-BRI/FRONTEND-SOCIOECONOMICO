@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class FrecuenciaServicioAseo extends CatalogModel
 {
-    protected $resourceName = 'frecuencias_servicio_aseo';
+    protected $resourceName = 'frecuencia-aseo';
 }

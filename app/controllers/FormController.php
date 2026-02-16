@@ -55,35 +55,35 @@ class FormController extends Controller
         // Lista de todos los catálogos necesarios
         // El backend usa la ruta dinámica /catalogo/:resource
         $endpoints = [
-            'nacionalidades' => '/catalogo/nacionalidades',
-            'sexos' => '/catalogo/sexos',
-            'tipos_estudiante' => '/catalogo/tipos-estudiante',
-            'carreras' => '/catalogo/carreras',
-            'semestres' => '/catalogo/semestres',
-            'estados_civiles' => '/catalogo/estados-civiles',
-            'condiciones_laborales' => '/catalogo/condiciones-laborales',
-            'relaciones_laborales' => '/catalogo/relaciones-laborales',
-            'tipos_organizacion' => '/catalogo/tipos-organizacion',
-            'sectores_trabajo' => '/catalogo/sectores-trabajo',
-            'categorias_ocupacionales' => '/catalogo/categorias-ocupacionales',
-            'tipos_convivencia' => '/catalogo/tipos-convivencia',
-            'tipos_vivienda' => '/catalogo/tipos-vivienda',
-            'tenencias_vivienda' => '/catalogo/tenencias-vivienda',
-            'ambientes_vivienda' => '/catalogo/ambientes-vivienda',
-            'activos_vivienda' => '/catalogo/activos-vivienda',
-            'servicios_vivienda' => '/catalogo/servicios-vivienda',
-            'frecuencias_agua' => '/catalogo/frecuencias-servicio-agua',
-            'frecuencias_aseo' => '/catalogo/frecuencias-servicio-aseo',
-            'frecuencias_electricidad' => '/catalogo/frecuencias-servicio-electricidad',
-            'frecuencias_gas' => '/catalogo/frecuencias-servicio-gas',
-            'transportes' => '/catalogo/transportes',
-            'dependencias_economicas' => '/catalogo/dependencias-economicas',
-            'fuentes_ingreso' => '/catalogo/fuentes-ingreso-familiar',
-            'ingresos_familiares' => '/catalogo/ingresos-familiares',
-            'niveles_educacion' => '/catalogo/niveles-educacion',
-            'tipos_empresa' => '/catalogo/tipos-empresa',
-            'veracidades' => '/catalogo/veracidades',
-            'tipos_beca' => '/catalogo/tipos-beca',
+            'nacionalidad' => '/catalogo/nacionalidad',
+            'sexo' => '/catalogo/sexo',
+            'tipo_estudiante' => '/catalogo/tipo-estudiante',
+            'carrera' => '/catalogo/carrera',
+            'semestre' => '/catalogo/semestre',
+            'estado_civil' => '/catalogo/estado-civil',
+            'condicion_laboral' => '/catalogo/condicion-laboral',
+            'relacion_laboral' => '/catalogo/relacion-laboral',
+            'tipo_organizacion' => '/catalogo/tipo-organizacion',
+            'sector_trabajo' => '/catalogo/sector-trabajo',
+            'categoria_ocupacional' => '/catalogo/categoria-ocupacional',
+            'tipo_convivencia' => '/catalogo/tipo-convivencia',
+            'tipo_vivienda' => '/catalogo/tipo-vivienda',
+            'tenencia_vivienda' => '/catalogo/tenencia-vivienda',
+            'ambiente_vivienda' => '/catalogo/ambiente-vivienda',
+            'activo_vivienda' => '/catalogo/activo-vivienda',
+            'servicio_vivienda' => '/catalogo/servicio-vivienda',
+            'frecuencia_agua' => '/catalogo/frecuencia-agua',
+            'frecuencia_aseo' => '/catalogo/frecuencia-aseo',
+            'frecuencia_electricidad' => '/catalogo/frecuencia-electricidad',
+            'frecuencia_gas' => '/catalogo/frecuencia-gas',
+            'transporte' => '/catalogo/transporte',
+            'dependencia_economica' => '/catalogo/dependencia-economica',
+            'fuente_ingreso' => '/catalogo/fuente-ingreso',
+            'ingreso_familiar' => '/catalogo/ingreso-familiar',
+            'nivel_educacion' => '/catalogo/nivel-educacion',
+            'tipo_empresa' => '/catalogo/tipo-empresa',
+            'veracidad' => '/catalogo/veracidad',
+            'tipo_beca' => '/catalogo/tipo-beca',
         ];
 
         // Cargar cada catálogo
@@ -95,6 +95,7 @@ class FormController extends Controller
                 } else {
                     // Si falla, usar array vacío
                     $catalogos[$key] = [];
+
                 }
             } catch (\Exception $e) {
                 // En caso de error, usar array vacío

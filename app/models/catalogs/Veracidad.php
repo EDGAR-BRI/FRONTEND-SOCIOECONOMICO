@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class Veracidad extends CatalogModel
 {
-    protected $resourceName = 'veracidades';
+    protected $resourceName = 'veracidad';
 }

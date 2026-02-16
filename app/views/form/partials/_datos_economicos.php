@@ -6,8 +6,8 @@
             <label for="transporte_id" class="label-field">Transporte</label>
             <select id="transporte_id" name="transporte_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['transportes'])): ?>
-                    <?php foreach ($catalogos['transportes'] as $item): ?>
+                <?php if (isset($catalogos['transporte'])): ?>
+                    <?php foreach ($catalogos['transporte'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['transporte_id']) && $old['transporte_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -21,8 +21,8 @@
             <label for="dependencia_economica_id" class="label-field">Dependencia Económica</label>
             <select id="dependencia_economica_id" name="dependencia_economica_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['dependencias_economicas'])): ?>
-                    <?php foreach ($catalogos['dependencias_economicas'] as $item): ?>
+                <?php if (isset($catalogos['dependencia_economica'])): ?>
+                    <?php foreach ($catalogos['dependencia_economica'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['dependencia_economica_id']) && $old['dependencia_economica_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -36,8 +36,8 @@
             <label for="fuente_ingreso_id" class="label-field">Fuente de Ingreso Familiar</label>
             <select id="fuente_ingreso_id" name="fuente_ingreso_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['fuentes_ingreso'])): ?>
-                    <?php foreach ($catalogos['fuentes_ingreso'] as $item): ?>
+                <?php if (isset($catalogos['fuente_ingreso'])): ?>
+                    <?php foreach ($catalogos['fuente_ingreso'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['fuente_ingreso_id']) && $old['fuente_ingreso_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -51,8 +51,8 @@
             <label for="ingreso_familiar_id" class="label-field">Ingreso Familiar</label>
             <select id="ingreso_familiar_id" name="ingreso_familiar_id" class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['ingresos_familiares'])): ?>
-                    <?php foreach ($catalogos['ingresos_familiares'] as $item): ?>
+                <?php if (isset($catalogos['ingreso_familiar'])): ?>
+                    <?php foreach ($catalogos['ingreso_familiar'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['ingreso_familiar_id']) && $old['ingreso_familiar_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -66,8 +66,8 @@
             <label for="veracidad_id" class="label-field">Veracidad de la Información <span class="text-red-500">*</span></label>
             <select id="veracidad_id" name="veracidad_id" required class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['veracidades'])): ?>
-                    <?php foreach ($catalogos['veracidades'] as $item): ?>
+                <?php if (isset($catalogos['veracidad'])): ?>
+                    <?php foreach ($catalogos['veracidad'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['veracidad_id']) && $old['veracidad_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>

@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class DependenciaEconomica extends CatalogModel
 {
-    protected $resourceName = 'dependencias_economicas';
+    protected $resourceName = 'dependencia-economica';
 }

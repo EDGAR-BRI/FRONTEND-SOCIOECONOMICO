@@ -9,7 +9,7 @@ use App\Models\Base\CatalogModel;
  */
 class Carrera extends CatalogModel
 {
-    protected $resourceName = 'carreras';
+    protected $resourceName = 'carrera';
     protected $codigo;
 
     protected function fill($data)

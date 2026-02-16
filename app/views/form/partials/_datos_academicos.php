@@ -6,8 +6,8 @@
             <label for="tipo_estudiante_id" class="label-field">Tipo de Estudiante <span class="text-red-500">*</span></label>
             <select id="tipo_estudiante_id" name="tipo_estudiante_id" required class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['tipos_estudiante'])): ?>
-                    <?php foreach ($catalogos['tipos_estudiante'] as $item): ?>
+                <?php if (isset($catalogos['tipo_estudiante'])): ?>
+                    <?php foreach ($catalogos['tipo_estudiante'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['tipo_estudiante_id']) && $old['tipo_estudiante_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -21,8 +21,8 @@
             <label for="carrera_id" class="label-field">Carrera <span class="text-red-500">*</span></label>
             <select id="carrera_id" name="carrera_id" required class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['carreras'])): ?>
-                    <?php foreach ($catalogos['carreras'] as $item): ?>
+                <?php if (isset($catalogos['carrera'])): ?>
+                    <?php foreach ($catalogos['carrera'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['carrera_id']) && $old['carrera_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -36,8 +36,8 @@
             <label for="semestre_id" class="label-field">Semestre <span class="text-red-500">*</span></label>
             <select id="semestre_id" name="semestre_id" required class="input-field">
                 <option value="">Seleccione...</option>
-                <?php if (isset($catalogos['semestres'])): ?>
-                    <?php foreach ($catalogos['semestres'] as $item): ?>
+                <?php if (isset($catalogos['semestre'])): ?>
+                    <?php foreach ($catalogos['semestre'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['semestre_id']) && $old['semestre_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>
@@ -69,8 +69,8 @@
             <label for="tipo_beca_id" class="label-field">Tipo de Beca</label>
             <select id="tipo_beca_id" name="tipo_beca_id" class="input-field">
                 <option value="">Ninguna</option>
-                <?php if (isset($catalogos['tipos_beca'])): ?>
-                    <?php foreach ($catalogos['tipos_beca'] as $item): ?>
+                <?php if (isset($catalogos['tipo_beca'])): ?>
+                    <?php foreach ($catalogos['tipo_beca'] as $item): ?>
                         <option value="<?php echo $item['id']; ?>"
                             <?php echo (isset($old['tipo_beca_id']) && $old['tipo_beca_id'] == $item['id']) ? 'selected' : ''; ?>>
                             <?php echo htmlspecialchars($item['nombre']); ?>

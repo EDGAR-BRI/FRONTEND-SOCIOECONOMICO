@@ -9,7 +9,7 @@ use App\Models\Base\CatalogModel;
  */
 class Semestre extends CatalogModel
 {
-    protected $resourceName = 'semestres';
+    protected $resourceName = 'semestre';
     protected $numero;
 
     protected function fill($data)

@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class IngresoFamiliar extends CatalogModel
 {
-    protected $resourceName = 'ingresos_familiares';
+    protected $resourceName = 'ingreso-familiar';
 }

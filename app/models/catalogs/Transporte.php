@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class Transporte extends CatalogModel
 {
-    protected $resourceName = 'transportes';
+    protected $resourceName = 'transporte';
 }

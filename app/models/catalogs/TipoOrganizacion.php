@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class TipoOrganizacion extends CatalogModel
 {
-    protected $resourceName = 'tipos_organizacion';
+    protected $resourceName = 'tipo-organizacion';
 }

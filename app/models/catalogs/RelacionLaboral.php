@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class RelacionLaboral extends CatalogModel
 {
-    protected $resourceName = 'relaciones_laborales';
+    protected $resourceName = 'relacion-laboral';
 }

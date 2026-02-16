@@ -6,5 +6,5 @@ use App\Models\Base\CatalogModel;
 
 class AmbienteVivienda extends CatalogModel
 {
-    protected $resourceName = 'ambientes_vivienda';
+    protected $resourceName = 'ambiente-vivienda';
 }
