@@ -77,25 +77,95 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ===== INDICADOR DE PROGRESO =====
-    const sections = document.querySelectorAll('.card');
-    let completedSections = 0;
+    // ===== GESTIÓN DE PASOS DEL FORMULARIO =====
+    const steps = document.querySelectorAll('.form-step');
+    const progressBar = document.getElementById('progressBar');
     
-    sections.forEach((section, index) => {
-        const inputs = section.querySelectorAll('input[required], select[required], textarea[required]');
-        let filledInputs = 0;
-        
-        inputs.forEach(input => {
-            if (input.value && input.value !== '') {
-                filledInputs++;
+    // Función para mostrar un paso específico y ocultar los demás
+    function showStep(stepId) {
+        steps.forEach(step => {
+            if (step.id === stepId) {
+                step.classList.remove('hidden');
+            } else {
+                step.classList.add('hidden');
             }
         });
+
+        // Actualizar barra de progreso
+        const stepNumber = parseInt(stepId.replace('step-', ''));
+        const totalSteps = steps.length;
+        const progress = (stepNumber / totalSteps) * 100;
         
-        if (filledInputs === inputs.length && inputs.length > 0) {
-            completedSections++;
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+            // progressBar.innerText = `Paso ${stepNumber} de ${totalSteps}`;
+        }
+        
+        // Scroll arriba
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Función para validar campos del paso actual
+    function validateStep(stepElement) {
+        // Seleccionamos solo los inputs visibles y habilitados para validar
+        const inputs = stepElement.querySelectorAll('input, select, textarea');
+        let isValid = true;
+        let firstInvalidInput = null;
+
+        inputs.forEach(input => {
+            // Check validity solo devuelve false si tiene restricciones (required, pattern, etc) que no se cumplen
+            if (!input.checkValidity()) {
+                isValid = false;
+                if (!firstInvalidInput) firstInvalidInput = input;
+                
+                // Resaltar visualmente
+                input.classList.add('border-red-500');
+                // input.classList.add('ring-2', 'ring-red-500'); // Optional: more visibility
+            } else {
+                input.classList.remove('border-red-500');
+                // input.classList.remove('ring-2', 'ring-red-500');
+            }
+        });
+
+        if (firstInvalidInput) {
+            firstInvalidInput.reportValidity(); // Muestra el mensaje nativo solo del primero
+            firstInvalidInput.focus();
+        }
+        
+        return isValid;
+    }
+
+    // Inicializar visualización de pasos
+    // Ocultar todos menos el primero si no se ha hecho ya (por si acaso el backend no lo hizo)
+    steps.forEach((step, index) => {
+        if (index === 0) {
+            step.classList.remove('hidden');
+        } else {
+            step.classList.add('hidden');
         }
     });
 
-    // Mostrar progreso en consola (opcional)
-    console.log(`Progreso del formulario: ${completedSections}/${sections.length} secciones completadas`);
+    // Event Listeners para botones Siguiente
+    document.querySelectorAll('.next-step').forEach(button => {
+        button.addEventListener('click', function() {
+            // Buscamos el contenedor del paso actual
+            // Usamos closest('.form-step') para asegurarnos de obtener el padre correcto
+            const currentStep = this.closest('.form-step');
+            const nextStepId = this.dataset.next;
+            
+            if (currentStep && validateStep(currentStep)) {
+                showStep(nextStepId);
+            }
+        });
+    });
+
+    // Event Listeners para botones Atrás
+    document.querySelectorAll('.prev-step').forEach(button => {
+        // ...
+
+        button.addEventListener('click', function() {
+            const prevStepId = this.dataset.prev;
+            showStep(prevStepId);
+        });
+    });
 });
