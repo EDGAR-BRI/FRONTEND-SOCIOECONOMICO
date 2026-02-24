@@ -220,12 +220,3 @@ if ($response['success']) {
     // Error
 }
 ```
-
-## Próximos Pasos
-
-- [ ] Configurar URL de API real
-- [ ] Agregar más campos al formulario
-- [ ] Implementar autenticación con la API
-- [ ] Agregar validaciones del lado del cliente con JavaScript
-- [ ] Mejorar manejo de errores
-- [ ] Agregar más componentes personalizados de Tailwind
