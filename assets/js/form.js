@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // ===== MOSTRAR/OCULTAR NÚMERO DE HIJOS =====
+    // ===== MOSTRAR/OCULTAR NÚMERO DE HIJOS EN EL FORMULAIRO =====
     const hijosRadios = document.querySelectorAll('input[name="hijos"]');
     const numeroHijosContainer = document.getElementById('numero_hijos_container');
     
@@ -161,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event Listeners para botones Atrás
     document.querySelectorAll('.prev-step').forEach(button => {
-        // ...
 
         button.addEventListener('click', function() {
             const prevStepId = this.dataset.prev;
