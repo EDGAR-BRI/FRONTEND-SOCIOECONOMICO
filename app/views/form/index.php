@@ -25,7 +25,7 @@
         <!-- Progress Bar -->
         <div class="mb-8 relative">
             <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                <div id="progressBar" style="width: 16.66%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-500"></div>
+                <div id="progressBar" style="width: 16.66%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary2-500 transition-all duration-500"></div>
             </div>
             <div class="flex justify-between text-xs text-gray-500">
                 <span>Personal</span>

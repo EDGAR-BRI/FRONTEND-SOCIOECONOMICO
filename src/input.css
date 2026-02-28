@@ -5,11 +5,11 @@
 /* Estilos personalizados */
 @layer components {
   .btn-primary {
-    @apply bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-6 rounded-md transition duration-200;
+    @apply bg-primary2-600 hover:bg-primary2-700 text-white font-semibold py-2 px-6 rounded-md transition duration-200;
   }
   
   .input-field {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary2-500 focus:border-transparent;
   }
   
   .label-field {
