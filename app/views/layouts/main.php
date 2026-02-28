@@ -8,6 +8,7 @@
     <link rel="icon" href="/FRONTEND-SOCIOECONOMICO/assets/FeyAlegria.svg" type="image/x-icon">
     <link rel="stylesheet" href="/FRONTEND-SOCIOECONOMICO/assets/css/output.css">
 </head>
+// formulario
 
 <body class="bg-gray-100 min-h-screen py-8">
     <?php echo $content; ?>
