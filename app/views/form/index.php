@@ -1,9 +1,9 @@
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
-        <div class="card mb-6">
-            <div class="text-center">
-
+        <div class="card mb-6 flex items-center justify-between p-6 sm:flex-row sm:items-center flex-col gap-4">
+            <img class="h-20 w-auto" src="assets/iujo.png" alt="IUJO Logo">
+            <div class="sm:text-start text-center">
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">Formulario Socioeconómico</h1>
                 <p class="text-gray-600">IUJO Barquisimeto - Sistema de Registro</p>
             </div>
@@ -22,34 +22,81 @@
             </div>
         <?php endif; ?>
 
-        <form action="/submit" method="POST" class="space-y-6" enctype="multipart/form-data">
+        <!-- Progress Bar -->
+        <div class="mb-8 relative">
+            <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                <div id="progressBar" style="width: 16.66%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-500"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-500">
+                <span>Personal</span>
+                <span>Académico</span>
+                <span>Laboral</span>
+                <span>Vivienda</span>
+                <span>Familiar</span>
+                <span>Económico</span>
+            </div>
+        </div>
 
+        <form id="socioeconomicForm" action="/submit" method="POST" class="space-y-6" enctype="multipart/form-data">
+            
             <!-- SECCIÓN 1: DATOS PERSONALES -->
-            <?php include __DIR__ . '/partials/_datos_personales.php'; ?>
+            <div id="step-1" class="form-step">
+                <?php include __DIR__ . '/partials/_datos_personales.php'; ?>
+                <div class="flex justify-end mt-4">
+                    <button type="button" class="btn-primary next-step" data-next="step-2">Siguiente</button>
+                </div>
+            </div>
 
             <!-- SECCIÓN 2: DATOS ACADÉMICOS -->
-            <?php include __DIR__ . '/partials/_datos_academicos.php'; ?>
+            <div id="step-2" class="form-step hidden">
+                <?php include __DIR__ . '/partials/_datos_academicos.php'; ?>
+                <div class="flex justify-between mt-4">
+                    <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-1">Atrás</button>
+                    <button type="button" class="btn-primary next-step" data-next="step-3">Siguiente</button>
+                </div>
+            </div>
 
             <!-- SECCIÓN 3: DATOS LABORALES -->
-            <?php include __DIR__ . '/partials/_datos_laborales.php'; ?>
+            <div id="step-3" class="form-step hidden">
+                <?php include __DIR__ . '/partials/_datos_laborales.php'; ?>
+                <div class="flex justify-between mt-4">
+                    <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-2">Atrás</button>
+                    <button type="button" class="btn-primary next-step" data-next="step-4">Siguiente</button>
+                </div>
+            </div>
 
             <!-- SECCIÓN 4: DATOS DE VIVIENDA -->
-            <?php include __DIR__ . '/partials/_datos_vivienda.php'; ?>
+            <div id="step-4" class="form-step hidden">
+                <?php include __DIR__ . '/partials/_datos_vivienda.php'; ?>
+                <div class="flex justify-between mt-4">
+                    <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-3">Atrás</button>
+                    <button type="button" class="btn-primary next-step" data-next="step-5">Siguiente</button>
+                </div>
+            </div>
 
             <!-- SECCIÓN 5: DATOS FAMILIARES -->
-            <?php include __DIR__ . '/partials/_datos_familiares.php'; ?>
+            <div id="step-5" class="form-step hidden">
+                <?php include __DIR__ . '/partials/_datos_familiares.php'; ?>
+                <div class="flex justify-between mt-4">
+                    <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-4">Atrás</button>
+                    <button type="button" class="btn-primary next-step" data-next="step-6">Siguiente</button>
+                </div>
+            </div>
 
             <!-- SECCIÓN 6: DATOS ECONÓMICOS -->
-            <?php include __DIR__ . '/partials/_datos_economicos.php'; ?>
-
-            <!-- Botones de Acción -->
-            <div class="flex justify-end gap-4">
-                <a href="/" class="inline-block bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
-                    Cancelar
-                </a>
-                <button type="submit" class="btn-primary">
-                    Enviar Formulario
-                </button>
+            <div id="step-6" class="form-step hidden">
+                <?php include __DIR__ . '/partials/_datos_economicos.php'; ?>
+                <div class="flex justify-between mt-4 gap-4">
+                     <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-5">Atrás</button>
+                    <div class="flex gap-4">
+                        <a href="/" class="inline-block bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn-primary">
+                            Enviar Formulario
+                        </button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
