@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Formulario socioeconómico con PHP y Tailwind CSS",
   "scripts": {
-    "build:css": "tailwindcss -i ./src/input.css -o ./assets/css/output.css",
-    "watch:css": "tailwindcss -i ./src/input.css -o ./assets/css/output.css --watch",
-    "build:prod": "tailwindcss -i ./src/input.css -o ./assets/css/output.css --minify"
+    "build:css": "node ./scripts/build-css.js",
+    "watch:css": "node ./scripts/build-css.js --watch",
+    "build:prod": "node ./scripts/build-css.js --minify"
   },
   "keywords": [
     "tailwind",

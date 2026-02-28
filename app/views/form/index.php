@@ -103,4 +103,4 @@
 </div>
 
 <!-- JavaScript para interactividad -->
-<script src="/FRONTEND-SOCIOECONOMICO/assets/js/form.js"></script>
+<script src="<?php echo $assetBase; ?>/js/form.js"></script>
