@@ -19,6 +19,11 @@ class ApiService
     public function __construct($baseUrl = null)
     {
         $this->baseUrl = $baseUrl ?: API_BASE_URL;
+
+        // Multi-tenant (opcional)
+        if (defined('INSTITUTO_ID') && !empty(INSTITUTO_ID)) {
+            $this->setHeader('X-Instituto-Id', (string) INSTITUTO_ID);
+        }
     }
 
     /**

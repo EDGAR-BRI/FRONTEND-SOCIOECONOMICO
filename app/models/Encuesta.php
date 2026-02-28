@@ -119,7 +119,8 @@ class Encuesta
 
             // Datos Laborales
             'condicion_laboral_id' => $this->get('condicion_laboral_id'),
-            'trabajo_relacion_id' => $this->get('trabajo_relacion_id'),
+            // En el formulario se llama relacion_laboral_id
+            'trabajo_relacion_id' => $this->get('relacion_laboral_id', $this->get('trabajo_relacion_id')),
             'tipo_organizacion_id' => $this->get('tipo_organizacion_id'),
             'sector_trabajo_id' => $this->get('sector_trabajo_id'),
             'categoria_ocupacional_id' => $this->get('categoria_ocupacional_id'),
@@ -132,20 +133,24 @@ class Encuesta
             'numero_ocupantes_familia' => $this->get('numero_ocupantes_familia', 1),
 
             // Servicios
-            'frecuencia_servicio_agua_id' => $this->get('frecuencia_servicio_agua_id'),
-            'frecuencia_servicio_aseo_id' => $this->get('frecuencia_servicio_aseo_id'),
-            'frecuencia_servicio_electricidad_id' => $this->get('frecuencia_servicio_electricidad_id'),
-            'frecuencia_servicio_gas_id' => $this->get('frecuencia_servicio_gas_id'),
+            // En el formulario se llaman frecuencia_agua_id, etc.
+            'frecuencia_servicio_agua_id' => $this->get('frecuencia_agua_id', $this->get('frecuencia_servicio_agua_id')),
+            'frecuencia_servicio_aseo_id' => $this->get('frecuencia_aseo_id', $this->get('frecuencia_servicio_aseo_id')),
+            'frecuencia_servicio_electricidad_id' => $this->get('frecuencia_electricidad_id', $this->get('frecuencia_servicio_electricidad_id')),
+            'frecuencia_servicio_gas_id' => $this->get('frecuencia_gas_id', $this->get('frecuencia_servicio_gas_id')),
 
             // Transporte y Economía
             'transporte_id' => $this->get('transporte_id'),
             'dependencia_economica_id' => $this->get('dependencia_economica_id'),
-            'fuente_ingreso_familiar_id' => $this->get('fuente_ingreso_familiar_id'),
+            // En el formulario se llama fuente_ingreso_id
+            'fuente_ingreso_familiar_id' => $this->get('fuente_ingreso_id', $this->get('fuente_ingreso_familiar_id')),
             'ingreso_familiar_id' => $this->get('ingreso_familiar_id'),
 
             // Datos del Padre
-            'nivel_eduacion_padre_id' => $this->get('nivel_eduacion_padre_id'),
-            'trabaja_padre' => $this->get('trabaja_padre', 0),
+            // En BD/Backend existe el typo nivel_eduacion_padre_id; en formulario es nivel_educacion_padre_id
+            'nivel_eduacion_padre_id' => $this->get('nivel_educacion_padre_id', $this->get('nivel_eduacion_padre_id')),
+            // En el formulario se llama padre_trabaja
+            'trabaja_padre' => $this->get('padre_trabaja', $this->get('trabaja_padre', 0)),
             'tipo_empresa_padre_id' => $this->get('tipo_empresa_padre_id'),
             'categoria_ocupacional_padre_id' => $this->get('categoria_ocupacional_padre_id'),
             'sector_trabajo_padre_id' => $this->get('sector_trabajo_padre_id'),
@@ -153,8 +158,10 @@ class Encuesta
             'padre_egresado_iujo' => $this->get('padre_egresado_iujo', 0),
 
             // Datos de la Madre
-            'nivel_eduacion_madre_id' => $this->get('nivel_eduacion_madre_id'),
-            'trabaja_madre' => $this->get('trabaja_madre', 0),
+            // En BD/Backend existe el typo nivel_eduacion_madre_id; en formulario es nivel_educacion_madre_id
+            'nivel_eduacion_madre_id' => $this->get('nivel_educacion_madre_id', $this->get('nivel_eduacion_madre_id')),
+            // En el formulario se llama madre_trabaja
+            'trabaja_madre' => $this->get('madre_trabaja', $this->get('trabaja_madre', 0)),
             'tipo_empresa_madre_id' => $this->get('tipo_empresa_madre_id'),
             'categoria_ocupacional_madre_id' => $this->get('categoria_ocupacional_madre_id'),
             'sector_trabajo_madre_id' => $this->get('sector_trabajo_madre_id'),
