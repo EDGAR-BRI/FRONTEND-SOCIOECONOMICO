@@ -31,6 +31,11 @@ define('API_BASE_URL', 'http://localhost/BACKEND-SOCIOECONOMICO/public');
 define('API_TOKEN', ''); // Agregar token cuando sea necesario
 define('API_TIMEOUT', 30); // Timeout en segundos
 
+// Multi-tenant (opcional): define el Instituto (tenant) para todas las llamadas al backend.
+// Puedes setearlo por variable de entorno INSTITUTO_ID (recomendado) o dejarlo vacío para usar el fallback del backend.
+$envInstitutoId = getenv('INSTITUTO_ID');
+define('INSTITUTO_ID', $envInstitutoId !== false && is_numeric($envInstitutoId) ? (int)$envInstitutoId : null);
+
 // Otras constantes
 define('SITE_URL', 'http://localhost');
 define('SITE_NAME', 'Formulario Socioeconómico');
