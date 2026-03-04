@@ -14,7 +14,7 @@
     <div class="w-full max-w-[480px] rounded-xl bg-white shadow-md p-8 sm:p-10 relative z-10">
         <div class="mb-8">
             <img class="h-16 w-auto mb-6" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
-            <h1 class="text-4xl leading-tight text-slate-700 font-medium mb-2">Bienvenido a Formación complementaria! 👋</h1>
+            <h1 class="text-4xl leading-tight text-slate-700 font-medium mb-2">Bienvenido al socio economico! 👋</h1>
             <p class="text-slate-500 text-lg">Por favor, coloca tu usuario y contraseña</p>
         </div>
 

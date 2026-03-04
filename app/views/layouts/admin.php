@@ -1,3 +1,34 @@
+<?php
+if (!isset($assetBase)) {
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    $basePath = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
+    $assetBase = $basePath . '/assets';
+}
+
+// Cache busting: avoid browser hard-cache when output.css changes.
+// Determine which CSS file exists in the current entrypoint's assets folder.
+$cssCandidates = ['output.css'];
+$cssFile = 'output.css';
+$cssVersion = null;
+
+$scriptFilename = $_SERVER['SCRIPT_FILENAME'] ?? '';
+$assetsDiskDir = $scriptFilename ? (dirname($scriptFilename) . DIRECTORY_SEPARATOR . 'assets') : '';
+foreach ($cssCandidates as $candidate) {
+    $candidateDiskPath = $assetsDiskDir
+        ? ($assetsDiskDir . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . $candidate)
+        : '';
+    if ($candidateDiskPath && is_file($candidateDiskPath)) {
+        $cssFile = $candidate;
+        $cssVersion = @filemtime($candidateDiskPath) ?: null;
+        break;
+    }
+}
+
+$cssHref = $assetBase . '/css/' . $cssFile;
+if ($cssVersion !== null) {
+    $cssHref .= '?v=' . $cssVersion;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,7 +36,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($title) ? htmlspecialchars($title) : 'Panel de Administración'; ?></title>
     <link rel="icon" href="<?php echo BASE_URL; ?>/assets/FeyAlegria.svg" type="image/x-icon">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/output.css">
+    <link rel="stylesheet" href="<?php echo $cssHref; ?>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal flex">
@@ -69,7 +100,7 @@
         <!-- Main Content -->
         <main class="flex-1 p-6 bg-gray-100">
             <!-- Renderiza la vista específica -->
-            <?php require_once $viewFile; ?>
+            <?php echo $content; ?>
         </main>
         
         <!-- Footer -->
