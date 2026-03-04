@@ -22,6 +22,10 @@ define('APP_PATH', ROOT_PATH . '/app');
 define('PUBLIC_PATH', ROOT_PATH . '/public');
 define('CONFIG_PATH', ROOT_PATH . '/config');
 
+// Base URL para redirecciones y assets (ej: /FRONTEND-SOCIOECONOMICO)
+// Si el proyecto se mueve a la raíz del dominio, esto sería simplemente ''
+define('BASE_URL', '/FRONTEND-SOCIOECONOMICO');
+
 // Configuración de la aplicación
 define('APP_NAME', 'Formulario Socioeconómico');
 define('APP_URL', 'http://localhost');

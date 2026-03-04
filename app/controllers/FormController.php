@@ -23,6 +23,7 @@ class FormController extends Controller
      */
     public function index()
     {
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -44,6 +45,7 @@ class FormController extends Controller
             'catalogos' => $catalogos
         ]);
     }
+
 
     /**
      * Carga todos los catálogos desde la API
@@ -111,6 +113,7 @@ class FormController extends Controller
      */
     public function submit()
     {
+
         if (!$this->isPost()) {
             $this->redirect('/');
             return;
@@ -174,6 +177,7 @@ class FormController extends Controller
      */
     public function success()
     {
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -189,4 +193,5 @@ class FormController extends Controller
             'encuesta' => $encuestaData
         ]);
     }
+
 }
