@@ -13,7 +13,7 @@
 
     <div class="w-full max-w-[480px] rounded-xl bg-white shadow-md p-8 sm:p-10 relative z-10">
         <div class="mb-8">
-            <img class="h-16 w-auto mb-6" src="/FRONTEND-SOCIOECONOMICO/assets/iujo.png" alt="IUJO Logo">
+            <img class="h-16 w-auto mb-6" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
             <h1 class="text-4xl leading-tight text-slate-700 font-medium mb-2">Bienvenido a Formación complementaria! 👋</h1>
             <p class="text-slate-500 text-lg">Por favor, coloca tu usuario y contraseña</p>
         </div>
@@ -24,7 +24,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="/login" method="POST" class="space-y-5" novalidate>
+        <form action="<?php echo BASE_URL; ?>/login" method="POST" class="space-y-5" novalidate>
             <div>
                 <label for="usuario" class="label-field">Usuario</label>
                 <input

@@ -7,7 +7,7 @@
         </div>
         <h1 class="text-2xl font-bold text-gray-800 mb-2">404 - Página no encontrada</h1>
         <p class="text-gray-600 mb-6">La página que buscas no existe.</p>
-        <a href="/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
+        <a href="<?php echo BASE_URL; ?>/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
             Ir al inicio
         </a>
     </div>

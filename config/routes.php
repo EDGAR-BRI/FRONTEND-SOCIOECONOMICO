@@ -10,13 +10,19 @@ $router = new Router();
 
 // Rutas GET
 $router->get('/', 'FormController@index');
-$router->get('/login', 'FormController@login');
+$router->get('/login', 'AuthController@login');
 $router->get('/success', 'FormController@success');
 
 // Rutas POST
-$router->post('/login', 'FormController@authenticate');
-$router->post('/logout', 'FormController@logout');
+$router->post('/login', 'AuthController@authenticate');
+$router->post('/logout', 'AuthController@logout');
 $router->post('/submit', 'FormController@submit');
+
+// Rutas Admin
+$router->get('/admin', 'AdminController@index');
+$router->get('/admin/usuarios', 'AdminController@users');
+$router->get('/admin/respuestas', 'AdminController@responses');
+$router->get('/admin/catalogos', 'AdminController@catalogs');
 
 // Ruta 404
 $router->notFound(function () {
