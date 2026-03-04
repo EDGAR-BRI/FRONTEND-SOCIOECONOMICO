@@ -16,6 +16,13 @@ class Controller
      */
     protected function view($view, $data = [], $layout = 'main')
     {
+        // Base path / assets path (works with both /index.php and /public/index.php)
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+        $basePath = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
+        if (!isset($data['assetBase'])) {
+            $data['assetBase'] = $basePath . '/assets';
+        }
+
         // Extraer datos para que estén disponibles en la vista
         extract($data);
 

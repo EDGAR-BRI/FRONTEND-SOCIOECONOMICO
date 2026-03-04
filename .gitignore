@@ -2,7 +2,7 @@
 node_modules/
 
 # CSS compilado (se genera automáticamente)
-#public/assets/css/output.css
+public/assets/css/output.css
 
 # Archivos del sistema
 .DS_Store
