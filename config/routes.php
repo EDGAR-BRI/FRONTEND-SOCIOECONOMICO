@@ -10,9 +10,12 @@ $router = new Router();
 
 // Rutas GET
 $router->get('/', 'FormController@index');
+$router->get('/login', 'FormController@login');
 $router->get('/success', 'FormController@success');
 
 // Rutas POST
+$router->post('/login', 'FormController@authenticate');
+$router->post('/logout', 'FormController@logout');
 $router->post('/submit', 'FormController@submit');
 
 // Ruta 404

@@ -2,7 +2,7 @@
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="card mb-6 flex items-center justify-between p-6 sm:flex-row sm:items-center flex-col gap-4">
-            <img class="h-20 w-auto" src="assets/iujo.png" alt="IUJO Logo">
+            <img class="h-20 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
             <div class="sm:text-start text-center">
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">Formulario Socioeconómico</h1>
                 <p class="text-gray-600">IUJO Barquisimeto - Sistema de Registro</p>
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <form id="socioeconomicForm" action="/submit" method="POST" class="space-y-6" enctype="multipart/form-data">
+        <form id="socioeconomicForm" action="<?php echo BASE_URL; ?>/submit" method="POST" class="space-y-6" enctype="multipart/form-data">
             
             <!-- SECCIÓN 1: DATOS PERSONALES -->
             <div id="step-1" class="form-step">
@@ -89,7 +89,7 @@
                 <div class="flex justify-between mt-4 gap-4">
                      <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-5">Atrás</button>
                     <div class="flex gap-4">
-                        <a href="/" class="inline-block bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
+                        <a href="<?php echo BASE_URL; ?>/" class="inline-block bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
                             Cancelar
                         </a>
                         <button type="submit" class="btn-primary">
@@ -103,4 +103,4 @@
 </div>
 
 <!-- JavaScript para interactividad -->
-<script src="/FRONTEND-SOCIOECONOMICO/assets/js/form.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/js/form.js"></script>

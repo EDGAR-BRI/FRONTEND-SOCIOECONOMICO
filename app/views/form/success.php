@@ -7,7 +7,7 @@
         </div>
         <h1 class="text-2xl font-bold text-gray-800 mb-2">¡Formulario Enviado!</h1>
         <p class="text-gray-600 mb-6">Tus datos han sido procesados correctamente.</p>
-        <a href="/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
+        <a href="<?php echo BASE_URL; ?>/" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
             Volver al formulario
         </a>
     </div>
