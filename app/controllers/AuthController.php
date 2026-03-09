@@ -101,7 +101,7 @@ class AuthController extends Controller
                 return;
             }
 
-            $message = 'Credenciales inválidas.' . $response['data'];
+            $message = 'Credenciales inválidas.';
             if ($payload && isset($payload['message']) && is_string($payload['message']) && trim($payload['message']) !== '') {
                 $message = $payload['message'];
             }
