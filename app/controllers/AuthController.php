@@ -3,12 +3,20 @@
 namespace App\Controllers;
 
 use Core\Controller;
+use App\Services\ApiService;
 
 /**
  * AuthController - Controlador para la autenticación
  */
 class AuthController extends Controller
 {
+    private $apiService;
+
+    public function __construct()
+    {
+        $this->apiService = new ApiService();
+    }
+
     /**
      * Muestra la vista de login
      */
@@ -60,9 +68,42 @@ class AuthController extends Controller
             return;
         }
 
-        // Aquí más adelante validarás contra la base de datos a través de la API
-        $_SESSION['auth_user'] = $usuario;
-        $this->redirect(BASE_URL . '/admin');
+        try {
+            $response = $this->apiService->post('/login', [
+                'ci' => $usuario,
+                'password' => $contrasena,
+            ]);
+
+            $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
+
+            if ($response['success'] && $payload && !empty($payload['success'])) {
+                // Seguridad: mitigar session fixation
+                if (function_exists('session_regenerate_id')) {
+                    session_regenerate_id(true);
+                }
+
+                // Guardamos el objeto de usuario retornado por el backend
+                $_SESSION['auth_user'] = $payload['data'] ?? ['ci' => $usuario];
+
+                $this->redirect(BASE_URL . '/admin');
+                return;
+            }
+
+            $message = 'Credenciales inválidas.';
+            if ($payload && isset($payload['message']) && is_string($payload['message']) && trim($payload['message']) !== '') {
+                $message = $payload['message'];
+            }
+
+            $_SESSION['login_error'] = $message;
+            $_SESSION['login_user'] = $usuario;
+            $this->redirect(BASE_URL . '/login');
+            return;
+        } catch (\Exception $e) {
+            $_SESSION['login_error'] = 'Error de conexión con el servidor: ' . $e->getMessage();
+            $_SESSION['login_user'] = $usuario;
+            $this->redirect(BASE_URL . '/login');
+            return;
+        }
     }
 
     /**
@@ -75,6 +116,9 @@ class AuthController extends Controller
         }
 
         unset($_SESSION['auth_user']);
+        if (function_exists('session_regenerate_id')) {
+            session_regenerate_id(true);
+        }
         $this->redirect(BASE_URL . '/login');
     }
 
