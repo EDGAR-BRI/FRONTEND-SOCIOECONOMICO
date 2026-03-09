@@ -93,7 +93,8 @@ class FormController extends Controller
             try {
                 $response = $this->apiService->get($endpoint);
                 if ($response['success']) {
-                    $catalogos[$key] = $response['data'];
+                    $payload = isset($response['data']) ? $response['data'] : null;
+                    $catalogos[$key] = $this->extraerDataCatalogo($payload);
                 } else {
                     // Si falla, usar array vacío
                     $catalogos[$key] = [];
@@ -106,6 +107,21 @@ class FormController extends Controller
         }
 
         return $catalogos;
+    }
+
+    private function extraerDataCatalogo($payload)
+    {
+        if (!is_array($payload)) {
+            return [];
+        }
+
+        // Formato estándar: {success, data, message}
+        if (array_key_exists('success', $payload) && array_key_exists('data', $payload)) {
+            return $payload['data'];
+        }
+
+        // Formato legacy: array plano
+        return $payload;
     }
 
     /**

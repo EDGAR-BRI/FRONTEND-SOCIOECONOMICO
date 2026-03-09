@@ -45,7 +45,11 @@ abstract class CatalogModel
             $response = $this->apiService->get($endpoint);
 
             if ($response['success'] && isset($response['data'])) {
-                $data = $response['data'];
+                $data = $this->extractApiData($response['data']);
+
+                if (!is_array($data)) {
+                    return [];
+                }
 
                 // Filtrar inactivos si es necesario
                 if (!$includeInactive) {
@@ -73,7 +77,7 @@ abstract class CatalogModel
             $response = $this->apiService->get($endpoint);
 
             if ($response['success'] && isset($response['data'])) {
-                return $response['data'];
+                return $this->extractApiData($response['data']);
             }
 
             return null;
@@ -95,8 +99,10 @@ abstract class CatalogModel
             $endpoint = "/catalogo/{$this->resourceName}";
             $response = $this->apiService->post($endpoint, $data);
 
-            if ($response['success'] && isset($response['data']['id'])) {
-                return $response['data']['id'];
+            $payload = isset($response['data']) ? $this->extractApiData($response['data']) : null;
+
+            if ($response['success'] && is_array($payload) && isset($payload['id'])) {
+                return $payload['id'];
             }
 
             return false;
@@ -173,6 +179,21 @@ abstract class CatalogModel
     {
         $all = $this->getAll($includeInactive);
         return count($all);
+    }
+
+    protected function extractApiData($payload)
+    {
+        if (!is_array($payload)) {
+            return null;
+        }
+
+        // Formato estándar: {success, data, message}
+        if (array_key_exists('success', $payload) && array_key_exists('data', $payload)) {
+            return $payload['data'];
+        }
+
+        // Formato legacy: array plano
+        return $payload;
     }
 
     // Getters

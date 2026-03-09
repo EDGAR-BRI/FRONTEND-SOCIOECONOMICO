@@ -139,6 +139,14 @@ class ApiService
      */
     private function request($method, $url, $data = null)
     {
+        // Si hay token en sesión, enviar Bearer automáticamente
+        if (!isset($this->headers['Authorization'])
+            && session_status() === PHP_SESSION_ACTIVE
+            && !empty($_SESSION['auth_token'])
+        ) {
+            $this->headers['Authorization'] = 'Bearer ' . (string) $_SESSION['auth_token'];
+        }
+
         $ch = curl_init();
 
         // Configurar opciones de cURL

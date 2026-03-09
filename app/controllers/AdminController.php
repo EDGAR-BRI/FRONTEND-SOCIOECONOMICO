@@ -37,7 +37,7 @@ class AdminController extends Controller
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        return !empty($_SESSION['auth_user']);
+        return !empty($_SESSION['auth_user']) && !empty($_SESSION['auth_token']);
     }
 
     /**

@@ -82,14 +82,26 @@ class AuthController extends Controller
                     session_regenerate_id(true);
                 }
 
-                // Guardamos el objeto de usuario retornado por el backend
-                $_SESSION['auth_user'] = $payload['data'] ?? ['ci' => $usuario];
+                // Guardamos token + usuario retornado por el backend
+                if (isset($payload['data']) && is_array($payload['data'])) {
+                    if (!empty($payload['data']['token'])) {
+                        $_SESSION['auth_token'] = (string) $payload['data']['token'];
+                    }
+
+                    if (isset($payload['data']['user']) && is_array($payload['data']['user'])) {
+                        $_SESSION['auth_user'] = $payload['data']['user'];
+                    } else {
+                        $_SESSION['auth_user'] = ['ci' => $usuario];
+                    }
+                } else {
+                    $_SESSION['auth_user'] = ['ci' => $usuario];
+                }
 
                 $this->redirect(BASE_URL . '/admin');
                 return;
             }
 
-            $message = 'Credenciales inválidas.';
+            $message = 'Credenciales inválidas.' . $response['data'];
             if ($payload && isset($payload['message']) && is_string($payload['message']) && trim($payload['message']) !== '') {
                 $message = $payload['message'];
             }
@@ -116,6 +128,7 @@ class AuthController extends Controller
         }
 
         unset($_SESSION['auth_user']);
+        unset($_SESSION['auth_token']);
         if (function_exists('session_regenerate_id')) {
             session_regenerate_id(true);
         }
@@ -131,6 +144,6 @@ class AuthController extends Controller
             session_start();
         }
 
-        return !empty($_SESSION['auth_user']);
+        return !empty($_SESSION['auth_user']) && !empty($_SESSION['auth_token']);
     }
 }
