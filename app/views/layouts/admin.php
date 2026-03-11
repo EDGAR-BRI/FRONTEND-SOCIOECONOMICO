@@ -1,4 +1,5 @@
 <?php
+// para que se pueda mover el proyecto a cualquier carpeta y no se rompan las imagenes
 if (!isset($assetBase)) {
     $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
     $basePath = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
@@ -7,6 +8,8 @@ if (!isset($assetBase)) {
 
 // Cache busting: avoid browser hard-cache when output.css changes.
 // Determine which CSS file exists in the current entrypoint's assets folder.
+// todo esto es para que recargue el css en caso de estar en modo dev o actualizar los estilos para que
+// recargen y los vuelva a cargar para tomar los nuevos cambios 
 $cssCandidates = ['output.css'];
 $cssFile = 'output.css';
 $cssVersion = null;
@@ -45,7 +48,6 @@ if ($cssVersion !== null) {
     <aside class="w-64 bg-white min-h-screen shadow-lg hidden md:block">
         <div class="p-6 border-b flex items-center gap-3">
             <img class="h-10 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo" onerror="this.src='https://via.placeholder.com/40'">
-            <span class="text-xl font-bold text-gray-800">Admin</span>
         </div>
         <nav class="p-4 space-y-2">
             <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
@@ -57,17 +59,17 @@ if ($cssVersion !== null) {
             <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'responses') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-file-alt w-5 text-center"></i> Respuestas
             </a>
-            <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
+            <!-- <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-list w-5 text-center"></i> Catálogos
-            </a>
+            </a> -->
         </nav>
     </aside>
 
     <!-- Main Content wrapper -->
     <div class="flex-1 flex flex-col min-h-screen transition-all duration-300">
         <!-- Top Navbar -->
-        <header class="bg-white shadow-sm flex items-center justify-between px-6 py-4">
-            <div class="flex items-center">
+        <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6">
+            <div class="flex items-center h-10">
                 <button id="mobile-menu-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
                     <i class="fas fa-bars text-xl"></i>
                 </button>

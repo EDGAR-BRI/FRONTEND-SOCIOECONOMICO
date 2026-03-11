@@ -21,11 +21,14 @@ class FormController extends Controller
     /**
      * Muestra el formulario con todos los catálogos
      */
-    public function index()
+    public function index($sede = '')
     {
-
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
+        }
+
+        if (!empty($sede)) {
+            $_SESSION['sede_actual'] = $sede;
         }
 
         // Obtener errores y datos antiguos de sesión
@@ -42,7 +45,8 @@ class FormController extends Controller
         $this->view('form/index', [
             'errors' => $errors,
             'old' => $oldData,
-            'catalogos' => $catalogos
+            'catalogos' => $catalogos,
+            'sede' => isset($_SESSION['sede_actual']) ? $_SESSION['sede_actual'] : ''
         ]);
     }
 
@@ -127,16 +131,22 @@ class FormController extends Controller
     /**
      * Procesa el envío del formulario
      */
-    public function submit()
+    public function submit($sede = '')
     {
 
         if (!$this->isPost()) {
-            $this->redirect('/');
+            $redirectPath = !empty($sede) ? "/{$sede}/formulario" : '/';
+            $this->redirect($redirectPath);
             return;
         }
 
         // Crear modelo con datos del formulario
         $encuesta = new Encuesta($_POST);
+
+        // Agregamos la sede al modelo
+        if (!empty($sede)) {
+            $encuesta->set('sede', $sede); // suponiendo que el backend reciba la sede o la enviemos
+        }
 
         // Validar datos
         if (!$encuesta->validate()) {
@@ -145,7 +155,8 @@ class FormController extends Controller
             }
             $_SESSION['errors'] = $encuesta->getErrors();
             $_SESSION['form_data'] = $_POST;
-            $this->redirect('/');
+            $redirectPath = !empty($sede) ? "/{$sede}/formulario" : '/';
+            $this->redirect($redirectPath);
             return;
         }
 
@@ -175,7 +186,8 @@ class FormController extends Controller
                     : 'Error al procesar el formulario. Intente nuevamente.';
                 $_SESSION['errors'] = ['general' => $errorMsg];
                 $_SESSION['form_data'] = $_POST;
-                $this->redirect('/');
+                $redirectPath = !empty($sede) ? "/{$sede}/formulario" : '/';
+                $this->redirect($redirectPath);
             }
         } catch (\Exception $e) {
             // Manejar excepción
@@ -184,7 +196,8 @@ class FormController extends Controller
             }
             $_SESSION['errors'] = ['general' => 'Error de conexión con el servidor: ' . $e->getMessage()];
             $_SESSION['form_data'] = $_POST;
-            $this->redirect('/');
+            $redirectPath = !empty($sede) ? "/{$sede}/formulario" : '/';
+            $this->redirect($redirectPath);
         }
     }
 

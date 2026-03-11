@@ -46,7 +46,7 @@ function runTailwind(args) {
     process.exit(1);
   }
 
-  const result = spawnSync(bin, args, { stdio: 'inherit' });
+  const result = spawnSync(bin, args, { stdio: 'inherit', shell: isWin });
   if (typeof result.status === 'number' && result.status !== 0) {
     process.exit(result.status);
   }
