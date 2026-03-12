@@ -33,48 +33,28 @@
                     <th class="py-3 px-4 font-semibold text-sm">Cédula</th>
                     <th class="py-3 px-4 font-semibold text-sm">Carrera</th>
                     <th class="py-3 px-4 font-semibold text-sm">Fecha</th>
-                    <th class="py-3 px-4 font-semibold text-sm">Estado</th>
+                    <th class="py-3 px-4 font-semibold text-sm">Estrato</th>
                     <th class="py-3 px-4 font-semibold text-sm text-right">Acciones</th>
                 </tr>
             </thead>
             <tbody class="text-sm divide-y">
-                <!-- Data mock -->
-                <tr class="hover:bg-gray-50">
-                    <td class="py-3 px-4">#1245</td>
-                    <td class="py-3 px-4 font-medium text-gray-800">Juan Carlos Pérez</td>
-                    <td class="py-3 px-4">V-20123456</td>
-                    <td class="py-3 px-4 text-gray-500">Informática</td>
-                    <td class="py-3 px-4">2026-03-03 14:30</td>
-                    <td class="py-3 px-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200">Completa</span></td>
-                    <td class="py-3 px-4 text-right">
-                        <button class="text-indigo-500 hover:text-indigo-700 mx-1" title="Ver Detalles"><i class="fas fa-eye"></i></button>
-                        <button class="text-blue-500 hover:text-blue-700 mx-1" title="Editar"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
-                <tr class="hover:bg-gray-50">
-                    <td class="py-3 px-4">#1244</td>
-                    <td class="py-3 px-4 font-medium text-gray-800">María Alejandra Gómez</td>
-                    <td class="py-3 px-4">V-25654321</td>
-                    <td class="py-3 px-4 text-gray-500">Administración</td>
-                    <td class="py-3 px-4">2026-03-02 09:15</td>
-                    <td class="py-3 px-4"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-medium border border-yellow-200">Pendiente</span></td>
-                    <td class="py-3 px-4 text-right">
-                        <button class="text-indigo-500 hover:text-indigo-700 mx-1" title="Ver Detalles"><i class="fas fa-eye"></i></button>
-                        <button class="text-blue-500 hover:text-blue-700 mx-1" title="Editar"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
-                 <tr class="hover:bg-gray-50">
-                    <td class="py-3 px-4">#1243</td>
-                    <td class="py-3 px-4 font-medium text-gray-800">Pedro Rodríguez</td>
-                    <td class="py-3 px-4">V-28999111</td>
-                    <td class="py-3 px-4 text-gray-500">Educación</td>
-                    <td class="py-3 px-4">2026-03-01 16:45</td>
-                    <td class="py-3 px-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200">Completa</span></td>
-                    <td class="py-3 px-4 text-right">
-                        <button class="text-indigo-500 hover:text-indigo-700 mx-1" title="Ver Detalles"><i class="fas fa-eye"></i></button>
-                        <button class="text-blue-500 hover:text-blue-700 mx-1" title="Editar"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
+                <?php if (isset($encuestas)): ?>
+                    <!-- Data mock -->
+                    <?php foreach ($encuestas['items'] as $encuesta): ?>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-3 px-4">#<?php echo $encuesta['id']?></td>
+                            <td class="py-3 px-4 font-medium text-gray-800"><?php echo $encuesta['estudiante'] ?></td>
+                            <td class="py-3 px-4"><?php echo $encuesta['cedula'] ?></td>
+                            <td class="py-3 px-4 text-gray-500"><?php echo $encuesta['carrera'] ?></td>
+                            <td class="py-3 px-4"><?php echo $encuesta['creado'] ?></td>
+                            <td class="py-3 px-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200"><?php echo $encuesta['estrato'] ?></span></td>
+                            <td class="py-3 px-4 text-right">
+                                <button class="text-indigo-500 hover:text-indigo-700 mx-1" title="Ver Detalles"><i class="fas fa-eye"></i></button>
+                                <button class="text-blue-500 hover:text-blue-700 mx-1" title="Editar"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>

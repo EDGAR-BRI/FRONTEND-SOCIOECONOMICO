@@ -73,10 +73,27 @@ class AdminController extends Controller
     public function responses()
     {
         $this->checkAuth();
+
+        $response = $this->apiService->get('/encuesta');
+
+        $payload = isset($response['data']) ? $response['data'] : null;
+
+        $encuestas = $payload;
         
+        if (!is_array($payload)) {
+            $encuestas = [];
+        }
+
+        // Formato estándar: {success, data, message}
+        if (array_key_exists('success', $payload) && array_key_exists('data', $payload)) {
+            $encuestas = $payload['data'];
+        }
+        
+
         $this->view('admin/responses', [
             'title' => 'Respuestas a Encuestas | Admin',
-            'current_page' => 'responses'
+            'current_page' => 'responses',
+            'encuestas' => $encuestas
         ], 'admin');
     }
 
