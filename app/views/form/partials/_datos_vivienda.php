@@ -4,7 +4,7 @@
     <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label for="tipo_convivencia_id" class="label-field">Tipo de Convivencia</label>
-            <select id="tipo_convivencia_id" name="tipo_convivencia_id" class="input-field">
+            <select id="tipo_convivencia_id" name="tipo_convivencia_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['tipo_convivencia'])): ?>
                     <?php foreach ($catalogos['tipo_convivencia'] as $item): ?>
@@ -19,7 +19,7 @@
 
         <div>
             <label for="tipo_vivienda_id" class="label-field">Tipo de Vivienda</label>
-            <select id="tipo_vivienda_id" name="tipo_vivienda_id" class="input-field">
+            <select id="tipo_vivienda_id" name="tipo_vivienda_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['tipo_vivienda'])): ?>
                     <?php foreach ($catalogos['tipo_vivienda'] as $item): ?>
@@ -34,7 +34,7 @@
 
         <div>
             <label for="tenencia_vivienda_id" class="label-field">Tenencia de Vivienda</label>
-            <select id="tenencia_vivienda_id" name="tenencia_vivienda_id" class="input-field">
+            <select id="tenencia_vivienda_id" name="tenencia_vivienda_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['tenencia_vivienda'])): ?>
                     <?php foreach ($catalogos['tenencia_vivienda'] as $item): ?>
@@ -51,14 +51,14 @@
             <label for="numero_habitantes" class="label-field">Número de Habitantes</label>
             <input type="number" id="numero_habitantes" name="numero_habitantes" min="1"
                 value="<?php echo isset($old['numero_habitantes']) ? htmlspecialchars($old['numero_habitantes']) : ''; ?>"
-                class="input-field">
+                class="input-field" required>
         </div>
 
         <div>
             <label for="numero_ocupantes_familia" class="label-field">Número de Ocupantes de la Familia</label>
             <input type="number" id="numero_ocupantes_familia" name="numero_ocupantes_familia" min="1"
                 value="<?php echo isset($old['numero_ocupantes_familia']) ? htmlspecialchars($old['numero_ocupantes_familia']) : ''; ?>"
-                class="input-field">
+                class="input-field" required>
         </div>
 
         <!-- Ambientes de Vivienda (Checkboxes) -->
@@ -97,7 +97,7 @@
         <!-- Frecuencias de Servicios -->
         <div>
             <label for="frecuencia_agua_id" class="label-field">Frecuencia Servicio de Agua</label>
-            <select id="frecuencia_agua_id" name="frecuencia_agua_id" class="input-field">
+            <select id="frecuencia_agua_id" name="frecuencia_agua_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['frecuencia_agua'])): ?>
                     <?php foreach ($catalogos['frecuencia_agua'] as $item): ?>
@@ -112,7 +112,7 @@
 
         <div>
             <label for="frecuencia_aseo_id" class="label-field">Frecuencia Servicio de Aseo</label>
-            <select id="frecuencia_aseo_id" name="frecuencia_aseo_id" class="input-field">
+            <select id="frecuencia_aseo_id" name="frecuencia_aseo_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['frecuencia_aseo'])): ?>
                     <?php foreach ($catalogos['frecuencia_aseo'] as $item): ?>
@@ -127,7 +127,7 @@
 
         <div>
             <label for="frecuencia_electricidad_id" class="label-field">Frecuencia Servicio de Electricidad</label>
-            <select id="frecuencia_electricidad_id" name="frecuencia_electricidad_id" class="input-field">
+            <select id="frecuencia_electricidad_id" name="frecuencia_electricidad_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['frecuencia_electricidad'])): ?>
                     <?php foreach ($catalogos['frecuencia_electricidad'] as $item): ?>
@@ -142,7 +142,7 @@
 
         <div>
             <label for="frecuencia_gas_id" class="label-field">Frecuencia Servicio de Gas</label>
-            <select id="frecuencia_gas_id" name="frecuencia_gas_id" class="input-field">
+            <select id="frecuencia_gas_id" name="frecuencia_gas_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['frecuencia_gas'])): ?>
                     <?php foreach ($catalogos['frecuencia_gas'] as $item): ?>
