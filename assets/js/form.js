@@ -1,14 +1,31 @@
 // form.js - Interactividad del formulario socioeconómico
 
-document.addEventListener('DOMContentLoaded', function() {
-    
+document.addEventListener('DOMContentLoaded', function () {
+
+    const selects = document.querySelectorAll('select');
+
+    selects.forEach(select => {
+        select.addEventListener('change', function () {
+            if (this.value) {
+                this.classList.remove('border-red-500');
+
+                // Deshabilita y oculta la opción "Seleccione..." por defecto
+                const defaultOption = this.querySelector('option[value=""]');
+                if (defaultOption) {
+                    defaultOption.disabled = true;
+                    defaultOption.hidden = true;
+                }
+            }
+        });
+    });
+
     // ===== MOSTRAR/OCULTAR NÚMERO DE HIJOS EN EL FORMULAIRO =====
     const hijosRadios = document.querySelectorAll('input[name="hijos"]');
     const numeroHijosContainer = document.getElementById('numero_hijos_container');
-    
+
     if (hijosRadios.length > 0 && numeroHijosContainer) {
         hijosRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
+            radio.addEventListener('change', function () {
                 if (this.value === '1') {
                     numeroHijosContainer.style.display = 'block';
                 } else {
@@ -28,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== VALIDACIÓN DE ARCHIVO DE CÉDULA =====
     const cedulaFile = document.getElementById('cedula_file');
     if (cedulaFile) {
-        cedulaFile.addEventListener('change', function() {
+        cedulaFile.addEventListener('change', function () {
             const file = this.files[0];
             if (file) {
                 // Validar tamaño (5MB máximo)
@@ -59,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== CONFIRMACIÓN ANTES DE ENVIAR =====
     const form = document.querySelector('form');
     if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             const veracidad = document.getElementById('veracidad_id');
             if (veracidad && !veracidad.value) {
                 e.preventDefault();
@@ -80,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== GESTIÓN DE PASOS DEL FORMULARIO =====
     const steps = document.querySelectorAll('.form-step');
     const progressBar = document.getElementById('progressBar');
-    
+
     // Función para mostrar un paso específico y ocultar los demás
     function showStep(stepId) {
         steps.forEach(step => {
@@ -95,12 +112,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const stepNumber = parseInt(stepId.replace('step-', ''));
         const totalSteps = steps.length;
         const progress = (stepNumber / totalSteps) * 100;
-        
+
         if (progressBar) {
             progressBar.style.width = `${progress}%`;
             // progressBar.innerText = `Paso ${stepNumber} de ${totalSteps}`;
         }
-        
+
         // Scroll arriba
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -117,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!input.checkValidity()) {
                 isValid = false;
                 if (!firstInvalidInput) firstInvalidInput = input;
-                
+
                 // Resaltar visualmente
                 input.classList.add('border-red-500');
                 // input.classList.add('ring-2', 'ring-red-500'); // Optional: more visibility
@@ -131,28 +148,33 @@ document.addEventListener('DOMContentLoaded', function() {
             firstInvalidInput.reportValidity(); // Muestra el mensaje nativo solo del primero
             firstInvalidInput.focus();
         }
-        
+
         return isValid;
     }
 
     // Inicializar visualización de pasos
-    // Ocultar todos menos el primero si no se ha hecho ya (por si acaso el backend no lo hizo)
+    // Ocultar todos menos el primero si no se ha hecho ya
     steps.forEach((step, index) => {
-        if (index === 0) {
+        if (index === 0) { // Índice 0 corresponde a la sección 1
             step.classList.remove('hidden');
         } else {
             step.classList.add('hidden');
         }
     });
 
+    // Actualizar barra de progreso para iniciar en el paso 1
+    if (progressBar && steps.length > 0) {
+        progressBar.style.width = `${(1 / steps.length) * 100}%`;
+    }
+
     // Event Listeners para botones Siguiente
     document.querySelectorAll('.next-step').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             // Buscamos el contenedor del paso actual
             // Usamos closest('.form-step') para asegurarnos de obtener el padre correcto
             const currentStep = this.closest('.form-step');
             const nextStepId = this.dataset.next;
-            
+
             if (currentStep && validateStep(currentStep)) {
                 showStep(nextStepId);
             }
@@ -162,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event Listeners para botones Atrás
     document.querySelectorAll('.prev-step').forEach(button => {
 
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const prevStepId = this.dataset.prev;
             showStep(prevStepId);
         });
