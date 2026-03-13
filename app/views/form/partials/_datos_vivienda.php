@@ -1,7 +1,7 @@
-<div class="card">
+<section class="card">
     <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b">4. Datos de Vivienda</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label for="tipo_convivencia_id" class="label-field">Tipo de Convivencia</label>
             <select id="tipo_convivencia_id" name="tipo_convivencia_id" class="input-field">
@@ -62,55 +62,37 @@
         </div>
 
         <!-- Ambientes de Vivienda (Checkboxes) -->
-        <div class="md:col-span-2">
-            <label class="label-field">Ambientes de la Vivienda</label>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
-                <?php if (isset($catalogos['ambiente_vivienda'])): ?>
-                    <?php foreach ($catalogos['ambiente_vivienda'] as $item): ?>
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="ambientes_vivienda[]" value="<?php echo $item['id']; ?>"
-                                <?php echo (isset($old['ambientes_vivienda']) && in_array($item['id'], $old['ambientes_vivienda'])) ? 'checked' : ''; ?>
-                                class="mr-2">
-                            <?php echo htmlspecialchars($item['nombre']); ?>
-                        </label>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
+        <?php
+        extract([
+            'label' => 'Ambientes de la Vivienda',
+            'name' => 'ambientes_vivienda[]',
+            'options' => isset($catalogos['ambiente_vivienda']) ? $catalogos['ambiente_vivienda'] : [],
+            'oldData' => isset($old['ambientes_vivienda']) ? $old['ambientes_vivienda'] : []
+        ]);
+        include __DIR__ . '/../components/_checkbox_group.php';
+        ?>
 
         <!-- Activos de Vivienda (Checkboxes) -->
-        <div class="md:col-span-2">
-            <label class="label-field">Activos de la Vivienda</label>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
-                <?php if (isset($catalogos['activo_vivienda'])): ?>
-                    <?php foreach ($catalogos['activo_vivienda'] as $item): ?>
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="activos_vivienda[]" value="<?php echo $item['id']; ?>"
-                                <?php echo (isset($old['activos_vivienda']) && in_array($item['id'], $old['activos_vivienda'])) ? 'checked' : ''; ?>
-                                class="mr-2">
-                            <?php echo htmlspecialchars($item['nombre']); ?>
-                        </label>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
+        <?php
+        extract([
+            'label' => 'Activos de la Vivienda',
+            'name' => 'activos_vivienda[]',
+            'options' => isset($catalogos['activo_vivienda']) ? $catalogos['activo_vivienda'] : [],
+            'oldData' => isset($old['activos_vivienda']) ? $old['activos_vivienda'] : []
+        ]);
+        include __DIR__ . '/../components/_checkbox_group.php';
+        ?>
 
         <!-- Servicios de Vivienda (Checkboxes) -->
-        <div class="md:col-span-2">
-            <label class="label-field">Servicios de la Vivienda</label>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
-                <?php if (isset($catalogos['servicio_vivienda'])): ?>
-                    <?php foreach ($catalogos['servicio_vivienda'] as $item): ?>
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="servicios_vivienda[]" value="<?php echo $item['id']; ?>"
-                                <?php echo (isset($old['servicios_vivienda']) && in_array($item['id'], $old['servicios_vivienda'])) ? 'checked' : ''; ?>
-                                class="mr-2">
-                            <?php echo htmlspecialchars($item['nombre']); ?>
-                        </label>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
+        <?php
+        extract([
+            'label' => 'Servicios de la Vivienda',
+            'name' => 'servicios_vivienda[]',
+            'options' => isset($catalogos['servicio_vivienda']) ? $catalogos['servicio_vivienda'] : [],
+            'oldData' => isset($old['servicios_vivienda']) ? $old['servicios_vivienda'] : []
+        ]);
+        include __DIR__ . '/../components/_checkbox_group.php';
+        ?>
 
         <!-- Frecuencias de Servicios -->
         <div>
@@ -172,5 +154,5 @@
                 <?php endif; ?>
             </select>
         </div>
-    </div>
-</div>
+    </article>
+</section>
