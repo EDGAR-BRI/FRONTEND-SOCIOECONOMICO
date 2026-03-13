@@ -20,7 +20,7 @@
             <label for="cedula" class="label-field">Cédula <span class="text-red-500">*</span></label>
             <input type="text" pattern="^[0-9]{7,8}$"  id="cedula" name="cedula" required
                 value="<?php echo isset($old['cedula']) ? htmlspecialchars($old['cedula']) : ''; ?>"
-                class="input-field" placeholder="V-12345678">
+                class="input-field" placeholder="12344698">
         </div>
 
         <div>
