@@ -140,6 +140,12 @@ class FormController extends Controller
             return;
         }
 
+        // Unir prefijo y teléfono si ambos existen
+        if (isset($_POST['prefijo']) && isset($_POST['telefono'])) {
+            $_POST['telefono'] = $_POST['prefijo'] . $_POST['telefono'];
+            unset($_POST['prefijo']);
+        }
+
         // Crear modelo con datos del formulario
         $encuesta = new Encuesta($_POST);
 
