@@ -1,7 +1,7 @@
-<div class="card">
+<section class="card">
     <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b">2. Datos Académicos</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label for="tipo_estudiante_id" class="label-field">Tipo de Estudiante <span class="text-red-500">*</span></label>
             <select id="tipo_estudiante_id" name="tipo_estudiante_id" required class="input-field">
@@ -48,6 +48,21 @@
         </div>
 
         <div>
+            <label for="tipo_beca_id" class="label-field">Tipo de Beca</label>
+            <select id="tipo_beca_id" name="tipo_beca_id" class="input-field">
+                <option value="">Seleccione...</option>
+                <?php if (isset($catalogos['tipo_beca'])): ?>
+                    <?php foreach ($catalogos['tipo_beca'] as $item): ?>
+                        <option value="<?php echo $item['id']; ?>"
+                            <?php echo (isset($old['tipo_beca_id']) && $old['tipo_beca_id'] == $item['id']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($item['nombre']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+        </div>
+
+         <div>
             <label class="label-field">¿Estudió en FyA?</label>
             <div class="flex gap-4">
                 <label class="inline-flex items-center">
@@ -64,20 +79,5 @@
                 </label>
             </div>
         </div>
-
-        <div>
-            <label for="tipo_beca_id" class="label-field">Tipo de Beca</label>
-            <select id="tipo_beca_id" name="tipo_beca_id" class="input-field">
-                <option value="">Ninguna</option>
-                <?php if (isset($catalogos['tipo_beca'])): ?>
-                    <?php foreach ($catalogos['tipo_beca'] as $item): ?>
-                        <option value="<?php echo $item['id']; ?>"
-                            <?php echo (isset($old['tipo_beca_id']) && $old['tipo_beca_id'] == $item['id']) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($item['nombre']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </select>
-        </div>
-    </div>
-</div>
+    </article>
+</section>

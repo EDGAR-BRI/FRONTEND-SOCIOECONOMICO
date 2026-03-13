@@ -77,8 +77,9 @@ class Router
 
         // Buscar la ruta correspondiente
         foreach ($this->routes as $route) {
-            if ($route['method'] === $requestMethod && $this->matchPath($route['path'], $requestUri)) {
-                $this->dispatch($route['controller']);
+            $params = [];
+            if ($route['method'] === $requestMethod && $this->matchPath($route['path'], $requestUri, $params)) {
+                $this->dispatch($route['controller'], $params);
                 return;
             }
         }
@@ -97,19 +98,39 @@ class Router
      * 
      * @param string $pattern Patrón de la ruta
      * @param string $path Ruta actual
+     * @param array &$params Parámetros extraídos
      * @return bool
      */
-    private function matchPath($pattern, $path)
+    private function matchPath($pattern, $path, &$params = [])
     {
-        return $pattern === $path;
+        // Convertir el patrón con parámetros :param a una expresión regular
+        $regex = preg_replace('/\:([a-zA-Z0-9_]+)/', '(?P<$1>[a-zA-Z0-9_\-]+)', $pattern);
+        
+        // Escapar barras
+        $regex = str_replace('/', '\/', $regex);
+        
+        // Patrón final
+        $regex = '/^' . $regex . '$/';
+
+        if (preg_match($regex, $path, $matches)) {
+            foreach ($matches as $key => $value) {
+                if (is_string($key)) {
+                    $params[$key] = $value;
+                }
+            }
+            return true;
+        }
+
+        return false;
     }
 
     /**
      * Despacha la petición al controlador correspondiente
      * 
      * @param string $controller Controlador en formato "Controller@method"
+     * @param array $params Parámetros extraídos de la URL
      */
-    private function dispatch($controller)
+    private function dispatch($controller, $params = [])
     {
         list($controllerName, $method) = explode('@', $controller);
 
@@ -126,7 +147,7 @@ class Router
             throw new \Exception("Método {$method} no encontrado en {$controllerClass}");
         }
 
-        // Ejecutar el método del controlador
-        $controllerInstance->$method();
+        // Ejecutar el método del controlador con los parámetros
+        call_user_func_array([$controllerInstance, $method], array_values($params));
     }
 }

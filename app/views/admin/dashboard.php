@@ -1,7 +1,7 @@
 <!-- Dashboard Overview -->
 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
     <!-- Card 1 -->
-    <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-blue-500 hover:shadow-md transition">
+    <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition">
         <div class="flex items-center">
             <div class="p-3 bg-blue-100 rounded-full text-blue-500 mr-4">
                 <i class="fas fa-file-invoice text-xl"></i>

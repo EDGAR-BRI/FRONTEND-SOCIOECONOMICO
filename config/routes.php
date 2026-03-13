@@ -9,14 +9,15 @@ use Core\Router;
 $router = new Router();
 
 // Rutas GET
-$router->get('/', 'FormController@index');
+$router->get('/', 'HomeController@index');
+$router->get('/:sede/formulario', 'FormController@index');
 $router->get('/login', 'AuthController@login');
 $router->get('/success', 'FormController@success');
 
 // Rutas POST
 $router->post('/login', 'AuthController@authenticate');
 $router->post('/logout', 'AuthController@logout');
-$router->post('/submit', 'FormController@submit');
+$router->post('/:sede/formulario/submit', 'FormController@submit');
 
 // Rutas Admin
 $router->get('/admin', 'AdminController@index');

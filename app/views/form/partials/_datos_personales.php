@@ -1,7 +1,7 @@
-<div class="card">
+<section class="card">
     <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b">1. Datos Personales</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label for="nombres" class="label-field">Nombres <span class="text-red-500">*</span></label>
             <input type="text" id="nombres" name="nombres" required
@@ -20,7 +20,8 @@
             <label for="cedula" class="label-field">Cédula <span class="text-red-500">*</span></label>
             <input type="text" pattern="^[0-9]{7,8}$"  id="cedula" name="cedula" required
                 value="<?php echo isset($old['cedula']) ? htmlspecialchars($old['cedula']) : ''; ?>"
-                class="input-field" placeholder="V-12345678">
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                class="input-field" placeholder="12344698">
         </div>
 
         <div>
@@ -69,9 +70,20 @@
 
         <div>
             <label for="telefono" class="label-field">Teléfono <span class="text-red-500">*</span></label>
-            <input type="tel" id="telefono" name="telefono" required
-                value="<?php echo isset($old['telefono']) ? htmlspecialchars($old['telefono']) : ''; ?>"
-                class="input-field" placeholder="0414-1234567">
+            <div class="grid grid-cols-3 gap-2">
+                <select name="prefijo" class="input-field col-span-1" id="prefijo">
+                    <option value="">Seleccione...</option>
+                    <option value="0414">0414</option>
+                    <option value="0416">0416</option>
+                    <option value="0424">0424</option>
+                    <option value="0426">0426</option>
+                </select>
+                <input type="tel" id="telefono" name="telefono" required
+                    pattern="^[0-9]{7}$" maxlength="7"
+                    value="<?php echo isset($old['telefono']) ? htmlspecialchars($old['telefono']) : ''; ?>"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                    class="input-field col-span-2" placeholder="1234567">
+            </div>
         </div>
 
         <div>
@@ -93,6 +105,20 @@
             <label for="direccion" class="label-field">Dirección <span class="text-red-500">*</span></label>
             <textarea id="direccion" name="direccion" required rows="3"
                 class="input-field"><?php echo isset($old['direccion']) ? htmlspecialchars($old['direccion']) : ''; ?></textarea>
+        </div>
+
+        <div>
+            <label for="discapacidad" class="label-field">Discapacidad (si aplica)</label>
+            <input type="text" id="discapacidad" name="discapacidad"
+                value="<?php echo isset($old['discapacidad']) ? htmlspecialchars($old['discapacidad']) : ''; ?>"
+                class="input-field">
+        </div>
+
+        <div>
+            <label for="enfermedad_cronica" class="label-field">Enfermedad Crónica (si aplica)</label>
+            <input type="text" id="enfermedad_cronica" name="enfermedad_cronica"
+                value="<?php echo isset($old['enfermedad_cronica']) ? htmlspecialchars($old['enfermedad_cronica']) : ''; ?>"
+                class="input-field">
         </div>
 
         <div>
@@ -119,19 +145,5 @@
                 value="<?php echo isset($old['numero_hijos']) ? htmlspecialchars($old['numero_hijos']) : '0'; ?>"
                 class="input-field">
         </div>
-
-        <div>
-            <label for="discapacidad" class="label-field">Discapacidad (si aplica)</label>
-            <input type="text" id="discapacidad" name="discapacidad"
-                value="<?php echo isset($old['discapacidad']) ? htmlspecialchars($old['discapacidad']) : ''; ?>"
-                class="input-field">
-        </div>
-
-        <div>
-            <label for="enfermedad_cronica" class="label-field">Enfermedad Crónica (si aplica)</label>
-            <input type="text" id="enfermedad_cronica" name="enfermedad_cronica"
-                value="<?php echo isset($old['enfermedad_cronica']) ? htmlspecialchars($old['enfermedad_cronica']) : ''; ?>"
-                class="input-field">
-        </div>
-    </div>
-</div>
+    </article>
+</section>
