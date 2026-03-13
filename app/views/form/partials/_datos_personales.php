@@ -1,7 +1,7 @@
-<div class="card">
+<section class="card">
     <h2 class="text-2xl font-bold text-gray-800 mb-4 pb-2 border-b">1. Datos Personales</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
             <label for="nombres" class="label-field">Nombres <span class="text-red-500">*</span></label>
             <input type="text" id="nombres" name="nombres" required
@@ -108,6 +108,20 @@
         </div>
 
         <div>
+            <label for="discapacidad" class="label-field">Discapacidad (si aplica)</label>
+            <input type="text" id="discapacidad" name="discapacidad"
+                value="<?php echo isset($old['discapacidad']) ? htmlspecialchars($old['discapacidad']) : ''; ?>"
+                class="input-field">
+        </div>
+
+        <div>
+            <label for="enfermedad_cronica" class="label-field">Enfermedad Crónica (si aplica)</label>
+            <input type="text" id="enfermedad_cronica" name="enfermedad_cronica"
+                value="<?php echo isset($old['enfermedad_cronica']) ? htmlspecialchars($old['enfermedad_cronica']) : ''; ?>"
+                class="input-field">
+        </div>
+
+        <div>
             <label class="label-field">¿Tiene hijos?</label>
             <div class="flex gap-4">
                 <label class="inline-flex items-center">
@@ -131,19 +145,5 @@
                 value="<?php echo isset($old['numero_hijos']) ? htmlspecialchars($old['numero_hijos']) : '0'; ?>"
                 class="input-field">
         </div>
-
-        <div>
-            <label for="discapacidad" class="label-field">Discapacidad (si aplica)</label>
-            <input type="text" id="discapacidad" name="discapacidad"
-                value="<?php echo isset($old['discapacidad']) ? htmlspecialchars($old['discapacidad']) : ''; ?>"
-                class="input-field">
-        </div>
-
-        <div>
-            <label for="enfermedad_cronica" class="label-field">Enfermedad Crónica (si aplica)</label>
-            <input type="text" id="enfermedad_cronica" name="enfermedad_cronica"
-                value="<?php echo isset($old['enfermedad_cronica']) ? htmlspecialchars($old['enfermedad_cronica']) : ''; ?>"
-                class="input-field">
-        </div>
-    </div>
-</div>
+    </article>
+</section>
