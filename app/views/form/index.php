@@ -15,7 +15,7 @@
                 <p class="font-bold mb-2">Por favor corrija los siguientes errores:</p>
                 <ul class="list-disc list-inside">
                     <?php foreach ($errors as $error): ?>
-                        
+
                         <li><?php echo htmlspecialchars($error); ?></li>
                     <?php endforeach; ?>
                 </ul>
@@ -39,9 +39,9 @@
 
         <?php $actionUrl = !empty($sede) ? BASE_URL . '/' . $sede . '/formulario/submit' : BASE_URL . '/submit'; ?>
         <form id="socioeconomicForm" action="<?php echo $actionUrl; ?>" method="POST" class="space-y-6" enctype="multipart/form-data">
-            
+
             <!-- SECCIÓN 1: DATOS PERSONALES -->
-            <section id="step-1" class="form-step">
+            <section id="step-1" class="form-step hidden">
                 <?php include __DIR__ . '/partials/_datos_personales.php'; ?>
                 <div class="flex justify-end mt-4">
                     <button type="button" class="btn-primary next-step" data-next="step-2">Siguiente</button>
@@ -49,7 +49,7 @@
             </section>
 
             <!-- SECCIÓN 2: DATOS ACADÉMICOS -->
-            <section id="step-2" class="form-step hidden">
+            <section id="step-2" class="form-step">
                 <?php include __DIR__ . '/partials/_datos_academicos.php'; ?>
                 <div class="flex justify-between mt-4">
                     <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-1">Atrás</button>
@@ -88,7 +88,7 @@
             <section id="step-6" class="form-step hidden">
                 <?php include __DIR__ . '/partials/_datos_economicos.php'; ?>
                 <div class="flex justify-between mt-4 gap-4">
-                     <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-5">Atrás</button>
+                    <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-md transition duration-200 prev-step" data-prev="step-5">Atrás</button>
                     <div class="flex gap-4">
                         <a href="<?php echo BASE_URL; ?>/" class="inline-block bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-md transition duration-200">
                             Cancelar
@@ -106,3 +106,4 @@
 <!-- JavaScript para interactividad -->
 <script src="<?php echo BASE_URL; ?>/assets/js/form.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/js/empleo.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/js/familia.js"></script>
