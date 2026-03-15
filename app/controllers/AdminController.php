@@ -211,6 +211,62 @@ class AdminController extends Controller
         ], 'admin');
     }
 
+    public function responseDetail($id)
+    {
+        $this->checkAuth();
+
+        $id = is_numeric($id) ? (int)$id : 0;
+
+        $encuesta = null;
+        $apiError = null;
+
+        if ($id <= 0) {
+            $apiError = ['status' => 400, 'message' => 'ID inválido'];
+        } else {
+            try {
+                // Forzar Authorization explícito (evita casos donde el header no llegue por sesión)
+                if (session_status() === PHP_SESSION_ACTIVE && !empty($_SESSION['auth_token'])) {
+                    $this->apiService->setHeader('Authorization', 'Bearer ' . (string) $_SESSION['auth_token']);
+                }
+
+                $response = $this->apiService->get('/encuesta/' . $id);
+                $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
+
+                if ($response['success'] && $payload) {
+                    $data = (isset($payload['success']) && array_key_exists('data', $payload) && is_array($payload['data']))
+                        ? $payload['data']
+                        : $payload;
+
+                    if (is_array($data)) {
+                        $encuesta = $data;
+                    }
+                } else {
+                    $message = 'No se pudo cargar el detalle de la encuesta.';
+                    if (is_array($payload) && isset($payload['message']) && is_string($payload['message']) && trim($payload['message']) !== '') {
+                        $message = $payload['message'];
+                    }
+
+                    $apiError = [
+                        'status' => isset($response['status']) ? (int)$response['status'] : 0,
+                        'message' => $message,
+                    ];
+                }
+            } catch (\Exception $e) {
+                $apiError = [
+                    'status' => 0,
+                    'message' => 'Error de conexión con el servidor: ' . $e->getMessage(),
+                ];
+            }
+        }
+
+        $this->view('admin/response_detail', [
+            'title' => 'Detalle de Encuesta | Admin',
+            'current_page' => 'responses',
+            'encuesta' => $encuesta,
+            'apiError' => $apiError,
+        ], 'admin');
+    }
+
     /**
      * Vista de gestión de catálogos
      */

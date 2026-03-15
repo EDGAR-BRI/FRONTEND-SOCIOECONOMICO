@@ -86,7 +86,6 @@
             onchange="this.form.submit()"
         >
             <option value="">Estrato</option>
-            <option value="completa" <?php echo (isset($filters['estrato']) && $filters['estrato'] === 'completa') ? 'selected' : ''; ?>>Completa</option>
             <option value="pendiente" <?php echo (isset($filters['estrato']) && ($filters['estrato'] === 'pendiente' || $filters['estrato'] === 'incompleta')) ? 'selected' : ''; ?>>Pendiente</option>
             <?php for ($i = 1; $i <= 5; $i++): ?>
                 <option value="<?php echo $i; ?>" <?php echo (isset($filters['estrato']) && (string)$filters['estrato'] === (string)$i) ? 'selected' : ''; ?>>Estrato <?php echo $i; ?></option>
@@ -134,7 +133,7 @@
                                 <?php endif; ?>
                             </td>
                             <td class="py-3 px-4 text-right">
-                                <button class="text-indigo-500 hover:text-indigo-700 mx-1" title="Ver Detalles"><i class="fas fa-eye"></i></button>
+                                <a class="text-indigo-500 hover:text-indigo-700 mx-1" href="<?php echo BASE_URL; ?>/admin/respuestas/<?php echo $id; ?>" title="Ver Detalles"><i class="fas fa-eye"></i></a>
                                 <button class="text-blue-500 hover:text-blue-700 mx-1" title="Editar"><i class="fas fa-edit"></i></button>
                             </td>
                         </tr>

@@ -23,6 +23,7 @@ $router->post('/:sede/formulario/submit', 'FormController@submit');
 $router->get('/admin', 'AdminController@index');
 $router->get('/admin/usuarios', 'AdminController@users');
 $router->get('/admin/respuestas', 'AdminController@responses');
+$router->get('/admin/respuestas/:id', 'AdminController@responseDetail');
 $router->get('/admin/catalogos', 'AdminController@catalogs');
 
 // Ruta 404
