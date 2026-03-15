@@ -42,12 +42,12 @@
                     <!-- Data mock -->
                     <?php foreach ($encuestas['items'] as $encuesta): ?>
                         <tr class="hover:bg-gray-50">
-                            <td class="py-3 px-4">#<?php echo $encuesta['id']?></td>
-                            <td class="py-3 px-4 font-medium text-gray-800"><?php echo $encuesta['estudiante'] ?></td>
-                            <td class="py-3 px-4"><?php echo $encuesta['cedula'] ?></td>
-                            <td class="py-3 px-4 text-gray-500"><?php echo $encuesta['carrera'] ?></td>
-                            <td class="py-3 px-4"><?php echo $encuesta['creado'] ?></td>
-                            <td class="py-3 px-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200"><?php echo $encuesta['estrato'] ?></span></td>
+                            <td class="py-3 px-4">#<?= $encuesta['id']?></td>
+                            <td class="py-3 px-4 font-medium text-gray-800"><?= $encuesta['estudiante'] ?></td>
+                            <td class="py-3 px-4"><?= $encuesta['cedula'] ?></td>
+                            <td class="py-3 px-4 text-gray-500"><?= $encuesta['carrera'] ?></td>
+                            <td class="py-3 px-4"><?= $encuesta['creado'] ?></td>
+                            <td class="py-3 px-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200"><?= $encuesta['estrato'] ?></span></td>
                             <td class="py-3 px-4 text-right">
                                 <button class="text-indigo-500 hover:text-indigo-700 mx-1" title="Ver Detalles"><i class="fas fa-eye"></i></button>
                                 <button class="text-blue-500 hover:text-blue-700 mx-1" title="Editar"><i class="fas fa-edit"></i></button>
