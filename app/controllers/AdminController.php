@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use Core\Controller;
 use App\Services\ApiService;
+use App\Services\CatalogoService;
+use App\Services\UsuarioService;
 
 /**
  * AdminController - Controlador para el Dashboard Administrativo
@@ -11,11 +13,15 @@ use App\Services\ApiService;
 class AdminController extends Controller
 {
     private $apiService;
+    private $catalogoService;
+    private $usuarioService;
 
     public function __construct()
     {
         
         $this->apiService = new ApiService();
+        $this->catalogoService = new CatalogoService($this->apiService);
+        $this->usuarioService = new UsuarioService($this->apiService);
     }
 
     /**
@@ -60,10 +66,163 @@ class AdminController extends Controller
     public function users()
     {
         $this->checkAuth();
-        
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $q = isset($_GET['q']) ? trim((string)$_GET['q']) : '';
+        $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+        if ($page < 1) {
+            $page = 1;
+        }
+
+        $perPage = isset($_GET['per_page']) && is_numeric($_GET['per_page']) ? (int)$_GET['per_page'] : 10;
+        if ($perPage < 1) {
+            $perPage = 10;
+        }
+        if ($perPage > 100) {
+            $perPage = 100;
+        }
+
+        $flash = null;
+        if (!empty($_SESSION['flash_message'])) {
+            $flash = [
+                'type' => isset($_SESSION['flash_type']) ? (string)$_SESSION['flash_type'] : 'info',
+                'message' => (string)$_SESSION['flash_message'],
+                'errors' => isset($_SESSION['flash_errors']) && is_array($_SESSION['flash_errors']) ? $_SESSION['flash_errors'] : [],
+            ];
+        }
+        unset($_SESSION['flash_type'], $_SESSION['flash_message'], $_SESSION['flash_errors']);
+
+        $authUser = isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user']) ? $_SESSION['auth_user'] : [];
+        $actorRol = null;
+        if (isset($authUser['rol']) && is_array($authUser['rol']) && !empty($authUser['rol']['codigo'])) {
+            $actorRol = (string)$authUser['rol']['codigo'];
+        }
+
+        $usuarios = [
+            'items' => [],
+            'pagination' => [
+                'page' => $page,
+                'per_page' => $perPage,
+                'total' => 0,
+                'total_pages' => 1,
+            ],
+        ];
+
+        $apiError = null;
+
+        try {
+            $response = $this->usuarioService->listar();
+            $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
+
+            if (!empty($response['success']) && $payload) {
+                $data = (isset($payload['success']) && array_key_exists('data', $payload) && is_array($payload['data']))
+                    ? $payload['data']
+                    : $payload;
+
+                $items = isset($data['items']) && is_array($data['items']) ? $data['items'] : [];
+
+                if ($q !== '') {
+                    $qLower = mb_strtolower($q, 'UTF-8');
+                    $items = array_values(array_filter($items, function ($u) use ($qLower) {
+                        $ci = isset($u['ci']) ? mb_strtolower((string)$u['ci'], 'UTF-8') : '';
+                        $nombre = isset($u['nombre_completo']) ? mb_strtolower((string)$u['nombre_completo'], 'UTF-8') : '';
+                        $rol = isset($u['rol_nombre']) ? mb_strtolower((string)$u['rol_nombre'], 'UTF-8') : '';
+                        $rolCodigo = isset($u['rol_codigo']) ? mb_strtolower((string)$u['rol_codigo'], 'UTF-8') : '';
+                        return (strpos($ci, $qLower) !== false)
+                            || (strpos($nombre, $qLower) !== false)
+                            || (strpos($rol, $qLower) !== false)
+                            || (strpos($rolCodigo, $qLower) !== false);
+                    }));
+                }
+
+                $total = count($items);
+                $totalPages = (int)ceil($total / $perPage);
+                if ($totalPages < 1) {
+                    $totalPages = 1;
+                }
+                if ($page > $totalPages) {
+                    $page = $totalPages;
+                }
+
+                $offset = ($page - 1) * $perPage;
+                $usuarios['items'] = array_slice($items, $offset, $perPage);
+                $usuarios['pagination'] = [
+                    'page' => $page,
+                    'per_page' => $perPage,
+                    'total' => $total,
+                    'total_pages' => $totalPages,
+                ];
+            } else {
+                $message = 'No se pudieron cargar los usuarios.';
+                if (is_array($payload) && isset($payload['message']) && is_string($payload['message']) && trim($payload['message']) !== '') {
+                    $message = $payload['message'];
+                }
+
+                $apiError = [
+                    'status' => isset($response['status']) ? (int)$response['status'] : 0,
+                    'message' => $message,
+                ];
+            }
+        } catch (\Exception $e) {
+            $apiError = [
+                'status' => 0,
+                'message' => 'Error de conexión con el servidor: ' . $e->getMessage(),
+            ];
+        }
+
+        $roles = [];
+        $institutos = [];
+
+        try {
+            $rolesResponse = $this->catalogoService->roles();
+            $rolesPayload = isset($rolesResponse['data']) && is_array($rolesResponse['data']) ? $rolesResponse['data'] : null;
+            if (!empty($rolesResponse['success']) && $rolesPayload) {
+                $rolesData = (isset($rolesPayload['success']) && array_key_exists('data', $rolesPayload) && is_array($rolesPayload['data']))
+                    ? $rolesPayload['data']
+                    : $rolesPayload;
+                if (is_array($rolesData)) {
+                    $roles = $rolesData;
+                }
+            }
+        } catch (\Exception $e) {
+            $roles = [];
+        }
+
+        // Solo SUPER_ADMIN necesita selector de institutos
+        if ($actorRol === 'SUPER_ADMIN') {
+            try {
+                $instResponse = $this->catalogoService->institutos();
+                $instPayload = isset($instResponse['data']) && is_array($instResponse['data']) ? $instResponse['data'] : null;
+                if (!empty($instResponse['success']) && $instPayload) {
+                    $instData = (isset($instPayload['success']) && array_key_exists('data', $instPayload) && is_array($instPayload['data']))
+                        ? $instPayload['data']
+                        : $instPayload;
+                    if (is_array($instData)) {
+                        $institutos = $instData;
+                    }
+                }
+            } catch (\Exception $e) {
+                $institutos = [];
+            }
+        }
+
         $this->view('admin/users', [
             'title' => 'Gestión de Usuarios | Admin',
-            'current_page' => 'users'
+            'current_page' => 'users',
+            'usuarios' => $usuarios,
+            'roles' => $roles,
+            'institutos' => $institutos,
+            'apiError' => $apiError,
+            'filters' => [
+                'q' => $q,
+                'page' => $page,
+                'per_page' => $perPage,
+            ],
+            'actorRol' => $actorRol,
+            'flash' => $flash,
         ], 'admin');
     }
 

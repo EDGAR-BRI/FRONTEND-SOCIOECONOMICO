@@ -26,6 +26,11 @@ $router->get('/admin/respuestas', 'AdminController@responses');
 $router->get('/admin/respuestas/:id', 'AdminController@responseDetail');
 $router->get('/admin/catalogos', 'AdminController@catalogs');
 
+// Acciones Admin Usuarios
+$router->post('/admin/usuarios/create', 'AdminUsersController@create');
+$router->post('/admin/usuarios/update/:id', 'AdminUsersController@update');
+$router->post('/admin/usuarios/delete/:id', 'AdminUsersController@delete');
+
 // Ruta 404
 $router->notFound(function () {
     $controller = new class extends Core\Controller {
