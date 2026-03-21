@@ -53,6 +53,9 @@ if ($cssVersion !== null) {
             <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-home w-5 text-center"></i> Dashboard
             </a>
+            <a href="<?php echo BASE_URL; ?>/admin/estadisticas" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'stats') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
+                <i class="fas fa-chart-pie w-5 text-center"></i> Estadísticas
+            </a>
             <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'users') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-users w-5 text-center"></i> Usuarios
             </a>
@@ -77,6 +80,7 @@ if ($cssVersion !== null) {
                     <?php 
                         $titles = [
                             'dashboard' => 'Dashboard Overview',
+                            'stats' => 'Estadísticas',
                             'users' => 'Gestión de Usuarios',
                             'responses' => 'Respuestas Recibidas',
                             'catalogs' => 'Gestión de Catálogos (Opciones)'

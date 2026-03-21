@@ -108,6 +108,162 @@ class AdminController extends Controller
     }
 
     /**
+     * Vista de estadísticas (maquetación con datos mock)
+     */
+    public function estadisticas()
+    {
+        $this->checkAuth();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $from = isset($_GET['from']) ? trim((string)$_GET['from']) : '';
+        $to = isset($_GET['to']) ? trim((string)$_GET['to']) : '';
+
+        $parseDate = function ($value) {
+            if (!is_string($value) || trim($value) === '') {
+                return null;
+            }
+            $dt = \DateTime::createFromFormat('Y-m-d', $value);
+            if (!$dt) {
+                return null;
+            }
+            $errors = \DateTime::getLastErrors();
+            if (!empty($errors['warning_count']) || !empty($errors['error_count'])) {
+                return null;
+            }
+            $dt->setTime(0, 0, 0);
+            return $dt;
+        };
+
+        $toDt = $parseDate($to);
+        if ($toDt === null) {
+            $toDt = new \DateTime('today');
+        }
+
+        $fromDt = $parseDate($from);
+        if ($fromDt === null) {
+            $fromDt = (clone $toDt)->modify('-29 days');
+        }
+
+        if ($fromDt > $toDt) {
+            $tmp = $fromDt;
+            $fromDt = $toDt;
+            $toDt = $tmp;
+        }
+
+        // Evitar rangos excesivos en mock
+        $maxDays = 366;
+        $diffDays = (int)$fromDt->diff($toDt)->format('%a') + 1;
+        if ($diffDays > $maxDays) {
+            $fromDt = (clone $toDt)->modify('-' . ($maxDays - 1) . ' days');
+            $diffDays = $maxDays;
+        }
+
+        // Serie temporal mock: encuestas por día
+        $labels = [];
+        $series = [];
+        $cursor = clone $fromDt;
+        while ($cursor <= $toDt) {
+            $label = $cursor->format('Y-m-d');
+            $labels[] = $label;
+            $seed = abs((int)crc32('encuestas:' . $label));
+            $value = 8 + ($seed % 17); // 8..24
+            // Simular fines de semana más bajos
+            $dow = (int)$cursor->format('N');
+            if ($dow >= 6) {
+                $value = (int)max(1, floor($value * 0.65));
+            }
+            $series[] = $value;
+            $cursor->modify('+1 day');
+        }
+
+        $totalEncuestas = array_sum($series);
+        $dias = count($series);
+        $promedioDiario = $dias > 0 ? ($totalEncuestas / $dias) : 0;
+        $maxDia = !empty($series) ? max($series) : 0;
+
+        // Distribución mock de estratos (1..5)
+        $estratoWeights = [
+            1 => 0.14,
+            2 => 0.24,
+            3 => 0.30,
+            4 => 0.20,
+            5 => 0.12,
+        ];
+        $estratos = [];
+        $assigned = 0;
+        foreach ($estratoWeights as $estrato => $w) {
+            $count = (int)floor($totalEncuestas * $w);
+            $estratos[(string)$estrato] = $count;
+            $assigned += $count;
+        }
+        // Ajustar remainder para cuadrar con el total
+        $remainder = $totalEncuestas - $assigned;
+        $estratoKeys = array_keys($estratos);
+        $i = 0;
+        while ($remainder > 0 && !empty($estratoKeys)) {
+            $k = $estratoKeys[$i % count($estratoKeys)];
+            $estratos[$k] += 1;
+            $remainder--;
+            $i++;
+        }
+
+        // Distribución mock por carreras
+        $carrerasBase = [
+            'Informática',
+            'Administración',
+            'Contaduría',
+            'Educación',
+            'Comunicación Social',
+            'Enfermería',
+            'Psicología',
+        ];
+        $carreraWeights = [0.18, 0.16, 0.13, 0.12, 0.11, 0.10, 0.20];
+        $carreras = [];
+        $assigned = 0;
+        foreach ($carrerasBase as $idx => $name) {
+            $w = isset($carreraWeights[$idx]) ? (float)$carreraWeights[$idx] : 0.1;
+            $count = (int)floor($totalEncuestas * $w);
+            $carreras[$name] = $count;
+            $assigned += $count;
+        }
+        $remainder = $totalEncuestas - $assigned;
+        $carreraKeys = array_keys($carreras);
+        $i = 0;
+        while ($remainder > 0 && !empty($carreraKeys)) {
+            $k = $carreraKeys[$i % count($carreraKeys)];
+            $carreras[$k] += 1;
+            $remainder--;
+            $i++;
+        }
+
+        $this->view('admin/estadisticas', [
+            'title' => 'Estadísticas | Admin',
+            'current_page' => 'stats',
+            'filters' => [
+                'from' => $fromDt->format('Y-m-d'),
+                'to' => $toDt->format('Y-m-d'),
+            ],
+            'kpis' => [
+                'total_encuestas' => $totalEncuestas,
+                'promedio_diario' => $promedioDiario,
+                'max_dia' => $maxDia,
+                'dias' => $dias,
+            ],
+            'charts' => [
+                'timeline' => [
+                    'labels' => $labels,
+                    'values' => $series,
+                ],
+                'estratos' => $estratos,
+                'carreras' => $carreras,
+            ],
+        ], 'admin');
+    }
+
+    /**
      * Vista de gestión de usuarios
      */
     public function users()

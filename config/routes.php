@@ -21,6 +21,7 @@ $router->post('/:sede/formulario/submit', 'FormController@submit');
 
 // Rutas Admin
 $router->get('/admin', 'AdminController@index');
+$router->get('/admin/estadisticas', 'AdminController@estadisticas');
 $router->get('/admin/usuarios', 'AdminController@users');
 $router->get('/admin/respuestas', 'AdminController@responses');
 $router->get('/admin/respuestas/:id', 'AdminController@responseDetail');
