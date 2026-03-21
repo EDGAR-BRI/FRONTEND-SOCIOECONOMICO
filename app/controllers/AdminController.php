@@ -6,6 +6,7 @@ use Core\Controller;
 use App\Services\ApiService;
 use App\Services\CatalogoService;
 use App\Services\UsuarioService;
+use App\Services\EncuestaService;
 
 /**
  * AdminController - Controlador para el Dashboard Administrativo
@@ -15,6 +16,7 @@ class AdminController extends Controller
     private $apiService;
     private $catalogoService;
     private $usuarioService;
+    private $encuestaService;
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class AdminController extends Controller
         $this->apiService = new ApiService();
         $this->catalogoService = new CatalogoService($this->apiService);
         $this->usuarioService = new UsuarioService($this->apiService);
+        $this->encuestaService = new EncuestaService($this->apiService);
     }
 
     /**
@@ -52,11 +55,55 @@ class AdminController extends Controller
     public function index()
     {
         $this->checkAuth();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $dashboard = [
+            'total_encuestas' => null,
+            'total_usuarios' => null,
+            'ultima_encuesta' => null,
+        ];
+
+        $encuestasRecientes = [];
+        $apiError = null;
+
+        try {
+            $encuestasRecientes = $this->encuestaService->ultimas(5);
+
+            // Total de encuestas (sin inferir estados como "pendiente")
+            $dashboard['total_encuestas'] = $this->encuestaService->totalPorFiltro(null);
+
+            // Fecha de la última encuesta (si el endpoint devuelve orden descendente)
+            if (!empty($encuestasRecientes) && is_array($encuestasRecientes[0]) && !empty($encuestasRecientes[0]['creado'])) {
+                $dashboard['ultima_encuesta'] = (string)$encuestasRecientes[0]['creado'];
+            }
+
+            // Total de usuarios
+            $usuariosResponse = $this->usuarioService->listar();
+            $usuariosPayload = isset($usuariosResponse['data']) && is_array($usuariosResponse['data']) ? $usuariosResponse['data'] : null;
+            if (!empty($usuariosResponse['success']) && $usuariosPayload) {
+                $usuariosData = (isset($usuariosPayload['success']) && array_key_exists('data', $usuariosPayload) && is_array($usuariosPayload['data']))
+                    ? $usuariosPayload['data']
+                    : $usuariosPayload;
+                $usuariosItems = isset($usuariosData['items']) && is_array($usuariosData['items']) ? $usuariosData['items'] : [];
+                $dashboard['total_usuarios'] = count($usuariosItems);
+            }
+        } catch (\Exception $e) {
+            $apiError = [
+                'status' => 0,
+                'message' => 'Error de conexión con el servidor: ' . $e->getMessage(),
+            ];
+        }
         
         // Renderizar vista usando el layout 'admin'
         $this->view('admin/dashboard', [
             'title' => 'Dashboard | Admin',
-            'current_page' => 'dashboard'
+            'current_page' => 'dashboard',
+            'dashboard' => $dashboard,
+            'encuestasRecientes' => $encuestasRecientes,
+            'apiError' => $apiError,
         ], 'admin');
     }
 

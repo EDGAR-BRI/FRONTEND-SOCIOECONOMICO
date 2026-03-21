@@ -1,5 +1,14 @@
+<?php
+    $dashboardData = isset($dashboard) && is_array($dashboard) ? $dashboard : [];
+    $totalEncuestas = isset($dashboardData['total_encuestas']) && $dashboardData['total_encuestas'] !== null ? (int)$dashboardData['total_encuestas'] : null;
+    $totalUsuarios = isset($dashboardData['total_usuarios']) && $dashboardData['total_usuarios'] !== null ? (int)$dashboardData['total_usuarios'] : null;
+    $ultimaEncuesta = isset($dashboardData['ultima_encuesta']) && $dashboardData['ultima_encuesta'] !== null ? (string)$dashboardData['ultima_encuesta'] : null;
+
+    $recientes = isset($encuestasRecientes) && is_array($encuestasRecientes) ? $encuestasRecientes : [];
+?>
+
 <!-- Dashboard Overview -->
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <!-- Card 1 -->
     <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition">
         <div class="flex items-center">
@@ -8,7 +17,7 @@
             </div>
             <div>
                 <p class="text-gray-500 text-sm font-medium">Total Encuestas</p>
-                <h3 class="text-2xl font-bold text-gray-800">1,245</h3>
+                <h3 class="text-2xl font-bold text-gray-800"><?php echo $totalEncuestas !== null ? number_format($totalEncuestas, 0, ',', '.') : '—'; ?></h3>
             </div>
         </div>
     </div>
@@ -17,11 +26,11 @@
     <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-green-500 hover:shadow-md transition">
         <div class="flex items-center">
             <div class="p-3 bg-green-100 rounded-full text-green-500 mr-4">
-                <i class="fas fa-check-circle text-xl"></i>
+                <i class="fas fa-users text-xl"></i>
             </div>
             <div>
-                <p class="text-gray-500 text-sm font-medium">Aprobadas</p>
-                <h3 class="text-2xl font-bold text-gray-800">920</h3>
+                <p class="text-gray-500 text-sm font-medium">Usuarios</p>
+                <h3 class="text-2xl font-bold text-gray-800"><?php echo $totalUsuarios !== null ? number_format($totalUsuarios, 0, ',', '.') : '—'; ?></h3>
             </div>
         </div>
     </div>
@@ -30,24 +39,11 @@
     <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-yellow-500 hover:shadow-md transition">
         <div class="flex items-center">
             <div class="p-3 bg-yellow-100 rounded-full text-yellow-500 mr-4">
-                <i class="fas fa-clock text-xl"></i>
+                <i class="fas fa-calendar-alt text-xl"></i>
             </div>
             <div>
-                <p class="text-gray-500 text-sm font-medium">Pendientes</p>
-                <h3 class="text-2xl font-bold text-gray-800">125</h3>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card 4 -->
-    <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-purple-500 hover:shadow-md transition">
-        <div class="flex items-center">
-            <div class="p-3 bg-purple-100 rounded-full text-purple-500 mr-4">
-                <i class="fas fa-users text-xl"></i>
-            </div>
-            <div>
-                <p class="text-gray-500 text-sm font-medium">Total Usuarios</p>
-                <h3 class="text-2xl font-bold text-gray-800">48</h3>
+                <p class="text-gray-500 text-sm font-medium">Última encuesta</p>
+                <h3 class="text-2xl font-bold text-gray-800"><?php echo htmlspecialchars($ultimaEncuesta ?: '—'); ?></h3>
             </div>
         </div>
     </div>
@@ -67,22 +63,37 @@
                         <th class="py-2 px-4 border-b">Estudiante</th>
                         <th class="py-2 px-4 border-b">Cédula</th>
                         <th class="py-2 px-4 border-b">Fecha</th>
-                        <th class="py-2 px-4 border-b">Estado</th>
+                        <th class="py-2 px-4 border-b">Estrato</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm">
-                    <tr>
-                        <td class="py-3 px-4 border-b">Juan Pérez</td>
-                        <td class="py-3 px-4 border-b">V-20123456</td>
-                        <td class="py-3 px-4 border-b">2026-03-03</td>
-                        <td class="py-3 px-4 border-b"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Completa</span></td>
-                    </tr>
-                    <tr>
-                        <td class="py-3 px-4 border-b">María Gómez</td>
-                        <td class="py-3 px-4 border-b">V-25654321</td>
-                        <td class="py-3 px-4 border-b">2026-03-02</td>
-                        <td class="py-3 px-4 border-b"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">Pendiente</span></td>
-                    </tr>
+                    <?php if (empty($recientes)): ?>
+                        <tr>
+                            <td class="py-6 px-4 text-gray-500" colspan="4">No hay encuestas para mostrar.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($recientes as $row): ?>
+                            <?php
+                                $estudiante = isset($row['estudiante']) ? (string)$row['estudiante'] : '';
+                                $cedula = isset($row['cedula']) ? (string)$row['cedula'] : '';
+                                $fecha = isset($row['creado']) ? (string)$row['creado'] : '';
+                                $estrato = isset($row['estrato']) ? $row['estrato'] : null;
+                                $isCompleta = $estrato !== null && $estrato !== '';
+                            ?>
+                            <tr>
+                                <td class="py-3 px-4 border-b"><?php echo htmlspecialchars($estudiante ?: '—'); ?></td>
+                                <td class="py-3 px-4 border-b"><?php echo htmlspecialchars($cedula ?: '—'); ?></td>
+                                <td class="py-3 px-4 border-b"><?php echo htmlspecialchars($fecha ?: '—'); ?></td>
+                                <td class="py-3 px-4 border-b">
+                                    <?php if ($estrato): ?>
+                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200"><?php echo htmlspecialchars((string)$estrato); ?></span>
+                                <?php else: ?>
+                                    <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-medium border border-gray-200">Sin estrato</span>
+                                <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
