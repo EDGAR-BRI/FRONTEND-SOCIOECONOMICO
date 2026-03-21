@@ -107,7 +107,7 @@ if ($cssVersion !== null) {
         
         <!-- Footer -->
         <footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
-            &copy; <?php echo date('Y'); ?> IUJO Barquisimeto - Sistema de Administración
+            &copy; <?php echo date('Y'); ?> IUJO - Sistema de Administración Socioeconómico. Todos los derechos reservados.
         </footer>
     </div>
 

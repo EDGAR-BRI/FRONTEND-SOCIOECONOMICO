@@ -134,7 +134,7 @@
                             </td>
                             <td class="py-3 px-4 text-right">
                                 <a class="text-indigo-500 hover:text-indigo-700 mx-1" href="<?php echo BASE_URL; ?>/admin/respuestas/<?php echo $id; ?>" title="Ver Detalles"><i class="fas fa-eye"></i></a>
-                                <button class="text-blue-500 hover:text-blue-700 mx-1" title="Editar"><i class="fas fa-edit"></i></button>
+                                <!--    <button class="text-blue-500 hover:text-blue-700 mx-1" title="Editar"><i class="fas fa-edit"></i></button> -->
                             </td>
                         </tr>
                     <?php endforeach; ?>
