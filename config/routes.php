@@ -33,12 +33,7 @@ $router->post('/admin/usuarios/delete/:id', 'AdminUsersController@delete');
 
 // Ruta 404
 $router->notFound(function () {
-    $controller = new class extends Core\Controller {
-        public function show404()
-        {
-            $this->view('errors/404', [], 'main');
-        }
-    };
+    $controller = new App\Controllers\ErrorsController();
     $controller->show404();
 });
 
