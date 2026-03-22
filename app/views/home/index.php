@@ -5,19 +5,19 @@
     </section>
 
     <section class="grid grid-col-1 grid-rows-1 lg:grid-cols-3 lg:grid-rows-3 gap-6 p-6 justify-center ">
-        <a href="<?php echo BASE_URL; ?>/IUJO-barquisimeto/formulario" class= "lg:col-span-2 card-grit-home ">
+        <a href="<?php echo BASE_URL; ?>/IUJO-BQTO/formulario" class= "lg:col-span-2 card-grit-home ">
             <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
             <h2 class =" text-card" >IUJO Barquisimeto</h2>
         </a>
-        <a href="<?php echo BASE_URL; ?>/IUJO-Petare/formulario" class= "card-grit-home  lg:row-span-2">
+        <a href="<?php echo BASE_URL; ?>/IUJO-PETARE/formulario" class= "card-grit-home  lg:row-span-2">
             <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
             <h2 class =" text-card">IUJO Petare</h2>
         </a>
-        <a href="<?php echo BASE_URL; ?>/IUJO-Catia/formulario" class= "card-grit-home  lg:row-span-2">
+        <a href="<?php echo BASE_URL; ?>/IUJO-CATIA/formulario" class= "card-grit-home  lg:row-span-2">
             <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
             <h2 class =" text-card">IUJO Catia</h2>
         </a>
-        <a href="<?php echo BASE_URL; ?>/IUJO-Guanarito/formulario" class = "card-grit-home ">
+        <a href="<?php echo BASE_URL; ?>/IUJO-GUANARITO/formulario" class = "card-grit-home ">
             <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
             <h2 class =" text-card">IUJO Guanarito</h2>
         </a>
