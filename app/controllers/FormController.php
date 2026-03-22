@@ -18,6 +18,29 @@ class FormController extends Controller
         $this->apiService = new ApiService();
     }
 
+    private function configurarTenantPorSede($sede)
+    {
+        if (empty($sede)) {
+            return;
+        }
+
+        $sedeKey = strtolower(trim((string)$sede));
+
+        // Opción recomendada: enviar la sede/siglas y dejar que el backend resuelva el instituto_id por BD.
+        // Backend soporta: X-Instituto-Siglas / X-Tenant-Code.
+        if ($sedeKey !== '') {
+            $this->apiService->setHeader('X-Instituto-Siglas', $sedeKey);
+        }
+
+        if (defined('SEDE_INSTITUTO_MAP') && is_array(SEDE_INSTITUTO_MAP) && isset(SEDE_INSTITUTO_MAP[$sedeKey])) {
+            $institutoId = SEDE_INSTITUTO_MAP[$sedeKey];
+
+            if (is_numeric($institutoId) && (int)$institutoId > 0) {
+                $this->apiService->setHeader('X-Instituto-Id', (string)((int)$institutoId));
+            }
+        }
+    }
+
     /**
      * Muestra el formulario con todos los catálogos
      */
@@ -26,6 +49,9 @@ class FormController extends Controller
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+
+        // Si la URL trae una sede (/:sede/formulario), la usamos para definir el tenant del backend.
+        $this->configurarTenantPorSede($sede);
 
         if (!empty($sede)) {
             $_SESSION['sede_actual'] = $sede;
@@ -135,16 +161,31 @@ class FormController extends Controller
     {
 
         if (!$this->isPost()) {
-            $redirectPath = !empty($sede) ? "/{$sede}/formulario" : '/';
+            $redirectPath = !empty($sede) ? BASE_URL . "/{$sede}/formulario" : BASE_URL . '/';
             $this->redirect($redirectPath);
             return;
         }
 
         // Unir prefijo y teléfono si ambos existen
         if (isset($_POST['prefijo']) && isset($_POST['telefono'])) {
-            $_POST['telefono'] = $_POST['prefijo'] . $_POST['telefono'];
+            $prefijo = preg_replace('/[^0-9]/', '', (string)$_POST['prefijo']);
+            $telefono = preg_replace('/[^0-9]/', '', (string)$_POST['telefono']);
+
+            // Si ya viene completo (11 dígitos), no concatenamos prefijo.
+            if (strlen($telefono) === 11) {
+                $_POST['telefono'] = $telefono;
+            } elseif (strlen($telefono) === 7 && strlen($prefijo) === 4) {
+                $_POST['telefono'] = $prefijo . $telefono;
+            } else {
+                // Mantener lo enviado para que falle con mensaje nativo de HTML5 o validación del modelo.
+                $_POST['telefono'] = $telefono;
+            }
+
             unset($_POST['prefijo']);
         }
+
+        // Asegurar tenant para la llamada al backend en base a la sede de la URL
+        $this->configurarTenantPorSede($sede);
 
         // Crear modelo con datos del formulario
         $encuesta = new Encuesta($_POST);
@@ -161,7 +202,7 @@ class FormController extends Controller
             }
             $_SESSION['errors'] = $encuesta->getErrors();
             $_SESSION['form_data'] = $_POST;
-            $redirectPath = !empty($sede) ? "/{$sede}/formulario" : '/';
+            $redirectPath = !empty($sede) ? BASE_URL . "/{$sede}/formulario" : BASE_URL . '/';
             $this->redirect($redirectPath);
             return;
         }
@@ -170,7 +211,11 @@ class FormController extends Controller
             // Enviar datos a la API
             $response = $this->apiService->post('/encuesta', $encuesta->toArray());
 
-            if ($response['success']) {
+            $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
+            $payloadSuccess = is_array($payload) && array_key_exists('success', $payload) ? (bool)$payload['success'] : null;
+
+            // Éxito real: HTTP 2xx y (si existe) payload.success === true
+            if (!empty($response['success']) && ($payloadSuccess === null || $payloadSuccess === true)) {
                 // Guardar datos de la encuesta en sesión para mostrar en success
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
@@ -181,18 +226,48 @@ class FormController extends Controller
                     'cedula' => $encuesta->get('cedula')
                 ];
 
-                $this->redirect('/success');
+                $this->redirect(BASE_URL . '/success');
             } else {
                 // Manejar error de la API
                 if (session_status() === PHP_SESSION_NONE) {
                     session_start();
                 }
-                $errorMsg = isset($response['data']['message'])
-                    ? $response['data']['message']
-                    : 'Error al procesar el formulario. Intente nuevamente.';
-                $_SESSION['errors'] = ['general' => $errorMsg];
+
+                $errors = [];
+
+                // El backend responde: { success: false, data: { errors: {...} }, message: '...' }
+                if (is_array($payload) && isset($payload['data']['errors']) && is_array($payload['data']['errors'])) {
+                    foreach ($payload['data']['errors'] as $fieldErrors) {
+                        if (is_array($fieldErrors)) {
+                            foreach ($fieldErrors as $msg) {
+                                if (is_string($msg) && trim($msg) !== '') {
+                                    $errors[] = trim($msg);
+                                }
+                            }
+                        } elseif (is_string($fieldErrors) && trim($fieldErrors) !== '') {
+                            $errors[] = trim($fieldErrors);
+                        }
+                    }
+                }
+
+                if (empty($errors)) {
+                    // Preferir message del backend; si no, mostrar status HTTP.
+                    $errorMsg = (is_array($payload) && isset($payload['message']) && is_string($payload['message']) && trim($payload['message']) !== '')
+                        ? trim($payload['message'])
+                        : null;
+
+                    if ($errorMsg === null) {
+                        $status = isset($response['status']) ? (int)$response['status'] : 0;
+                        $errorMsg = $status > 0
+                            ? 'Error al procesar el formulario (HTTP ' . $status . '). Intente nuevamente.'
+                            : 'Error al procesar el formulario. Intente nuevamente.';
+                    }
+                    $errors[] = $errorMsg;
+                }
+
+                $_SESSION['errors'] = $errors;
                 $_SESSION['form_data'] = $_POST;
-                $redirectPath = !empty($sede) ? "/{$sede}/formulario" : '/';
+                $redirectPath = !empty($sede) ? BASE_URL . "/{$sede}/formulario" : BASE_URL . '/';
                 $this->redirect($redirectPath);
             }
         } catch (\Exception $e) {
@@ -202,7 +277,7 @@ class FormController extends Controller
             }
             $_SESSION['errors'] = ['general' => 'Error de conexión con el servidor: ' . $e->getMessage()];
             $_SESSION['form_data'] = $_POST;
-            $redirectPath = !empty($sede) ? "/{$sede}/formulario" : '/';
+            $redirectPath = !empty($sede) ? BASE_URL . "/{$sede}/formulario" : BASE_URL . '/';
             $this->redirect($redirectPath);
         }
     }
@@ -220,7 +295,7 @@ class FormController extends Controller
         unset($_SESSION['encuesta_enviada']);
 
         if (!$encuestaData) {
-            $this->redirect('/');
+            $this->redirect(BASE_URL . '/');
             return;
         }
 

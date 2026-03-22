@@ -37,8 +37,8 @@
             </div>
         </section>
 
-        <?php $actionUrl = !empty($sede) ? BASE_URL . '/' . $sede . '/formulario/submit' : BASE_URL . '/submit'; echo $actionUrl; ?>
-        <form id="socioeconomicForm" action="<?php echo $actionUrl; ?>" method="POST" class="space-y-6" enctype="multipart/form-data">
+        <?php $actionUrl = !empty($sede) ? BASE_URL . '/' . $sede . '/formulario/submit' : BASE_URL . '/submit'; ?>
+        <form id="socioeconomicForm" action="<?php echo $actionUrl; ?>" method="POST" class="space-y-6" enctype="multipart/form-data" data-api-base-url="<?php echo htmlspecialchars(API_BASE_URL); ?>">
 
             <!-- SECCIÓN 1: DATOS PERSONALES -->
             <section id="step-1" class="form-step hidden">

@@ -17,6 +17,7 @@ $router->get('/success', 'FormController@success');
 // Rutas POST
 $router->post('/login', 'AuthController@authenticate');
 $router->post('/logout', 'AuthController@logout');
+$router->post('/submit', 'FormController@submit');
 $router->post('/:sede/formulario/submit', 'FormController@submit');
 
 // Rutas Admin

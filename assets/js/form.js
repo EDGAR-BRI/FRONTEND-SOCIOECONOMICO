@@ -129,6 +129,20 @@ document.addEventListener('DOMContentLoaded', function () {
         let isValid = true;
         let firstInvalidInput = null;
 
+        // Validación especial: teléfono puede ser 11 dígitos completo o 7 dígitos + prefijo.
+        const telefonoEl = stepElement.querySelector('#telefono');
+        const prefijoEl = stepElement.querySelector('#prefijo');
+        if (telefonoEl) {
+            const telefonoVal = (telefonoEl.value || '').replace(/[^0-9]/g, '');
+            const prefijoVal = prefijoEl ? (prefijoEl.value || '').replace(/[^0-9]/g, '') : '';
+
+            if (telefonoVal.length === 7 && prefijoVal.length !== 4) {
+                telefonoEl.setCustomValidity('Seleccione un prefijo (0414/0416/0424/0426) o escriba el teléfono completo de 11 dígitos.');
+            } else {
+                telefonoEl.setCustomValidity('');
+            }
+        }
+
         inputs.forEach(input => {
             // Check validity solo devuelve false si tiene restricciones (required, pattern, etc) que no se cumplen
             if (!input.checkValidity()) {
@@ -169,15 +183,92 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Event Listeners para botones Siguiente
     document.querySelectorAll('.next-step').forEach(button => {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', async function () {
             // Buscamos el contenedor del paso actual
             // Usamos closest('.form-step') para asegurarnos de obtener el padre correcto
             const currentStep = this.closest('.form-step');
             const nextStepId = this.dataset.next;
 
-            if (currentStep && validateStep(currentStep)) {
-                showStep(nextStepId);
+            if (!currentStep || !validateStep(currentStep)) {
+                return;
             }
+
+            // Chequeo temprano: en el paso 1 validar duplicados de cédula/email.
+            if (currentStep.id === 'step-1') {
+                const formEl = document.getElementById('socioeconomicForm');
+                const apiBaseUrl = formEl ? (formEl.dataset.apiBaseUrl || '').replace(/\/+$/, '') : '';
+                const cedulaEl = currentStep.querySelector('#cedula');
+                const emailEl = currentStep.querySelector('#email');
+
+                if (apiBaseUrl && (cedulaEl || emailEl)) {
+                    const cedula = cedulaEl ? (cedulaEl.value || '').trim() : '';
+                    const email = emailEl ? (emailEl.value || '').trim() : '';
+
+                    // Solo consultar si hay algo que verificar
+                    if (cedula !== '' || email !== '') {
+                        // Evitar doble click mientras consulta
+                        const prevDisabled = this.disabled;
+                        this.disabled = true;
+
+                        try {
+                            const qs = new URLSearchParams();
+                            if (cedula !== '') qs.set('cedula', cedula);
+                            if (email !== '') qs.set('email', email);
+
+                            const resp = await fetch(apiBaseUrl + '/encuesta/check?' + qs.toString(), {
+                                method: 'GET',
+                                headers: { 'Accept': 'application/json' },
+                            });
+
+                            const payload = await resp.json().catch(() => null);
+
+                            // Resetear mensajes previos
+                            if (cedulaEl) cedulaEl.setCustomValidity('');
+                            if (emailEl) emailEl.setCustomValidity('');
+
+                            if (!resp.ok || !payload || payload.success !== true || !payload.data) {
+                                // Si falla el check, dejamos continuar (para no bloquear por un fallo de red).
+                                // El backend definitivo validará al enviar.
+                                showStep(nextStepId);
+                                return;
+                            }
+
+                            const cedulaExists = !!payload.data.cedula_exists;
+                            const emailExists = !!payload.data.email_exists;
+
+                            if (cedulaExists) {
+                                cedulaEl.setCustomValidity('Ya existe una encuesta registrada con esta cédula.');
+                            }
+                            if (emailExists) {
+                                emailEl.setCustomValidity('Ya existe una encuesta registrada con este correo.');
+                            }
+
+                            if (cedulaExists) {
+                                cedulaEl.reportValidity();
+                                cedulaEl.focus();
+                                return;
+                            }
+
+                            if (emailExists) {
+                                emailEl.reportValidity();
+                                emailEl.focus();
+                                return;
+                            }
+
+                            showStep(nextStepId);
+                            return;
+                        } catch (e) {
+                            // En caso de error de red/parseo, no bloqueamos el avance.
+                            showStep(nextStepId);
+                            return;
+                        } finally {
+                            this.disabled = prevDisabled;
+                        }
+                    }
+                }
+            }
+
+            showStep(nextStepId);
         });
     });
 
@@ -189,4 +280,19 @@ document.addEventListener('DOMContentLoaded', function () {
             showStep(prevStepId);
         });
     });
+
+    // Limpiar validaciones personalizadas (duplicados) al editar
+    const cedulaInput = document.getElementById('cedula');
+    if (cedulaInput) {
+        cedulaInput.addEventListener('input', function () {
+            this.setCustomValidity('');
+        });
+    }
+
+    const emailInput = document.getElementById('email');
+    if (emailInput) {
+        emailInput.addEventListener('input', function () {
+            this.setCustomValidity('');
+        });
+    }
 });
