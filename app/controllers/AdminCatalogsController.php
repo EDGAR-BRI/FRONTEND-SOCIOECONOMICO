@@ -71,6 +71,66 @@ class AdminCatalogsController extends Controller
         $this->redirect($url);
     }
 
+    private function applyCarreraInstitutosState($carreraId, array $desiredInstitutoIds, array $prevInstitutoIds)
+    {
+        $carreraId = is_numeric($carreraId) ? (int)$carreraId : 0;
+        if ($carreraId <= 0) {
+            return ['success' => false, 'errors' => ['ID de carrera inválido']];
+        }
+
+        $normalize = function (array $arr) {
+            $arr = array_values(array_unique(array_filter(array_map(function ($v) {
+                return is_numeric($v) ? (int)$v : 0;
+            }, $arr), function ($v) {
+                return (int)$v > 0;
+            })));
+            sort($arr);
+            return $arr;
+        };
+
+        $desired = $normalize($desiredInstitutoIds);
+        $prev = $normalize($prevInstitutoIds);
+
+        $toActivate = array_values(array_diff($desired, $prev));
+        $toDeactivate = array_values(array_diff($prev, $desired));
+
+        $errors = [];
+
+        foreach ($toActivate as $iid) {
+            try {
+                $resp = $this->catalogos->adminRestore('carrera', $carreraId, ['instituto_id' => (int)$iid]);
+                $payload = isset($resp['data']) && is_array($resp['data']) ? $resp['data'] : null;
+                if (empty($resp['success']) || !$payload || empty($payload['success'])) {
+                    $msg = 'No se pudo activar en sede #' . (int)$iid;
+                    if (is_array($payload) && !empty($payload['message'])) {
+                        $msg = (string)$payload['message'];
+                    }
+                    $errors[] = $msg;
+                }
+            } catch (\Exception $e) {
+                $errors[] = 'Error activando en sede #' . (int)$iid . ': ' . $e->getMessage();
+            }
+        }
+
+        foreach ($toDeactivate as $iid) {
+            try {
+                $resp = $this->catalogos->adminDelete('carrera', $carreraId, ['instituto_id' => (int)$iid]);
+                $payload = isset($resp['data']) && is_array($resp['data']) ? $resp['data'] : null;
+                if (empty($resp['success']) || !$payload || empty($payload['success'])) {
+                    $msg = 'No se pudo desactivar en sede #' . (int)$iid;
+                    if (is_array($payload) && !empty($payload['message'])) {
+                        $msg = (string)$payload['message'];
+                    }
+                    $errors[] = $msg;
+                }
+            } catch (\Exception $e) {
+                $errors[] = 'Error desactivando en sede #' . (int)$iid . ': ' . $e->getMessage();
+            }
+        }
+
+        return ['success' => empty($errors), 'errors' => $errors];
+    }
+
     public function create()
     {
         $this->checkSuperAdmin();
@@ -79,13 +139,35 @@ class AdminCatalogsController extends Controller
         $institutoId = isset($_POST['instituto_id']) && is_numeric($_POST['instituto_id']) ? (int)$_POST['instituto_id'] : null;
 
         $data = $_POST;
-        unset($data['resource']);
+        unset($data['resource'], $data['share_instituto_ids'], $data['instituto_activo_ids'], $data['prev_active_instituto_ids']);
+
+        $desiredInstitutos = [];
+        if (isset($_POST['instituto_activo_ids']) && is_array($_POST['instituto_activo_ids'])) {
+            $desiredInstitutos = $_POST['instituto_activo_ids'];
+        }
+        $prevInstitutos = [];
+        if (!empty($_POST['prev_active_instituto_ids']) && is_string($_POST['prev_active_instituto_ids'])) {
+            $decoded = json_decode($_POST['prev_active_instituto_ids'], true);
+            if (is_array($decoded)) {
+                $prevInstitutos = $decoded;
+            }
+        }
 
         try {
             $response = $this->catalogos->adminCreate($resource, $data);
             $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
 
             if (!empty($response['success']) && $payload && !empty($payload['success'])) {
+                // Carrera: aplicar estado por sedes (Instituto_Carrera)
+                if ($resource === 'carrera') {
+                    $newId = isset($payload['data']['id']) ? (int)$payload['data']['id'] : 0;
+                    $apply = $this->applyCarreraInstitutosState($newId, $desiredInstitutos, $prevInstitutos);
+                    if (!empty($apply['errors'])) {
+                        $this->flash('error', 'Registro creado, pero con errores al aplicar sedes.', ['sedes' => $apply['errors']]);
+                        $this->redirectBack($resource, $institutoId);
+                    }
+                }
+
                 $this->flash('success', 'Registro creado correctamente.');
             } else {
                 $message = 'No se pudo crear el registro.';
@@ -111,13 +193,34 @@ class AdminCatalogsController extends Controller
         $institutoId = isset($_POST['instituto_id']) && is_numeric($_POST['instituto_id']) ? (int)$_POST['instituto_id'] : null;
 
         $data = $_POST;
-        unset($data['resource']);
+        unset($data['resource'], $data['share_instituto_ids'], $data['instituto_activo_ids'], $data['prev_active_instituto_ids']);
+
+        $desiredInstitutos = [];
+        if (isset($_POST['instituto_activo_ids']) && is_array($_POST['instituto_activo_ids'])) {
+            $desiredInstitutos = $_POST['instituto_activo_ids'];
+        }
+        $prevInstitutos = [];
+        if (!empty($_POST['prev_active_instituto_ids']) && is_string($_POST['prev_active_instituto_ids'])) {
+            $decoded = json_decode($_POST['prev_active_instituto_ids'], true);
+            if (is_array($decoded)) {
+                $prevInstitutos = $decoded;
+            }
+        }
 
         try {
             $response = $this->catalogos->adminUpdate($resource, $id, $data);
             $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
 
             if (!empty($response['success']) && $payload && !empty($payload['success'])) {
+                // Carrera: aplicar estado por sedes (Instituto_Carrera)
+                if ($resource === 'carrera' && $id > 0) {
+                    $apply = $this->applyCarreraInstitutosState($id, $desiredInstitutos, $prevInstitutos);
+                    if (!empty($apply['errors'])) {
+                        $this->flash('error', 'Registro actualizado, pero con errores al aplicar sedes.', ['sedes' => $apply['errors']]);
+                        $this->redirectBack($resource, $institutoId);
+                    }
+                }
+
                 $this->flash('success', 'Registro actualizado correctamente.');
             } else {
                 $message = 'No se pudo actualizar el registro.';

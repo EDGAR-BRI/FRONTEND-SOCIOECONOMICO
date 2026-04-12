@@ -5,6 +5,7 @@
         $institutoId = isset($institutoId) && $institutoId !== null ? (int)$institutoId : null;
         $currentTenantScoped = !empty($currentTenantScoped);
         $institutos = isset($institutos) && is_array($institutos) ? $institutos : [];
+        $carreraActivosMap = isset($carreraActivosMap) && is_array($carreraActivosMap) ? $carreraActivosMap : [];
         $editId = isset($editId) && $editId !== null ? (int)$editId : null;
         $editItem = isset($editItem) && is_array($editItem) ? $editItem : null;
 
@@ -134,12 +135,29 @@
             <div>
                 <h3 class="text-xl font-bold text-gray-800"><?php echo htmlspecialchars(isset($catalogoLabel) ? (string)$catalogoLabel : 'Catálogo'); ?></h3>
                 <p class="text-sm text-gray-500">Gestiona las opciones disponibles para este campo.</p>
+                <?php if ($currentTenantScoped): ?>
+                    <?php
+                        $currentInstName = '';
+                        foreach ($institutos as $inst) {
+                            if (is_array($inst) && isset($inst['id']) && !empty($institutoId) && (int)$inst['id'] === (int)$institutoId) {
+                                $sig = isset($inst['siglas']) ? trim((string)$inst['siglas']) : '';
+                                $nm = isset($inst['nombre']) ? trim((string)$inst['nombre']) : '';
+                                $currentInstName = $sig !== '' ? $sig : $nm;
+                                break;
+                            }
+                        }
+                    ?>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Sede actual: <?php echo htmlspecialchars($currentInstName !== '' ? $currentInstName : ((string)$institutoId)); ?>
+                        <span class="text-gray-400">(el estado puede variar por sede)</span>
+                    </p>
+                <?php endif; ?>
             </div>
             <?php if ($currentTenantScoped): ?>
                 <form method="GET" action="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-2">
                     <input type="hidden" name="resource" value="<?php echo htmlspecialchars($resource); ?>">
                     <label class="text-sm text-gray-600" for="instituto_id">Sede</label>
-                    <select id="instituto_id" name="instituto_id" class="border border-gray-300 rounded-md p-2 text-sm focus:ring-primary-500 focus:border-primary-500 outline-none">
+                    <select id="instituto_id" name="instituto_id" onchange="this.form.submit()" class="border border-gray-300 rounded-md p-2 text-sm focus:ring-primary-500 focus:border-primary-500 outline-none">
                         <?php foreach ($institutos as $inst): ?>
                             <?php
                                 if (!is_array($inst) || !isset($inst['id'])) {
@@ -153,7 +171,6 @@
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded shadow-sm text-sm font-medium transition">Cambiar</button>
                 </form>
             <?php endif; ?>
 
@@ -205,6 +222,14 @@
                                     class="text-blue-500 hover:text-blue-700 mx-1 js-edit-catalog-item"
                                     title="Editar"
                                     data-id="<?php echo (int)$id; ?>"
+                                    <?php if ($resource === 'carrera'): ?>
+                                        <?php
+                                            $aid = (int)$id;
+                                            $activeList = isset($carreraActivosMap[$aid]) && is_array($carreraActivosMap[$aid]) ? $carreraActivosMap[$aid] : [];
+                                            $activeJson = htmlspecialchars(json_encode(array_values(array_map('intval', $activeList))), ENT_QUOTES);
+                                        ?>
+                                        data-active-institutos="<?php echo $activeJson; ?>"
+                                    <?php endif; ?>
                                     <?php foreach ($fields as $f): ?>
                                         <?php $dv = array_key_exists($f, $row) ? (string)$row[$f] : ''; ?>
                                         data-<?php echo htmlspecialchars($f); ?>="<?php echo htmlspecialchars($dv, ENT_QUOTES); ?>"
@@ -264,6 +289,7 @@
                 <?php else: ?>
                     <input type="hidden" name="instituto_id" id="catalog-instituto-id" value="">
                 <?php endif; ?>
+                <input type="hidden" name="prev_active_instituto_ids" id="catalog-prev-activos" value="[]">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <?php foreach ($fieldMeta as $meta): ?>
@@ -285,6 +311,34 @@
                         </div>
                     <?php endforeach; ?>
                 </div>
+
+                <?php if ($resource === 'carrera' && !empty($institutos)): ?>
+                    <div class="mt-5 pt-4 border-t">
+                        <div class="text-sm font-medium text-gray-800 mb-2">Sedes donde está activa</div>
+                        <p class="text-xs text-gray-500 mb-3">
+                            Puedes activar o desactivar la carrera por sede (tabla Instituto_Carrera).
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <?php foreach ($institutos as $inst): ?>
+                                <?php
+                                    if (!is_array($inst) || !isset($inst['id'])) {
+                                        continue;
+                                    }
+                                    $iid = (int)$inst['id'];
+                                    $iname = isset($inst['nombre']) ? (string)$inst['nombre'] : ('Instituto #' . $iid);
+                                    $isig = isset($inst['siglas']) ? trim((string)$inst['siglas']) : '';
+                                    $label = $isig !== '' ? ($isig . ' — ' . $iname) : $iname;
+                                    $isCurrent = (!empty($institutoId) && (int)$institutoId === $iid);
+                                ?>
+                                <label class="flex items-center gap-2 text-sm text-gray-700">
+                                    <input type="checkbox" class="h-4 w-4" name="instituto_activo_ids[]" value="<?php echo (int)$iid; ?>" <?php echo $isCurrent ? 'data-current="1"' : ''; ?>>
+                                    <span><?php echo htmlspecialchars($label); ?></span>
+                                </label>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
                 <div class="mt-6 flex justify-end gap-2">
                     <button type="button" class="px-4 py-2 rounded border text-gray-700 hover:bg-gray-50" data-modal-close>Cancelar</button>

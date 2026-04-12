@@ -61,4 +61,9 @@ class CatalogoService
         $resource = trim((string)$resource);
         return $this->api->post('/catalogo-admin/' . rawurlencode($resource) . '/' . (int)$id . '/restore', $data);
     }
+
+    public function carreraActivos()
+    {
+        return $this->api->get('/catalogo-admin/carrera/activos');
+    }
 }

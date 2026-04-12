@@ -693,6 +693,7 @@ class AdminController extends Controller
         $institutos = [];
         $currentTenantScoped = false;
         $editItem = null;
+        $carreraActivosMap = [];
 
         try {
             // Menú dinámico desde backend
@@ -754,6 +755,20 @@ class AdminController extends Controller
                 $institutoId = (int)$institutos[0]['id'];
             }
 
+            // Para Carreras: mapa de sedes activas (Instituto_Carrera) para marcar checks correctamente en el modal
+            if ($resource === 'carrera') {
+                $mapResp = $this->catalogoService->carreraActivos();
+                $mapPayload = isset($mapResp['data']) && is_array($mapResp['data']) ? $mapResp['data'] : null;
+                if (!empty($mapResp['success']) && is_array($mapPayload)) {
+                    $mapData = (isset($mapPayload['success']) && array_key_exists('data', $mapPayload) && is_array($mapPayload['data']))
+                        ? $mapPayload['data']
+                        : $mapPayload;
+                    if (is_array($mapData)) {
+                        $carreraActivosMap = $mapData;
+                    }
+                }
+            }
+
             // Datos del catálogo seleccionado (admin: incluye inactivos)
             $params = [];
             if ($currentTenantScoped && !empty($institutoId)) {
@@ -806,6 +821,7 @@ class AdminController extends Controller
             'currentTenantScoped' => $currentTenantScoped,
             'editId' => $editId,
             'editItem' => $editItem,
+            'carreraActivosMap' => $carreraActivosMap,
             'catalogoLabel' => $catalogoLabel,
             'catalogoItems' => $catalogoItems,
             'apiError' => $apiError,

@@ -27,6 +27,7 @@
 
     var inputResource = qs('#catalog-resource');
     var inputInstituto = qs('#catalog-instituto-id');
+    var inputPrevActivos = qs('#catalog-prev-activos');
 
     var page = window.__CATALOGS_PAGE__ || {};
     var baseUrl = page.baseUrl || '';
@@ -53,6 +54,15 @@
         input.value = '';
       });
 
+      // Carrera: sede-activo por Instituto_Carrera
+      qsa('input[name="instituto_activo_ids[]"]', form).forEach(function (cb) {
+        cb.checked = false;
+        if (String(cb.getAttribute('data-current') || '') === '1') {
+          cb.checked = true;
+        }
+      });
+      if (inputPrevActivos) inputPrevActivos.value = '[]';
+
       show(modal);
       var first = fields.length ? qs('#catalog-' + fields[0]) : null;
       if (first) first.focus();
@@ -71,6 +81,28 @@
         if (!input) return;
         input.value = btn.getAttribute('data-' + f) || '';
       });
+
+      // Carrera: marcar checks según estado real
+      var raw = btn.getAttribute('data-active-institutos') || '[]';
+      var activeIds = [];
+      try {
+        activeIds = JSON.parse(raw);
+        if (!Array.isArray(activeIds)) activeIds = [];
+      } catch (e) {
+        activeIds = [];
+      }
+
+      var activeSet = {};
+      activeIds.forEach(function (v) {
+        var n = parseInt(v, 10);
+        if (!isNaN(n) && n > 0) activeSet[String(n)] = true;
+      });
+
+      qsa('input[name="instituto_activo_ids[]"]', form).forEach(function (cb) {
+        var vid = cb.value;
+        cb.checked = !!activeSet[String(vid)];
+      });
+      if (inputPrevActivos) inputPrevActivos.value = JSON.stringify(activeIds);
 
       show(modal);
       var first = fields.length ? qs('#catalog-' + fields[0]) : null;
