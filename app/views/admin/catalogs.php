@@ -62,6 +62,18 @@
         if (in_array('valor_estrato', $extraCols, true) && !in_array('valor_estrato', $fields, true)) {
             $fields[] = 'valor_estrato';
         }
+
+        $fieldMeta = [];
+        foreach ($fields as $f) {
+            $label = $f;
+            if ($f === 'valor_estrato') $label = 'Valor estrato';
+            if ($f === 'siglas') $label = 'Siglas';
+            if ($f === 'codigo') $label = 'Código';
+            if ($f === 'numero') $label = 'Número';
+            if ($f === 'nombre') $label = 'Nombre';
+            $type = ($f === 'numero' || $f === 'valor_estrato') ? 'number' : 'text';
+            $fieldMeta[] = ['name' => $f, 'label' => $label, 'type' => $type];
+        }
     ?>
 
     <div class="bg-white rounded-lg shadow-sm border p-4 md:col-span-1 h-fit">
@@ -144,83 +156,10 @@
                     <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded shadow-sm text-sm font-medium transition">Cambiar</button>
                 </form>
             <?php endif; ?>
-        </div>
 
-        <!-- Formulario Crear/Editar -->
-        <div class="mb-6 p-4 border rounded bg-gray-50">
-            <?php if (!empty($editId) && is_array($editItem)): ?>
-                <div class="flex items-center justify-between mb-3">
-                    <div class="font-medium text-gray-800">Editar registro #<?php echo (int)$editId; ?></div>
-                    <a class="text-sm text-gray-600 hover:text-gray-800" href="<?php echo htmlspecialchars($buildCatalogUrl($resource)); ?>">Cancelar</a>
-                </div>
-                <form method="POST" action="<?php echo BASE_URL; ?>/admin/catalogos/update/<?php echo (int)$editId; ?>" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <input type="hidden" name="resource" value="<?php echo htmlspecialchars($resource); ?>">
-                    <?php if ($currentTenantScoped && !empty($institutoId)): ?>
-                        <input type="hidden" name="instituto_id" value="<?php echo (int)$institutoId; ?>">
-                    <?php endif; ?>
-
-                    <?php foreach ($fields as $f): ?>
-                        <?php
-                            $label = $f;
-                            if ($f === 'valor_estrato') $label = 'Valor estrato';
-                            if ($f === 'siglas') $label = 'Siglas';
-                            if ($f === 'codigo') $label = 'Código';
-                            if ($f === 'numero') $label = 'Número';
-                            if ($f === 'nombre') $label = 'Nombre';
-                            $val = isset($editItem[$f]) ? (string)$editItem[$f] : '';
-                            $type = ($f === 'numero' || $f === 'valor_estrato') ? 'number' : 'text';
-                        ?>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1"><?php echo htmlspecialchars($label); ?></label>
-                            <input
-                                type="<?php echo $type; ?>"
-                                name="<?php echo htmlspecialchars($f); ?>"
-                                value="<?php echo htmlspecialchars($val); ?>"
-                                class="border border-gray-300 rounded-md p-2 w-full focus:ring-primary-500 focus:border-primary-500 outline-none text-sm"
-                                <?php echo ($type === 'number') ? 'step="1"' : ''; ?>
-                            >
-                        </div>
-                    <?php endforeach; ?>
-
-                    <div class="md:col-span-3 flex justify-end">
-                        <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition">Guardar cambios</button>
-                    </div>
-                </form>
-            <?php else: ?>
-                <div class="font-medium text-gray-800 mb-3">Añadir nuevo registro</div>
-                <form method="POST" action="<?php echo BASE_URL; ?>/admin/catalogos/create" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <input type="hidden" name="resource" value="<?php echo htmlspecialchars($resource); ?>">
-                    <?php if ($currentTenantScoped && !empty($institutoId)): ?>
-                        <input type="hidden" name="instituto_id" value="<?php echo (int)$institutoId; ?>">
-                    <?php endif; ?>
-
-                    <?php foreach ($fields as $f): ?>
-                        <?php
-                            $label = $f;
-                            if ($f === 'valor_estrato') $label = 'Valor estrato';
-                            if ($f === 'siglas') $label = 'Siglas';
-                            if ($f === 'codigo') $label = 'Código';
-                            if ($f === 'numero') $label = 'Número';
-                            if ($f === 'nombre') $label = 'Nombre';
-                            $type = ($f === 'numero' || $f === 'valor_estrato') ? 'number' : 'text';
-                        ?>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1"><?php echo htmlspecialchars($label); ?></label>
-                            <input
-                                type="<?php echo $type; ?>"
-                                name="<?php echo htmlspecialchars($f); ?>"
-                                value=""
-                                class="border border-gray-300 rounded-md p-2 w-full focus:ring-primary-500 focus:border-primary-500 outline-none text-sm"
-                                <?php echo ($type === 'number') ? 'step="1"' : ''; ?>
-                            >
-                        </div>
-                    <?php endforeach; ?>
-
-                    <div class="md:col-span-3 flex justify-end">
-                        <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition">Crear</button>
-                    </div>
-                </form>
-            <?php endif; ?>
+            <button type="button" id="btn-new-catalog-item" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition">
+                <i class="fas fa-plus mr-2"></i> Añadir Opción
+            </button>
         </div>
 
         <table class="w-full text-left border-collapse">
@@ -261,9 +200,16 @@
                                 <?php endif; ?>
                             </td>
                             <td class="py-3 px-4 text-right">
-                                <a class="text-blue-500 hover:text-blue-700 mx-1" href="<?php echo htmlspecialchars($buildCatalogUrl($resource, ['edit_id' => (int)$id])); ?>" title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                <button
+                                    type="button"
+                                    class="text-blue-500 hover:text-blue-700 mx-1 js-edit-catalog-item"
+                                    title="Editar"
+                                    data-id="<?php echo (int)$id; ?>"
+                                    <?php foreach ($fields as $f): ?>
+                                        <?php $dv = array_key_exists($f, $row) ? (string)$row[$f] : ''; ?>
+                                        data-<?php echo htmlspecialchars($f); ?>="<?php echo htmlspecialchars($dv, ENT_QUOTES); ?>"
+                                    <?php endforeach; ?>
+                                ><i class="fas fa-edit"></i></button>
 
                                 <?php if ($activo === 1): ?>
                                     <form method="POST" action="<?php echo BASE_URL; ?>/admin/catalogos/delete/<?php echo (int)$id; ?>" class="inline">
@@ -298,3 +244,64 @@
         </table>
     </div>
 </div>
+
+<!-- Modal create/edit -->
+<div id="catalog-item-modal" class="fixed inset-0 z-50 hidden" aria-hidden="true">
+    <div class="absolute inset-0 bg-black/40" data-modal-close></div>
+    <div class="relative mx-auto mt-16 w-full max-w-xl px-4">
+        <div class="bg-white rounded-lg shadow-sm border">
+            <div class="flex items-center justify-between px-6 py-4 border-b">
+                <h4 id="catalog-item-modal-title" class="text-lg font-semibold text-gray-800">Nueva Opción</h4>
+                <button type="button" class="text-gray-500 hover:text-gray-700" data-modal-close>
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form id="catalog-item-form" method="POST" action="<?php echo BASE_URL; ?>/admin/catalogos/create" class="p-6">
+                <input type="hidden" name="resource" id="catalog-resource" value="<?php echo htmlspecialchars($resource); ?>">
+                <?php if ($currentTenantScoped && !empty($institutoId)): ?>
+                    <input type="hidden" name="instituto_id" id="catalog-instituto-id" value="<?php echo (int)$institutoId; ?>">
+                <?php else: ?>
+                    <input type="hidden" name="instituto_id" id="catalog-instituto-id" value="">
+                <?php endif; ?>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <?php foreach ($fieldMeta as $meta): ?>
+                        <?php
+                            $f = (string)$meta['name'];
+                            $label = (string)$meta['label'];
+                            $type = (string)$meta['type'];
+                        ?>
+                        <div class="<?php echo ($f === 'nombre') ? 'md:col-span-2' : ''; ?>">
+                            <label class="block text-sm font-medium text-gray-700 mb-1"><?php echo htmlspecialchars($label); ?></label>
+                            <input
+                                name="<?php echo htmlspecialchars($f); ?>"
+                                id="catalog-<?php echo htmlspecialchars($f); ?>"
+                                type="<?php echo htmlspecialchars($type); ?>"
+                                class="border border-gray-300 rounded-md p-2 w-full focus:ring-primary-500 focus:border-primary-500 outline-none"
+                                <?php echo ($f === 'nombre') ? 'required' : ''; ?>
+                                <?php echo ($type === 'number') ? 'step="1"' : ''; ?>
+                            >
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="mt-6 flex justify-end gap-2">
+                    <button type="button" class="px-4 py-2 rounded border text-gray-700 hover:bg-gray-50" data-modal-close>Cancelar</button>
+                    <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.__CATALOGS_PAGE__ = {
+        baseUrl: <?php echo json_encode(BASE_URL); ?>,
+        resource: <?php echo json_encode($resource); ?>,
+        institutoId: <?php echo json_encode($institutoId); ?>,
+        tenantScoped: <?php echo json_encode($currentTenantScoped ? 1 : 0); ?>,
+        fields: <?php echo json_encode(array_values($fields)); ?>
+    };
+</script>
+<script src="<?php echo $assetBase; ?>/js/admin-catalogs.js"></script>

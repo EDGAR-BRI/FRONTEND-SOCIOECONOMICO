@@ -102,11 +102,11 @@ class AdminCatalogsController extends Controller
         $this->redirectBack($resource, $institutoId);
     }
 
-    public function update($params = [])
+    public function update($id)
     {
         $this->checkSuperAdmin();
 
-        $id = isset($params['id']) ? (int)$params['id'] : 0;
+        $id = is_numeric($id) ? (int)$id : 0;
         $resource = isset($_POST['resource']) ? trim((string)$_POST['resource']) : '';
         $institutoId = isset($_POST['instituto_id']) && is_numeric($_POST['instituto_id']) ? (int)$_POST['instituto_id'] : null;
 
@@ -134,11 +134,11 @@ class AdminCatalogsController extends Controller
         $this->redirectBack($resource, $institutoId);
     }
 
-    public function delete($params = [])
+    public function delete($id)
     {
         $this->checkSuperAdmin();
 
-        $id = isset($params['id']) ? (int)$params['id'] : 0;
+        $id = is_numeric($id) ? (int)$id : 0;
         $resource = isset($_POST['resource']) ? trim((string)$_POST['resource']) : '';
         $institutoId = isset($_POST['instituto_id']) && is_numeric($_POST['instituto_id']) ? (int)$_POST['instituto_id'] : null;
 
@@ -168,11 +168,11 @@ class AdminCatalogsController extends Controller
         $this->redirectBack($resource, $institutoId);
     }
 
-    public function restore($params = [])
+    public function restore($id)
     {
         $this->checkSuperAdmin();
 
-        $id = isset($params['id']) ? (int)$params['id'] : 0;
+        $id = is_numeric($id) ? (int)$id : 0;
         $resource = isset($_POST['resource']) ? trim((string)$_POST['resource']) : '';
         $institutoId = isset($_POST['instituto_id']) && is_numeric($_POST['instituto_id']) ? (int)$_POST['instituto_id'] : null;
 
