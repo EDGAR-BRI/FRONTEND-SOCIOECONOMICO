@@ -664,15 +664,35 @@ class AdminController extends Controller
         $this->checkAuth();
         $this->requireSuperAdmin();
 
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
         $resource = isset($_GET['resource']) ? trim((string)$_GET['resource']) : '';
         if ($resource === '') {
             $resource = 'nacionalidad';
         }
 
+        $institutoId = isset($_GET['instituto_id']) && is_numeric($_GET['instituto_id']) ? (int)$_GET['instituto_id'] : null;
+        $editId = isset($_GET['edit_id']) && is_numeric($_GET['edit_id']) ? (int)$_GET['edit_id'] : null;
+
+        $flash = null;
+        if (!empty($_SESSION['flash_message'])) {
+            $flash = [
+                'type' => isset($_SESSION['flash_type']) ? (string)$_SESSION['flash_type'] : 'info',
+                'message' => (string)$_SESSION['flash_message'],
+                'errors' => isset($_SESSION['flash_errors']) && is_array($_SESSION['flash_errors']) ? $_SESSION['flash_errors'] : [],
+            ];
+        }
+        unset($_SESSION['flash_type'], $_SESSION['flash_message'], $_SESSION['flash_errors']);
+
         $catalogosMenu = [];
         $catalogoItems = [];
         $catalogoLabel = $resource;
         $apiError = null;
+        $institutos = [];
+        $currentTenantScoped = false;
+        $editItem = null;
 
         try {
             // Menú dinámico desde backend
@@ -706,12 +726,40 @@ class AdminController extends Controller
                     if (isset($item['label']) && is_string($item['label']) && trim($item['label']) !== '') {
                         $catalogoLabel = $item['label'];
                     }
+                    if (!empty($item['tenant_scoped'])) {
+                        $currentTenantScoped = true;
+                    }
                     break;
                 }
             }
 
-            // Datos del catálogo seleccionado
-            $dataResponse = $this->catalogoService->catalogo($resource);
+            // Lista de sedes (institutos) para selector
+            $instResponse = $this->catalogoService->catalogoAdmin('instituto');
+            $instPayload = isset($instResponse['data']) && is_array($instResponse['data']) ? $instResponse['data'] : null;
+            if (!empty($instResponse['success']) && $instPayload) {
+                $instData = (isset($instPayload['success']) && array_key_exists('data', $instPayload))
+                    ? $instPayload['data']
+                    : $instPayload;
+
+                if (is_array($instData)) {
+                    foreach ($instData as $inst) {
+                        if (is_array($inst) && !empty($inst['activo']) && isset($inst['id'])) {
+                            $institutos[] = $inst;
+                        }
+                    }
+                }
+            }
+
+            if ($currentTenantScoped && empty($institutoId) && !empty($institutos) && isset($institutos[0]['id'])) {
+                $institutoId = (int)$institutos[0]['id'];
+            }
+
+            // Datos del catálogo seleccionado (admin: incluye inactivos)
+            $params = [];
+            if ($currentTenantScoped && !empty($institutoId)) {
+                $params['instituto_id'] = (int)$institutoId;
+            }
+            $dataResponse = $this->catalogoService->catalogoAdmin($resource, $params);
             $dataPayload = isset($dataResponse['data']) && is_array($dataResponse['data']) ? $dataResponse['data'] : null;
             if (!empty($dataResponse['success']) && $dataPayload) {
                 $data = (isset($dataPayload['success']) && array_key_exists('data', $dataPayload))
@@ -731,6 +779,15 @@ class AdminController extends Controller
                     'message' => $message,
                 ];
             }
+
+            if (!empty($editId) && !empty($catalogoItems)) {
+                foreach ($catalogoItems as $it) {
+                    if (is_array($it) && isset($it['id']) && (int)$it['id'] === (int)$editId) {
+                        $editItem = $it;
+                        break;
+                    }
+                }
+            }
         } catch (\Exception $e) {
             $apiError = [
                 'status' => 0,
@@ -741,8 +798,14 @@ class AdminController extends Controller
         $this->view('admin/catalogs', [
             'title' => 'Gestión de Catálogos | Admin',
             'current_page' => 'catalogs',
+            'flash' => $flash,
             'catalogosMenu' => $catalogosMenu,
             'resource' => $resource,
+            'institutos' => $institutos,
+            'institutoId' => $institutoId,
+            'currentTenantScoped' => $currentTenantScoped,
+            'editId' => $editId,
+            'editItem' => $editItem,
             'catalogoLabel' => $catalogoLabel,
             'catalogoItems' => $catalogoItems,
             'apiError' => $apiError,
