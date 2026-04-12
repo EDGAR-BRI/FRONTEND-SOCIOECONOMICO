@@ -49,6 +49,32 @@ class AdminController extends Controller
         return !empty($_SESSION['auth_user']) && !empty($_SESSION['auth_token']);
     }
 
+    private function actorRolCodigo()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $authUser = isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user']) ? $_SESSION['auth_user'] : [];
+        if (isset($authUser['rol']) && is_array($authUser['rol']) && !empty($authUser['rol']['codigo'])) {
+            return (string)$authUser['rol']['codigo'];
+        }
+        return null;
+    }
+
+    private function requireSuperAdmin()
+    {
+        $rol = $this->actorRolCodigo();
+        if ($rol !== 'SUPER_ADMIN') {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['flash_type'] = 'error';
+            $_SESSION['flash_message'] = 'No autorizado: solo SUPER_ADMIN puede acceder a esta sección.';
+            $this->redirect(BASE_URL . '/admin');
+        }
+    }
+
     /**
      * Vista principal del Dashboard
      */
@@ -269,6 +295,7 @@ class AdminController extends Controller
     public function users()
     {
         $this->checkAuth();
+        $this->requireSuperAdmin();
 
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -635,6 +662,7 @@ class AdminController extends Controller
     public function catalogs()
     {
         $this->checkAuth();
+        $this->requireSuperAdmin();
 
         $resource = isset($_GET['resource']) ? trim((string)$_GET['resource']) : '';
         if ($resource === '') {

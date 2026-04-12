@@ -44,6 +44,20 @@ if ($cssVersion !== null) {
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal flex">
 
+<?php
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    $sidebarRol = null;
+    if (isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user'])
+        && isset($_SESSION['auth_user']['rol']) && is_array($_SESSION['auth_user']['rol'])
+        && !empty($_SESSION['auth_user']['rol']['codigo'])
+    ) {
+        $sidebarRol = (string)$_SESSION['auth_user']['rol']['codigo'];
+    }
+    $isSuperAdmin = ($sidebarRol === 'SUPER_ADMIN');
+?>
+
     <!-- Sidebar -->
     <aside class="w-64 bg-white min-h-screen shadow-lg hidden md:block">
         <div class="p-6 border-b flex items-center gap-3">
@@ -56,15 +70,19 @@ if ($cssVersion !== null) {
             <a href="<?php echo BASE_URL; ?>/admin/estadisticas" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'stats') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-chart-pie w-5 text-center"></i> Estadísticas
             </a>
-            <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'users') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
-                <i class="fas fa-users w-5 text-center"></i> Usuarios
-            </a>
+            <?php if ($isSuperAdmin): ?>
+                <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'users') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
+                    <i class="fas fa-users w-5 text-center"></i> Usuarios
+                </a>
+            <?php endif; ?>
             <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'responses') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-file-alt w-5 text-center"></i> Respuestas
             </a>
-            <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
-                <i class="fas fa-list w-5 text-center"></i> Catálogos
-            </a>
+            <?php if ($isSuperAdmin): ?>
+                <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
+                    <i class="fas fa-list w-5 text-center"></i> Catálogos
+                </a>
+            <?php endif; ?>
         </nav>
     </aside>
 

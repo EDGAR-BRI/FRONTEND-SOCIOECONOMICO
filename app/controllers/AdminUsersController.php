@@ -23,6 +23,19 @@ class AdminUsersController extends Controller
         if (empty($_SESSION['auth_user']) || empty($_SESSION['auth_token'])) {
             $this->redirect(BASE_URL . '/login');
         }
+
+        $rol = null;
+        if (isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user'])
+            && isset($_SESSION['auth_user']['rol']) && is_array($_SESSION['auth_user']['rol'])
+            && !empty($_SESSION['auth_user']['rol']['codigo'])
+        ) {
+            $rol = (string)$_SESSION['auth_user']['rol']['codigo'];
+        }
+
+        if ($rol !== 'SUPER_ADMIN') {
+            $this->flash('error', 'No autorizado: solo SUPER_ADMIN puede gestionar usuarios.');
+            $this->redirect(BASE_URL . '/admin');
+        }
     }
 
     private function flash($type, $message, $errors = null)
