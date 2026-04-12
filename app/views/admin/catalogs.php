@@ -133,7 +133,7 @@
 
         <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
             <div>
-                <h3 class="text-xl font-bold text-gray-800"><?php echo htmlspecialchars(isset($catalogoLabel) ? (string)$catalogoLabel : 'Catálogo'); ?></h3>
+                <h3 class="text-xl font-bold text-gray-800 mb-4"><?php echo htmlspecialchars(isset($catalogoLabel) ? (string)$catalogoLabel : 'Catálogo'); ?></h3>
                 <p class="text-sm text-gray-500">Gestiona las opciones disponibles para este campo.</p>
                 <?php if ($currentTenantScoped): ?>
                     <?php
@@ -151,32 +151,42 @@
                         Sede actual: <?php echo htmlspecialchars($currentInstName !== '' ? $currentInstName : ((string)$institutoId)); ?>
                         <span class="text-gray-400">(el estado puede variar por sede)</span>
                     </p>
+
+                    <?php if (!empty($resource) && $resource === 'carrera'): ?>
+                        <p class="text-xs text-gray-500 mt-1">
+                            Nota: el nombre de la carrera es global; aquí se activa/desactiva por sede.
+                        </p>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
-            <?php if ($currentTenantScoped): ?>
-                <form method="GET" action="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-2">
-                    <input type="hidden" name="resource" value="<?php echo htmlspecialchars($resource); ?>">
-                    <label class="text-sm text-gray-600" for="instituto_id">Sede</label>
-                    <select id="instituto_id" name="instituto_id" onchange="this.form.submit()" class="border border-gray-300 rounded-md p-2 text-sm focus:ring-primary-500 focus:border-primary-500 outline-none">
-                        <?php foreach ($institutos as $inst): ?>
-                            <?php
-                                if (!is_array($inst) || !isset($inst['id'])) {
-                                    continue;
-                                }
-                                $iid = (int)$inst['id'];
-                                $iname = isset($inst['nombre']) ? (string)$inst['nombre'] : ('Instituto #' . $iid);
-                            ?>
-                            <option value="<?php echo (int)$iid; ?>" <?php echo (!empty($institutoId) && (int)$institutoId === $iid) ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($iname); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </form>
-            <?php endif; ?>
 
-            <button type="button" id="btn-new-catalog-item" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition">
-                <i class="fas fa-plus mr-2"></i> Añadir Opción
-            </button>
+            <div class="flex flex-col md:items-center gap-4">
+
+                <button type="button" id="btn-new-catalog-item" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition">
+                    <i class="fas fa-plus mr-2"></i> Añadir Opción
+                </button>
+
+                <?php if ($currentTenantScoped): ?>
+                    <form method="GET" action="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-2">
+                        <input type="hidden" name="resource" value="<?php echo htmlspecialchars($resource); ?>">
+                        <label class="text-sm text-gray-600" for="instituto_id">Sede</label>
+                        <select id="instituto_id" name="instituto_id" onchange="this.form.submit()" class="border border-gray-300 rounded-md p-2 text-sm focus:ring-primary-500 focus:border-primary-500 outline-none">
+                            <?php foreach ($institutos as $inst): ?>
+                                <?php
+                                    if (!is_array($inst) || !isset($inst['id'])) {
+                                        continue;
+                                    }
+                                    $iid = (int)$inst['id'];
+                                    $iname = isset($inst['nombre']) ? (string)$inst['nombre'] : ('Instituto #' . $iid);
+                                ?>
+                                <option value="<?php echo (int)$iid; ?>" <?php echo (!empty($institutoId) && (int)$institutoId === $iid) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($iname); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </form>
+                <?php endif; ?>                
+            </div>
         </div>
 
         <table class="w-full text-left border-collapse">
