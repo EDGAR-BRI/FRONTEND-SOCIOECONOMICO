@@ -62,9 +62,9 @@ if ($cssVersion !== null) {
             <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'responses') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-file-alt w-5 text-center"></i> Respuestas
             </a>
-            <!-- <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
+            <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-list w-5 text-center"></i> Catálogos
-            </a> -->
+            </a>
         </nav>
     </aside>
 

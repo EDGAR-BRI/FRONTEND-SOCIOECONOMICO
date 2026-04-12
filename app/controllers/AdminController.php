@@ -635,10 +635,89 @@ class AdminController extends Controller
     public function catalogs()
     {
         $this->checkAuth();
-        
+
+        $resource = isset($_GET['resource']) ? trim((string)$_GET['resource']) : '';
+        if ($resource === '') {
+            $resource = 'nacionalidad';
+        }
+
+        $catalogosMenu = [];
+        $catalogoItems = [];
+        $catalogoLabel = $resource;
+        $apiError = null;
+
+        try {
+            // Menú dinámico desde backend
+            $menuResponse = $this->catalogoService->catalogos();
+            $menuPayload = isset($menuResponse['data']) && is_array($menuResponse['data']) ? $menuResponse['data'] : null;
+            if (!empty($menuResponse['success']) && $menuPayload) {
+                $menuData = (isset($menuPayload['success']) && array_key_exists('data', $menuPayload) && is_array($menuPayload['data']))
+                    ? $menuPayload['data']
+                    : $menuPayload;
+
+                if (is_array($menuData)) {
+                    $catalogosMenu = $menuData;
+                }
+            }
+
+            // Si el resource no existe en el menú, usamos el primero disponible
+            $allowedResources = [];
+            foreach ($catalogosMenu as $item) {
+                if (is_array($item) && isset($item['resource'])) {
+                    $allowedResources[] = (string)$item['resource'];
+                }
+            }
+
+            if (!empty($allowedResources) && !in_array($resource, $allowedResources, true)) {
+                $resource = $allowedResources[0];
+            }
+
+            // Label para el título
+            foreach ($catalogosMenu as $item) {
+                if (is_array($item) && isset($item['resource']) && (string)$item['resource'] === $resource) {
+                    if (isset($item['label']) && is_string($item['label']) && trim($item['label']) !== '') {
+                        $catalogoLabel = $item['label'];
+                    }
+                    break;
+                }
+            }
+
+            // Datos del catálogo seleccionado
+            $dataResponse = $this->catalogoService->catalogo($resource);
+            $dataPayload = isset($dataResponse['data']) && is_array($dataResponse['data']) ? $dataResponse['data'] : null;
+            if (!empty($dataResponse['success']) && $dataPayload) {
+                $data = (isset($dataPayload['success']) && array_key_exists('data', $dataPayload))
+                    ? $dataPayload['data']
+                    : $dataPayload;
+
+                if (is_array($data)) {
+                    $catalogoItems = $data;
+                }
+            } else {
+                $message = 'No se pudo cargar el catálogo.';
+                if (is_array($dataPayload) && isset($dataPayload['message']) && is_string($dataPayload['message']) && trim($dataPayload['message']) !== '') {
+                    $message = $dataPayload['message'];
+                }
+                $apiError = [
+                    'status' => isset($dataResponse['status']) ? (int)$dataResponse['status'] : 0,
+                    'message' => $message,
+                ];
+            }
+        } catch (\Exception $e) {
+            $apiError = [
+                'status' => 0,
+                'message' => 'Error de conexión con el servidor: ' . $e->getMessage(),
+            ];
+        }
+
         $this->view('admin/catalogs', [
             'title' => 'Gestión de Catálogos | Admin',
-            'current_page' => 'catalogs'
+            'current_page' => 'catalogs',
+            'catalogosMenu' => $catalogosMenu,
+            'resource' => $resource,
+            'catalogoLabel' => $catalogoLabel,
+            'catalogoItems' => $catalogoItems,
+            'apiError' => $apiError,
         ], 'admin');
     }
 }

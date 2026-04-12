@@ -20,4 +20,15 @@ class CatalogoService
     {
         return $this->api->get('/catalogo/instituto');
     }
+
+    public function catalogos()
+    {
+        return $this->api->get('/catalogo');
+    }
+
+    public function catalogo($resource, $params = [])
+    {
+        $resource = trim((string)$resource);
+        return $this->api->get('/catalogo/' . rawurlencode($resource), $params);
+    }
 }
