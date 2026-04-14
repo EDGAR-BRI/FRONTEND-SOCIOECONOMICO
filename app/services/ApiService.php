@@ -139,12 +139,37 @@ class ApiService
      */
     private function request($method, $url, $data = null)
     {
+        // Si la petición trae instituto_id explícito, debe prevalecer sobre el header global.
+        // Esto permite multi-sede por selector (query/body) incluso si INSTITUTO_ID está definido.
+        $institutoOverride = null;
+        $parts = @parse_url($url);
+        if (is_array($parts) && !empty($parts['query'])) {
+            $query = [];
+            parse_str($parts['query'], $query);
+            if (isset($query['instituto_id']) && is_numeric($query['instituto_id']) && (int)$query['instituto_id'] > 0) {
+                $institutoOverride = (int)$query['instituto_id'];
+            }
+        }
+
+        if ($institutoOverride === null && is_array($data)
+            && isset($data['instituto_id']) && is_numeric($data['instituto_id']) && (int)$data['instituto_id'] > 0
+        ) {
+            $institutoOverride = (int)$data['instituto_id'];
+        }
+
+        // Headers efectivos para ESTA petición (no mutar $this->headers)
+        $effectiveHeaders = $this->headers;
+
+        if ($institutoOverride !== null) {
+            $effectiveHeaders['X-Instituto-Id'] = (string)$institutoOverride;
+        }
+
         // Si hay token en sesión, enviar Bearer automáticamente
-        if (!isset($this->headers['Authorization'])
+        if (!isset($effectiveHeaders['Authorization'])
             && session_status() === PHP_SESSION_ACTIVE
             && !empty($_SESSION['auth_token'])
         ) {
-            $this->headers['Authorization'] = 'Bearer ' . (string) $_SESSION['auth_token'];
+            $effectiveHeaders['Authorization'] = 'Bearer ' . (string) $_SESSION['auth_token'];
         }
 
         $ch = curl_init();
@@ -157,7 +182,7 @@ class ApiService
 
         // Configurar headers
         $headers = ['Content-Type: application/json'];
-        foreach ($this->headers as $key => $value) {
+        foreach ($effectiveHeaders as $key => $value) {
             $headers[] = "{$key}: {$value}";
         }
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);

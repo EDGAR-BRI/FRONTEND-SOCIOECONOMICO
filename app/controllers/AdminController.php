@@ -49,6 +49,32 @@ class AdminController extends Controller
         return !empty($_SESSION['auth_user']) && !empty($_SESSION['auth_token']);
     }
 
+    private function actorRolCodigo()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $authUser = isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user']) ? $_SESSION['auth_user'] : [];
+        if (isset($authUser['rol']) && is_array($authUser['rol']) && !empty($authUser['rol']['codigo'])) {
+            return (string)$authUser['rol']['codigo'];
+        }
+        return null;
+    }
+
+    private function requireSuperAdmin()
+    {
+        $rol = $this->actorRolCodigo();
+        if ($rol !== 'SUPER_ADMIN') {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['flash_type'] = 'error';
+            $_SESSION['flash_message'] = 'No autorizado: solo SUPER_ADMIN puede acceder a esta sección.';
+            $this->redirect(BASE_URL . '/admin');
+        }
+    }
+
     /**
      * Vista principal del Dashboard
      */
@@ -269,6 +295,7 @@ class AdminController extends Controller
     public function users()
     {
         $this->checkAuth();
+        $this->requireSuperAdmin();
 
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -635,10 +662,169 @@ class AdminController extends Controller
     public function catalogs()
     {
         $this->checkAuth();
-        
+        $this->requireSuperAdmin();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $resource = isset($_GET['resource']) ? trim((string)$_GET['resource']) : '';
+        if ($resource === '') {
+            $resource = 'nacionalidad';
+        }
+
+        $institutoId = isset($_GET['instituto_id']) && is_numeric($_GET['instituto_id']) ? (int)$_GET['instituto_id'] : null;
+        $editId = isset($_GET['edit_id']) && is_numeric($_GET['edit_id']) ? (int)$_GET['edit_id'] : null;
+
+        $flash = null;
+        if (!empty($_SESSION['flash_message'])) {
+            $flash = [
+                'type' => isset($_SESSION['flash_type']) ? (string)$_SESSION['flash_type'] : 'info',
+                'message' => (string)$_SESSION['flash_message'],
+                'errors' => isset($_SESSION['flash_errors']) && is_array($_SESSION['flash_errors']) ? $_SESSION['flash_errors'] : [],
+            ];
+        }
+        unset($_SESSION['flash_type'], $_SESSION['flash_message'], $_SESSION['flash_errors']);
+
+        $catalogosMenu = [];
+        $catalogoItems = [];
+        $catalogoLabel = $resource;
+        $apiError = null;
+        $institutos = [];
+        $currentTenantScoped = false;
+        $editItem = null;
+        $carreraActivosMap = [];
+
+        try {
+            // Menú dinámico desde backend
+            $menuResponse = $this->catalogoService->catalogos();
+            $menuPayload = isset($menuResponse['data']) && is_array($menuResponse['data']) ? $menuResponse['data'] : null;
+            if (!empty($menuResponse['success']) && $menuPayload) {
+                $menuData = (isset($menuPayload['success']) && array_key_exists('data', $menuPayload) && is_array($menuPayload['data']))
+                    ? $menuPayload['data']
+                    : $menuPayload;
+
+                if (is_array($menuData)) {
+                    $catalogosMenu = $menuData;
+                }
+            }
+
+            // Si el resource no existe en el menú, usamos el primero disponible
+            $allowedResources = [];
+            foreach ($catalogosMenu as $item) {
+                if (is_array($item) && isset($item['resource'])) {
+                    $allowedResources[] = (string)$item['resource'];
+                }
+            }
+
+            if (!empty($allowedResources) && !in_array($resource, $allowedResources, true)) {
+                $resource = $allowedResources[0];
+            }
+
+            // Label para el título
+            foreach ($catalogosMenu as $item) {
+                if (is_array($item) && isset($item['resource']) && (string)$item['resource'] === $resource) {
+                    if (isset($item['label']) && is_string($item['label']) && trim($item['label']) !== '') {
+                        $catalogoLabel = $item['label'];
+                    }
+                    if (!empty($item['tenant_scoped'])) {
+                        $currentTenantScoped = true;
+                    }
+                    break;
+                }
+            }
+
+            // Lista de sedes (institutos) para selector
+            $instResponse = $this->catalogoService->catalogoAdmin('instituto');
+            $instPayload = isset($instResponse['data']) && is_array($instResponse['data']) ? $instResponse['data'] : null;
+            if (!empty($instResponse['success']) && $instPayload) {
+                $instData = (isset($instPayload['success']) && array_key_exists('data', $instPayload))
+                    ? $instPayload['data']
+                    : $instPayload;
+
+                if (is_array($instData)) {
+                    foreach ($instData as $inst) {
+                        if (is_array($inst) && !empty($inst['activo']) && isset($inst['id'])) {
+                            $institutos[] = $inst;
+                        }
+                    }
+                }
+            }
+
+            if ($currentTenantScoped && empty($institutoId) && !empty($institutos) && isset($institutos[0]['id'])) {
+                $institutoId = (int)$institutos[0]['id'];
+            }
+
+            // Para Carreras: mapa de sedes activas (Instituto_Carrera) para marcar checks correctamente en el modal
+            if ($resource === 'carrera') {
+                $mapResp = $this->catalogoService->carreraActivos();
+                $mapPayload = isset($mapResp['data']) && is_array($mapResp['data']) ? $mapResp['data'] : null;
+                if (!empty($mapResp['success']) && is_array($mapPayload)) {
+                    $mapData = (isset($mapPayload['success']) && array_key_exists('data', $mapPayload) && is_array($mapPayload['data']))
+                        ? $mapPayload['data']
+                        : $mapPayload;
+                    if (is_array($mapData)) {
+                        $carreraActivosMap = $mapData;
+                    }
+                }
+            }
+
+            // Datos del catálogo seleccionado (admin: incluye inactivos)
+            $params = [];
+            if ($currentTenantScoped && !empty($institutoId)) {
+                $params['instituto_id'] = (int)$institutoId;
+            }
+            $dataResponse = $this->catalogoService->catalogoAdmin($resource, $params);
+            $dataPayload = isset($dataResponse['data']) && is_array($dataResponse['data']) ? $dataResponse['data'] : null;
+            if (!empty($dataResponse['success']) && $dataPayload) {
+                $data = (isset($dataPayload['success']) && array_key_exists('data', $dataPayload))
+                    ? $dataPayload['data']
+                    : $dataPayload;
+
+                if (is_array($data)) {
+                    $catalogoItems = $data;
+                }
+            } else {
+                $message = 'No se pudo cargar el catálogo.';
+                if (is_array($dataPayload) && isset($dataPayload['message']) && is_string($dataPayload['message']) && trim($dataPayload['message']) !== '') {
+                    $message = $dataPayload['message'];
+                }
+                $apiError = [
+                    'status' => isset($dataResponse['status']) ? (int)$dataResponse['status'] : 0,
+                    'message' => $message,
+                ];
+            }
+
+            if (!empty($editId) && !empty($catalogoItems)) {
+                foreach ($catalogoItems as $it) {
+                    if (is_array($it) && isset($it['id']) && (int)$it['id'] === (int)$editId) {
+                        $editItem = $it;
+                        break;
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            $apiError = [
+                'status' => 0,
+                'message' => 'Error de conexión con el servidor: ' . $e->getMessage(),
+            ];
+        }
+
         $this->view('admin/catalogs', [
             'title' => 'Gestión de Catálogos | Admin',
-            'current_page' => 'catalogs'
+            'current_page' => 'catalogs',
+            'flash' => $flash,
+            'catalogosMenu' => $catalogosMenu,
+            'resource' => $resource,
+            'institutos' => $institutos,
+            'institutoId' => $institutoId,
+            'currentTenantScoped' => $currentTenantScoped,
+            'editId' => $editId,
+            'editItem' => $editItem,
+            'carreraActivosMap' => $carreraActivosMap,
+            'catalogoLabel' => $catalogoLabel,
+            'catalogoItems' => $catalogoItems,
+            'apiError' => $apiError,
         ], 'admin');
     }
 }

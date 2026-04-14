@@ -40,6 +40,14 @@ define('API_TIMEOUT', 30); // Timeout en segundos
 $envInstitutoId = getenv('INSTITUTO_ID');
 define('INSTITUTO_ID', $envInstitutoId !== false && is_numeric($envInstitutoId) ? (int)$envInstitutoId : null);
 
+// Multi-sede (opcional): si usas URLs tipo /:sede/formulario, puedes mapear ese slug al instituto_id del backend.
+// Esto permite que estudiantes SIN usuario queden asociados a su instituto solo por la URL.
+// Ejemplo: /bqto/formulario => instituto_id=1
+define('SEDE_INSTITUTO_MAP', [
+    // 'bqto' => 1,
+    // 'carora' => 2,
+]);
+
 // Otras constantes
 define('SITE_URL', 'http://localhost');
 define('SITE_NAME', 'Formulario Socioeconómico');

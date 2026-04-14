@@ -79,10 +79,10 @@
                     <option value="0426">0426</option>
                 </select>
                 <input type="tel" id="telefono" name="telefono" required
-                    pattern="^[0-9]{7}$" maxlength="7"
+                    pattern="^([0-9]{7}|[0-9]{11})$" maxlength="11"
                     value="<?php echo isset($old['telefono']) ? htmlspecialchars($old['telefono']) : ''; ?>"
                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                    class="input-field col-span-2" placeholder="1234567">
+                    class="input-field col-span-2" placeholder="1234567 o 04261234567">
             </div>
         </div>
 

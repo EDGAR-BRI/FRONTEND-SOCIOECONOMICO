@@ -17,6 +17,7 @@ $router->get('/success', 'FormController@success');
 // Rutas POST
 $router->post('/login', 'AuthController@authenticate');
 $router->post('/logout', 'AuthController@logout');
+$router->post('/submit', 'FormController@submit');
 $router->post('/:sede/formulario/submit', 'FormController@submit');
 
 // Rutas Admin
@@ -26,6 +27,12 @@ $router->get('/admin/usuarios', 'AdminController@users');
 $router->get('/admin/respuestas', 'AdminController@responses');
 $router->get('/admin/respuestas/:id', 'AdminController@responseDetail');
 $router->get('/admin/catalogos', 'AdminController@catalogs');
+
+// Acciones Admin Catálogos
+$router->post('/admin/catalogos/create', 'AdminCatalogsController@create');
+$router->post('/admin/catalogos/update/:id', 'AdminCatalogsController@update');
+$router->post('/admin/catalogos/delete/:id', 'AdminCatalogsController@delete');
+$router->post('/admin/catalogos/restore/:id', 'AdminCatalogsController@restore');
 
 // Acciones Admin Usuarios
 $router->post('/admin/usuarios/create', 'AdminUsersController@create');
