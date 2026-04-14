@@ -1,4 +1,4 @@
-<main class="container px-4 py-12 min-h-[80vh] bg-gray-100 w-screen  flex flex-col">
+<main class="container px-4 py-12 min-h-[80vh] bg-gray-100 r-0 l-0 mx-auto  flex flex-col">
     <section class="text-center mb-16">
         <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 tracking-tight">Seleccione su Instituto</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">Bienvenido al sistema de registro socioeconómico. Por favor, seleccione la sede a la que pertenece para continuar.</p>
