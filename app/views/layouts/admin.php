@@ -153,40 +153,7 @@ if ($cssVersion !== null) {
                         $titles = [
                             'dashboard' => 'Dashboard Overview',
                             'stats' => 'Estadísticas',
-                            'stats_resumen' => 'Estadísticas · Vista 1: Dashboard General (Resumen Ejecutivo)
-¿Para qué sirve?: Para que los directores o autoridades tengan una "fotografía" rápida de la situación global de la institución.
-
-¿Qué debe contener?
-
-Tarjetas de KPIs (Key Performance Indicators): Total de estudiantes encuestados vs. Total de población (tasa de respuesta), Moda del estrato (el estrato más común).
-
-Gráfico de Dono o Pastel: Distribución general por Sexo (Ej. 60% Femenino, 40% Masculino).
-
-Gráfico de Barras Verticales: Distribución general de la población por Estratos (Eje X: Estrato 1, 2, 3, etc. Eje Y: Cantidad de estudiantes).
-
-El porqué: En esta vista no cruzamos la carrera. Solo damos totales globales. Evitamos la redundancia dejando los detalles para las siguientes vistas.
-
-Vista 2: Análisis Académico (Filtro por Carreras)
-¿Para qué sirve?: Para que los coordinadores de cada facultad o carrera entiendan la realidad socioeconómica específica de sus estudiantes.
-
-¿Qué debe contener?
-
-Filtros principales en la parte superior: Un selector (Dropdown) para filtrar por "Carrera" o "Facultad".
-
-Gráfico de Barras Apiladas (Stacked Bar Chart) al 100%: Si no filtran una carrera específica, muestras todas las carreras en el Eje X, y cada barra representa el 100% de los estudiantes de esa carrera, segmentada por colores según sus estratos.
-
-El porqué: Aquí aplicamos el principio de consolidación. En lugar de hacer una vista por cada carrera (lo cual sería super redundante), haces una sola vista interactiva. La interactividad elimina la redundancia visual.
-
-Vista 3: Análisis Demográfico y de Vulnerabilidad (Cruces Complejos)
-¿Para qué sirve?: Para analistas de bienestar social que necesitan encontrar "focos de vulnerabilidad" (por ejemplo, descubrir si la mayoría de las mujeres de cierta carrera están en los estratos más bajos).
-
-¿Qué debe contener?
-
-Mapa de Calor (Heatmap): Eje X: Estratos. Eje Y: Carreras. El color de la celda es más intenso (ej. rojo) donde haya mayor cantidad de estudiantes. Esto permite ver visualmente dónde se concentra la población.
-
-Gráfico de Barras Agrupadas (Grouped Bar Chart): Eje X: Estratos. Por cada estrato, dos barras de lado a lado (Femenino y Masculino).
-
-El porqué: Solo en esta vista se cruzan 3 o más variables (Sexo, Estrato, Carrera). Mantener esta complejidad aislada en su propia pestaña evita que las vistas más simples se ensucien.Resumen',
+                            'stats_resumen' => 'Estadísticas · Resumen',
                             'stats_estratos' => 'Estadísticas · Estratos',
                             'stats_carreras' => 'Estadísticas · Carreras',
                             'users' => 'Gestión de Usuarios',
