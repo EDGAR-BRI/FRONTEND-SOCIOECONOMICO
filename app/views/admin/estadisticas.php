@@ -465,17 +465,22 @@
         }
     }
 
-    if (activeView === 'estratos') {
+    if (activeView === 'estratos') {                      
         const ctxStacked = document.getElementById('chartStackedCarreras');
         if (ctxStacked) {
             const datasets = stackedDatasets.map((dataset, idx) => ({
-                label: dataset.label,
-                data: dataset.data,
-                backgroundColor: colors.estratos[idx % colors.estratos.length],
-                borderWidth: 0,
-                borderRadius: 4,
-                borderSkipped: false
-            }));
+            label: dataset.label,
+            data: dataset.data,
+            // AQUÍ ESTÁ EL SECRETO: 
+            // Debes asegurarte de que el nombre coincida con lo que manda PHP.
+            // Si PHP lo manda como "dataset.estudiantes_reales", aquí debes poner:
+            absoluteValues: dataset.estudiantes_reales, 
+            
+            backgroundColor: colors.estratos[idx % colors.estratos.length],
+            borderWidth: 0,
+            borderRadius: 4
+        }));
+        console.log(stackedDatasets)
 
             new Chart(ctxStacked, {
                 type: 'bar',
@@ -484,32 +489,30 @@
                     datasets: datasets
                 },
                 options: {
+                    indexAxis: 'y', // <--- ¡AÑADE ESTO! Convierte las barras a horizontales para mejor lectura
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: {
-                            stacked: true,
-                            ticks: { color: colors.gray600 },
-                            grid: { display: false }
-                        },
-                        y: {
-                            stacked: true,
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: {
-                                color: colors.gray600,
-                                callback: (value) => value + '%'
-                            },
-                            grid: { color: 'rgba(0,0,0,0.08)' }
-                        }
+                        x: { stacked: true, max: 100 }, // Ahora la X es el porcentaje
+                        y: { stacked: true }            // Ahora la Y son las carreras
                     },
                     plugins: {
-                        legend: { position: 'bottom' },
                         tooltip: {
                             callbacks: {
+                                // La función 'label' controla el texto principal de la cajita
                                 label: function (context) {
-                                    const val = Number(context.parsed.y || 0).toFixed(1).replace('.', ',');
-                                    return `${context.dataset.label}: ${val}%`;
+                                    // 1. Obtenemos el porcentaje
+                                    // Usamos parsed.x porque al hacer el gráfico horizontal (indexAxis: 'y'), el valor numérico ahora vive en el eje X.
+                                    const val = Number(context.parsed.x || 0).toFixed(1).replace('.', ',');
+                                    
+                                    // 2. Obtenemos el valor absoluto (las personas reales)
+                                    // context.dataIndex nos dice en qué barra exacta estamos parados (Ej: índice 2 = Carrera de Sistemas)
+                                    const dataIndex = context.dataIndex; 
+                                    // Buscamos en nuestro dataset personalizado el número real de estudiantes para esa barra
+                                    const absoluteVal = context.dataset.absoluteValues[dataIndex];
+                                    
+                                    // 3. Retornamos el texto final formateado maravillosamente
+                                    return `${context.dataset.label}: ${val}% (${absoluteVal} estudiantes)`;
                                 }
                             }
                         }
