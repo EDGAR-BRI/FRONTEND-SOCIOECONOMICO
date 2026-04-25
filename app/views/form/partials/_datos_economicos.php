@@ -3,8 +3,8 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-            <label for="transporte_id" class="label-field">Transporte</label>
-            <select id="transporte_id" name="transporte_id" class="input-field">
+            <label for="transporte_id" class="label-field">Transporte <span class="text-red-500">*</span></label>
+            <select id="transporte_id" name="transporte_id" required class="input-field">
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['transporte'])): ?>
                     <?php foreach ($catalogos['transporte'] as $item): ?>
@@ -18,8 +18,8 @@
         </div>
 
         <div>
-            <label for="dependencia_economica_id" class="label-field">Dependencia Económica</label>
-            <select id="dependencia_economica_id" name="dependencia_economica_id" class="input-field">
+            <label for="dependencia_economica_id" class="label-field">Dependencia Económica <span class="text-red-500">*</span></label>
+            <select id="dependencia_economica_id" name="dependencia_economica_id" required class="input-field">
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['dependencia_economica'])): ?>
                     <?php foreach ($catalogos['dependencia_economica'] as $item): ?>
@@ -33,8 +33,8 @@
         </div>
 
         <div>
-            <label for="fuente_ingreso_id" class="label-field">Fuente de Ingreso Familiar</label>
-            <select id="fuente_ingreso_id" name="fuente_ingreso_id" class="input-field">
+            <label for="fuente_ingreso_id" class="label-field">Fuente de Ingreso Familiar <span class="text-red-500">*</span></label>
+            <select id="fuente_ingreso_id" name="fuente_ingreso_id" required class="input-field">
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['fuente_ingreso'])): ?>
                     <?php foreach ($catalogos['fuente_ingreso'] as $item): ?>
@@ -48,8 +48,8 @@
         </div>
 
         <div>
-            <label for="ingreso_familiar_id" class="label-field">Ingreso Familiar</label>
-            <select id="ingreso_familiar_id" name="ingreso_familiar_id" class="input-field">
+            <label for="ingreso_familiar_id" class="label-field">Ingreso Familiar <span class="text-red-500">*</span></label>
+            <select id="ingreso_familiar_id" name="ingreso_familiar_id" required class="input-field">
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['ingreso_familiar'])): ?>
                     <?php foreach ($catalogos['ingreso_familiar'] as $item): ?>
@@ -77,11 +77,5 @@
             </select>
         </div>
 
-        <div class="md:col-span-2">
-            <label for="cedula_file" class="label-field">Cédula de Identidad (Archivo)</label>
-            <input type="file" id="cedula_file" name="cedula_file" accept="image/*,.pdf"
-                class="input-field">
-            <p class="text-sm text-gray-500 mt-1">Formatos aceptados: JPG, PNG, PDF (máx. 5MB)</p>
-        </div>
     </div>
 </div>
