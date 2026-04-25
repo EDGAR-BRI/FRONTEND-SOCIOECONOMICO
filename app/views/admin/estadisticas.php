@@ -190,7 +190,7 @@
     $responseRateFmt = number_format($tasaRespuesta, 1, ',', '.');
 ?>
 
-<div class="bg-white rounded-lg shadow-sm border p-7 mb-7">
+<div class="bg-white rounded-lg shadow-sm border p-7 mb-6">
     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
             <h3 class="text-lg font-bold text-gray-800">Centro de Estadísticas Socioeconómicas</h3>
@@ -219,10 +219,6 @@
 </div>
 
 <?php if ($statsView === 'resumen'): ?>
-    <div class="mb-8">
-        <h4 class="text-base font-semibold text-gray-800 mb-3">Vista 1: Dashboard General (Resumen Ejecutivo)</h4>
-        <p class="text-sm text-gray-600">Fotografía rápida global para directores y autoridades.</p>
-    </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
         <div class="bg-white rounded-lg shadow-sm border p-6">
@@ -264,10 +260,6 @@
         </div>
     </div>
 <?php elseif ($statsView === 'estratos'): ?>
-    <div class="mb-8">
-        <h4 class="text-base font-semibold text-gray-800 mb-3">Vista 2: Análisis Académico (Filtro por Carreras)</h4>
-        <p class="text-sm text-gray-600">Consolidación por carrera/facultad para coordinación académica.</p>
-    </div>
 
     <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
         <form method="GET" action="<?php echo BASE_URL; ?>/admin/estadisticas" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
@@ -321,10 +313,6 @@
         </div>
     </div>
 <?php elseif ($statsView === 'carreras'): ?>
-    <div class="mb-8">
-        <h4 class="text-base font-semibold text-gray-800 mb-3">Vista 3: Análisis Demográfico y de Vulnerabilidad</h4>
-        <p class="text-sm text-gray-600">Cruces complejos para identificar focos de vulnerabilidad (sexo, estrato y carrera).</p>
-    </div>
 
     <div class="bg-white rounded-lg shadow-sm border p-7 mb-8 overflow-x-auto">
         <div class="flex items-center justify-between mb-4">
