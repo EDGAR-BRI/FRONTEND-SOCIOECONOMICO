@@ -100,6 +100,15 @@
                 <?php endif; ?>
             </select>
         </div>
+        <div class="flex flex-col">
+            <label for="foto_cedula" class="label-field">Foto de la cédula</label>
+            <label for="foto_cedula" class="input-field cursor-pointer inline-flex items-center justify-center gap-2 rounded-md border px-4 py-2 font-semibold transition duration-200 hover:bg-primary2-100 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid  fa-address-card" aria-hidden="true"></i>
+                <span>Selecionar imagen</span>
+            </label>
+            <input id="foto_cedula" class="hidden" type="file" name="foto_cedula" accept="image/*">
+            <small id="foto_cedula_filename" class="text-xs text-gray-500 dark:text-slate-300">Ningún archivo seleccionado</small>
+        </div>
 
         <div class="md:col-span-2">
             <label for="direccion" class="label-field">Dirección <span class="text-red-500">*</span></label>

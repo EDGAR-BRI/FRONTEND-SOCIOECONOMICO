@@ -1,6 +1,27 @@
 // form.js - Interactividad del formulario socioeconómico
 
 document.addEventListener('DOMContentLoaded', function () {
+    const themeStorageKey = 'socioeconomico-theme';
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+
+    function setTheme(theme) {
+        const isDark = theme === 'dark';
+        root.classList.toggle('dark', isDark);
+        root.dataset.theme = theme;
+        localStorage.setItem(themeStorageKey, theme);
+        if (themeToggle) {
+            themeToggle.checked = isDark;
+        }
+    }
+
+    if (themeToggle) {
+        themeToggle.checked = root.classList.contains('dark');
+
+        themeToggle.addEventListener('change', function () {
+            setTheme(this.checked ? 'dark' : 'light');
+        });
+    }
 
     const selects = document.querySelectorAll('select');
 
@@ -43,7 +64,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ===== VALIDACIÓN DE ARCHIVO DE CÉDULA =====
-    const cedulaFile = document.getElementById('cedula_file');
+    const cedulaFile = document.getElementById('foto_cedula');
+    const cedulaFileName = document.getElementById('foto_cedula_filename');
     if (cedulaFile) {
         cedulaFile.addEventListener('change', function () {
             const file = this.files[0];
@@ -53,16 +75,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (file.size > maxSize) {
                     alert('El archivo es demasiado grande. El tamaño máximo es 5MB.');
                     this.value = '';
+                    if (cedulaFileName) {
+                        cedulaFileName.textContent = 'Ningún archivo seleccionado';
+                    }
                     return;
                 }
 
                 // Validar tipo de archivo
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
                 if (!allowedTypes.includes(file.type)) {
-                    alert('Tipo de archivo no permitido. Solo se aceptan JPG, PNG y PDF.');
+                    alert('Tipo de archivo no permitido. Solo se aceptan JPG, PNG y WEBP.');
                     this.value = '';
+                    if (cedulaFileName) {
+                        cedulaFileName.textContent = 'Ningún archivo seleccionado';
+                    }
                     return;
                 }
+
+                if (cedulaFileName) {
+                    cedulaFileName.textContent = file.name;
+                }
+            } else if (cedulaFileName) {
+                cedulaFileName.textContent = 'Ningún archivo seleccionado';
             }
         });
     }
