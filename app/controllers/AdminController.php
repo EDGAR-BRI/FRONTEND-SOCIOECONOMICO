@@ -144,6 +144,12 @@ class AdminController extends Controller
             session_start();
         }
 
+        $vista = isset($_GET['vista']) ? trim((string)$_GET['vista']) : '';
+        $allowedVistas = ['resumen', 'estratos', 'carreras'];
+        if ($vista === '' || !in_array($vista, $allowedVistas, true)) {
+            $vista = 'resumen';
+        }
+
         $from = isset($_GET['from']) ? trim((string)$_GET['from']) : '';
         $to = isset($_GET['to']) ? trim((string)$_GET['to']) : '';
 
@@ -267,7 +273,8 @@ class AdminController extends Controller
 
         $this->view('admin/estadisticas', [
             'title' => 'Estadísticas | Admin',
-            'current_page' => 'stats',
+            'current_page' => 'stats_' . $vista,
+            'stats_view' => $vista,
             'filters' => [
                 'from' => $fromDt->format('Y-m-d'),
                 'to' => $toDt->format('Y-m-d'),

@@ -1,4 +1,9 @@
 <?php
+    $statsView = isset($stats_view) ? trim((string)$stats_view) : 'resumen';
+    if ($statsView === '') {
+        $statsView = 'resumen';
+    }
+
     $filters = isset($filters) && is_array($filters) ? $filters : [];
     $from = isset($filters['from']) ? (string)$filters['from'] : '';
     $to = isset($filters['to']) ? (string)$filters['to'] : '';
@@ -34,6 +39,7 @@
         </div>
 
         <form method="GET" action="<?php echo BASE_URL; ?>/admin/estadisticas" class="flex flex-col sm:flex-row gap-3">
+            <input type="hidden" name="vista" value="<?php echo htmlspecialchars($statsView); ?>" />
             <div>
                 <label class="block text-xs font-medium text-gray-600 mb-1">Desde</label>
                 <input type="date" name="from" value="<?php echo htmlspecialchars($from); ?>" class="w-full sm:w-44 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-200" />
@@ -102,7 +108,17 @@
 
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+<?php if ($statsView === 'resumen'): ?>
+    <div class="bg-white rounded-lg shadow-sm border p-7">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-bold text-gray-800">Encuestas creadas por día</h3>
+            <div class="text-xs text-gray-500">Línea</div>
+        </div>
+        <div class="w-full" style="height: 380px;">
+            <canvas id="chartTimeline"></canvas>
+        </div>
+    </div>
+<?php elseif ($statsView === 'estratos'): ?>
     <div class="bg-white rounded-lg shadow-sm border p-7">
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold text-gray-800">Estratos (1–5)</h3>
@@ -112,7 +128,7 @@
             <canvas id="chartEstratos"></canvas>
         </div>
     </div>
-
+<?php elseif ($statsView === 'carreras'): ?>
     <div class="bg-white rounded-lg shadow-sm border p-7">
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-bold text-gray-800">Encuestas por carreras</h3>
@@ -122,17 +138,7 @@
             <canvas id="chartCarreras"></canvas>
         </div>
     </div>
-</div>
-
-<div class="bg-white rounded-lg shadow-sm border p-7">
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-bold text-gray-800">Encuestas creadas por día</h3>
-        <div class="text-xs text-gray-500">Línea</div>
-    </div>
-    <div class="w-full" style="height: 380px;">
-        <canvas id="chartTimeline"></canvas>
-    </div>
-</div>
+<?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
