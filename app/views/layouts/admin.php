@@ -64,17 +64,17 @@ if ($cssVersion !== null) {
     $statsMenuItems = [
         [
             'key' => 'stats_resumen',
-            'label' => 'Dashboard General',
+            'label' => 'Resumen General',
             'href' => BASE_URL . '/admin/estadisticas?vista=resumen',
         ],
         [
             'key' => 'stats_estratos',
-            'label' => 'Análisis Académico',
+            'label' => 'Estratos por Carrera',
             'href' => BASE_URL . '/admin/estadisticas?vista=estratos',
         ],
         [
             'key' => 'stats_carreras',
-            'label' => 'Demográfico y Vulnerabilidad',
+            'label' => 'Perfil Social',
             'href' => BASE_URL . '/admin/estadisticas?vista=carreras',
         ],
     ];
@@ -153,9 +153,9 @@ if ($cssVersion !== null) {
                         $titles = [
                             'dashboard' => 'Dashboard Overview',
                             'stats' => 'Estadísticas',
-                            'stats_resumen' => 'Estadísticas · Dashboard General',
-                            'stats_estratos' => 'Estadísticas · Análisis Académico',
-                            'stats_carreras' => 'Estadísticas · Análisis Demográfico y de Vulnerabilidad',
+                            'stats_resumen' => 'Estadísticas · Resumen General',
+                            'stats_estratos' => 'Estadísticas · Composición de Estratos por Institución y Carreras',
+                            'stats_carreras' => 'Estadísticas · Perfil Socioeconómico por Carreras',
                             'users' => 'Gestión de Usuarios',
                             'responses' => 'Respuestas Recibidas',
                             'catalogs' => 'Gestión de Catálogos (Opciones)'
