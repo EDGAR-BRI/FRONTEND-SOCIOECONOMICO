@@ -190,27 +190,31 @@
     $responseRateFmt = number_format($tasaRespuesta, 1, ',', '.');
 ?>
 
-<div class="bg-white rounded-lg shadow-sm border p-7 mb-6">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+<div class="bg-white rounded-lg shadow-sm border p-7 mb-4">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
         <div>
-            <h3 class="text-lg font-bold text-gray-800">Centro de Estadísticas Socioeconómicas</h3>
-            <p class="text-sm text-gray-500">Maquetación en tres vistas de análisis con datos mock.</p>
+            <h3 class="text-lg font-bold text-gray-800">Filtro de Estadísticas Socioeconómicas</h3>
+            <p class="text-sm text-gray-500">Filtra los datos por un rango de fechas específico.</p>
         </div>
 
-        <form method="GET" action="<?php echo BASE_URL; ?>/admin/estadisticas" class="flex flex-col sm:flex-row gap-3">
+        <form method="GET" action="<?php echo BASE_URL; ?>/admin/estadisticas" class="flex flex-col sm:flex-row  gap-3">
             <input type="hidden" name="vista" value="<?php echo htmlspecialchars($statsView); ?>" />
             <input type="hidden" name="facultad" value="<?php echo htmlspecialchars($selectedFacultad); ?>" />
             <input type="hidden" name="carrera" value="<?php echo htmlspecialchars($selectedCarrera); ?>" />
-            <div>
+
+            <div class="w-full sm:w-auto">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Desde</label>
                 <input type="date" name="from" value="<?php echo htmlspecialchars($from); ?>" class="w-full sm:w-44 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-200" />
             </div>
-            <div>
+
+            <div class="w-full sm:w-auto">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Hasta</label>
                 <input type="date" name="to" value="<?php echo htmlspecialchars($to); ?>" class="w-full sm:w-44 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-200" />
             </div>
-            <div class="sm:pb-0">
-                <button type="submit" class="mt-5 sm:mt-0 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
+
+            <div class="w-full sm:w-auto">
+                <label class="block text-xs font-medium text-white mb-1">.</label>
+                <button type="submit" class="w-full sm:w-auto bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
                     Aplicar
                 </button>
             </div>
@@ -220,18 +224,19 @@
 
 <?php if ($statsView === 'resumen'): ?>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-4">
         <div class="bg-white rounded-lg shadow-sm border p-6">
             <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Estudiantes encuestados</p>
             <h3 class="text-2xl font-bold text-gray-800"><?php echo number_format($totalEncuestas, 0, ',', '.'); ?></h3>
         </div>
         <div class="bg-white rounded-lg shadow-sm border p-6">
-            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Población total estimada</p>
+            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Día con más encuestas realizadas</p>
             <h3 class="text-2xl font-bold text-gray-800"><?php echo number_format($totalPoblacion, 0, ',', '.'); ?></h3>
+            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">03/04/2023</p>
         </div>
         <div class="bg-white rounded-lg shadow-sm border p-6">
-            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Tasa de respuesta</p>
-            <h3 class="text-2xl font-bold text-green-700"><?php echo htmlspecialchars($responseRateFmt); ?>%</h3>
+            <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Tiempo Promedio de Completación</p>
+            <h3 class="text-2xl font-bold text-green-700">25min</h3>
         </div>
         <div class="bg-white rounded-lg shadow-sm border p-6">
             <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Moda de estrato</p>
@@ -239,20 +244,20 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        <div class="bg-white rounded-lg shadow-sm border p-7">
+    <div class="grid grid-cols-3 gap-4">
+        <div class="col-span-1 bg-white rounded-lg shadow-sm border p-7">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800">Distribución por sexo</h3>
-                <span class="text-xs text-gray-500">Dona</span>
+                <!-- <span class="text-xs text-gray-500">Dona</span> -->
             </div>
             <div class="w-full" style="height: 360px;">
                 <canvas id="chartSexo"></canvas>
             </div>
         </div>
-        <div class="bg-white rounded-lg shadow-sm border p-7">
+        <div class="col-span-2 bg-white rounded-lg shadow-sm border p-7">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800">Distribución por estratos</h3>
-                <span class="text-xs text-gray-500">Barras verticales</span>
+                <!-- <span class="text-xs text-gray-500">Barras verticales</span> -->
             </div>
             <div class="w-full" style="height: 360px;">
                 <canvas id="chartEstratosGlobal"></canvas>
@@ -292,12 +297,14 @@
             </div>
 
             <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">.</label>
                 <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
                     Aplicar filtro
                 </button>
             </div>
 
             <div class="text-xs text-gray-500 md:text-right">
+                <label class="block text-xs font-medium text-gray-600 mb-1">.</label>
                 Contexto actual: <?php echo htmlspecialchars($stackedTitleFilter); ?>
             </div>
         </form>
