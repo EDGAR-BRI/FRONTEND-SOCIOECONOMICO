@@ -49,6 +49,11 @@ class Encuesta
         $this->validateRequired('carrera_id', 'La carrera es requerida');
         $this->validateRequired('semestre_id', 'El semestre es requerido');
         $this->validateRequired('estado_civil_id', 'El estado civil es requerido');
+        $this->validateRequired('transporte_id', 'El transporte es requerido');
+        $this->validateRequired('dependencia_economica_id', 'La dependencia económica es requerida');
+        $this->validateRequired('fuente_ingreso_id', 'La fuente de ingreso familiar es requerida');
+        $this->validateRequired('ingreso_familiar_id', 'El ingreso familiar es requerido');
+        $this->validateRequired('veracidad_id', 'La veracidad de la información es requerida');
 
         // Validaciones condicionales
         if ($this->get('hijos') == 1) {

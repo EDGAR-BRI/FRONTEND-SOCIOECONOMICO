@@ -208,8 +208,36 @@ class FormController extends Controller
         }
 
         try {
+            $uploadError = $this->validateFotoCedulaUpload();
+            if ($uploadError !== null) {
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
+                $_SESSION['errors'] = [$uploadError];
+                $_SESSION['form_data'] = $_POST;
+                $redirectPath = !empty($sede) ? BASE_URL . "/{$sede}/formulario" : BASE_URL . '/';
+                $this->redirect($redirectPath);
+                return;
+            }
+
+            $payload = $encuesta->toArray();
+
+            if (isset($_FILES['foto_cedula'])
+                && is_array($_FILES['foto_cedula'])
+                && isset($_FILES['foto_cedula']['error'])
+                && (int)$_FILES['foto_cedula']['error'] === UPLOAD_ERR_OK
+            ) {
+                $tmpName = isset($_FILES['foto_cedula']['tmp_name']) ? (string)$_FILES['foto_cedula']['tmp_name'] : '';
+                $mimeType = isset($_FILES['foto_cedula']['type']) ? (string)$_FILES['foto_cedula']['type'] : 'application/octet-stream';
+                $originalName = isset($_FILES['foto_cedula']['name']) ? (string)$_FILES['foto_cedula']['name'] : 'cedula';
+
+                if ($tmpName !== '' && is_file($tmpName)) {
+                    $payload['foto_cedula'] = new \CURLFile($tmpName, $mimeType, $originalName);
+                }
+            }
+
             // Enviar datos a la API
-            $response = $this->apiService->post('/encuesta', $encuesta->toArray());
+            $response = $this->apiService->post('/encuesta', $payload);
 
             $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
             $payloadSuccess = is_array($payload) && array_key_exists('success', $payload) ? (bool)$payload['success'] : null;
@@ -302,6 +330,32 @@ class FormController extends Controller
         $this->view('form/success', [
             'encuesta' => $encuestaData
         ]);
+    }
+
+    private function validateFotoCedulaUpload()
+    {
+        if (!isset($_FILES['foto_cedula']) || !is_array($_FILES['foto_cedula'])) {
+            return null;
+        }
+
+        $upload = $_FILES['foto_cedula'];
+        $error = isset($upload['error']) ? (int)$upload['error'] : UPLOAD_ERR_NO_FILE;
+
+        if ($error === UPLOAD_ERR_NO_FILE) {
+            return null;
+        }
+
+        if ($error !== UPLOAD_ERR_OK) {
+            return 'No se pudo procesar la foto de la cédula. Intente de nuevo.';
+        }
+
+        $size = isset($upload['size']) ? (int)$upload['size'] : 0;
+        $maxSize = 5 * 1024 * 1024;
+        if ($size > $maxSize) {
+            return 'La foto de la cédula supera el tamaño máximo de 5MB.';
+        }
+
+        return null;
     }
 
 }

@@ -73,6 +73,25 @@ class ApiService
         return $this->request('POST', $url, $data);
     }
 
+    private function containsCurlFile($data)
+    {
+        if ($data instanceof \CURLFile) {
+            return true;
+        }
+
+        if (!is_array($data)) {
+            return false;
+        }
+
+        foreach ($data as $value) {
+            if ($this->containsCurlFile($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Realiza una petición PUT
      * 
@@ -180,16 +199,25 @@ class ApiService
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 
+        $isMultipart = is_array($data) && $this->containsCurlFile($data);
+
         // Configurar headers
-        $headers = ['Content-Type: application/json'];
+        $headers = [];
+        if (!$isMultipart) {
+            $headers[] = 'Content-Type: application/json';
+        }
         foreach ($effectiveHeaders as $key => $value) {
             $headers[] = "{$key}: {$value}";
         }
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-        // Si hay datos, enviarlos como JSON
+        // Si hay datos, enviarlos como JSON o multipart según corresponda.
         if ($data !== null && in_array($method, ['POST', 'PUT', 'PATCH'])) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            if ($isMultipart) {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            } else {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            }
         }
 
         // Ejecutar petición
