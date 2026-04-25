@@ -30,10 +30,10 @@
     <main class="max-w-4xl mx-auto">
         <!-- Header -->
         <header class="card mb-6 flex items-center justify-between p-6 sm:flex-row sm:items-center flex-col gap-4">
-            <img class="h-20 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
+            <img class="lg:h-20 md:h-16 h-14 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
             <article class="sm:text-start text-center">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">Formulario Socioeconómico</h1>
-                <p class="text-gray-600 text-center">IUJO - Sistema de Registro</p>
+                <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">Formulario Socioeconómico</h1>
+                <p class="text-gray-600 text-center lg:text-lg md:text-base text-sm">IUJO - Sistema de Registro</p>
             </article>
 
         </header>
