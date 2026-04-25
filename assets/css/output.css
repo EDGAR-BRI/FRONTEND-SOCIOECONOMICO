@@ -1041,16 +1041,16 @@ html.dark .bg-red-100 {
   height: 2.5rem;
 }
 
+.h-14 {
+  height: 3.5rem;
+}
+
 .h-16 {
   height: 4rem;
 }
 
 .h-2 {
   height: 0.5rem;
-}
-
-.h-20 {
-  height: 5rem;
 }
 
 .h-3\.5 {
@@ -1073,6 +1073,14 @@ html.dark .bg-red-100 {
   height: 28px;
 }
 
+.h-\[360px\] {
+  height: 360px;
+}
+
+.h-\[400px\] {
+  height: 400px;
+}
+
 .h-fit {
   height: -moz-fit-content;
   height: fit-content;
@@ -1080,18 +1088,6 @@ html.dark .bg-red-100 {
 
 .h-full {
   height: 100%;
-}
-
-.h-\[360px\] {
-  height: 360px;
-}
-
-.h-\[380px\] {
-  height: 380px;
-}
-
-.h-14 {
-  height: 3.5rem;
 }
 
 .max-h-32 {
@@ -1293,16 +1289,12 @@ html.dark .bg-red-100 {
   gap: 1rem;
 }
 
-.gap-6 {
-  gap: 1.5rem;
-}
-
-.gap-8 {
-  gap: 2rem;
-}
-
 .gap-5 {
   gap: 1.25rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
 }
 
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -1741,11 +1733,6 @@ html.dark .bg-red-100 {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
-}
-
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
 }
 
 .text-4xl {
@@ -2368,10 +2355,6 @@ html.dark select:focus {
 }
 
 @media (min-width: 640px) {
-  .sm\:mt-0 {
-    margin-top: 0px;
-  }
-
   .sm\:inline {
     display: inline;
   }
@@ -2398,10 +2381,6 @@ html.dark select:focus {
 
   .sm\:p-10 {
     padding: 2.5rem;
-  }
-
-  .sm\:pb-0 {
-    padding-bottom: 0px;
   }
 
   .sm\:text-start {
@@ -2470,33 +2449,14 @@ html.dark select:focus {
     justify-content: space-between;
   }
 
-  .md\:text-right {
-    text-align: right;
-  }
-
-  .md\:text-5xl {
-    font-size: 3rem;
-    line-height: 1;
-  }
-
   .md\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
   }
 
-  .md\:text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
-
-  .md\:text-xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
-
-  .md\:text-lg {
-    font-size: 1.125rem;
-    line-height: 1.75rem;
+  .md\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
   }
 
   .md\:text-base {
@@ -2547,18 +2507,9 @@ html.dark select:focus {
     font-size: 1.125rem;
     line-height: 1.75rem;
   }
-
-  .lg\:text-xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-  }
 }
 
 @media (min-width: 1280px) {
-  .xl\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .xl\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }

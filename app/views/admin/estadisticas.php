@@ -309,13 +309,16 @@
     </div>
 
 <?php elseif ($statsView === 'carreras'): ?>
-        <div class="col-span-1 bg-white rounded-lg shadow-sm border p-7 mb-8 overflow-x-auto">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        
+        <div class="bg-white rounded-lg shadow-sm border p-7 overflow-x-auto">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800">Mapa de calor (Carreras vs Estratos)</h3>
-                <span class="text-xs text-gray-500">Mayor intensidad = mayor concentración</span>
+                <span class="text-xs text-gray-500">Mayor intensidad = concentración</span>
             </div>
 
-            <table class=" min-w-full border border-gray-200 rounded-lg overflow-hidden text-sm">
+            <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden text-sm">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-4 py-3 text-left font-semibold text-gray-700 border-b">Carrera</th>
@@ -344,15 +347,18 @@
             </table>
         </div>
 
-        <div class="bg-white col-span-1 rounded-lg shadow-sm border p-7">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-gray-800">Sexo por estrato (barras agrupadas)</h3>
-                <span class="text-xs text-gray-500">Femenino vs Masculino en cada estrato</span>
+        <div class="bg-white rounded-lg shadow-sm border p-7">
+            <div class="flex  items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Sexo por estrato</h3>
+                <span class="text-xs text-gray-500">Femenino vs Masculino</span>
             </div>
-            <div class="w-full h-[380px] relative">
-                <canvas id="chartGroupedSexoEstrato"></canvas>
+
+            <div class="w-full h-[400px] relative">
+                <canvas class="h-full" id="chartGroupedSexoEstrato"></canvas>
             </div>
         </div>
+
+    </div>
 <?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
