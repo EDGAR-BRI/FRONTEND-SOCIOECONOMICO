@@ -64,17 +64,17 @@ if ($cssVersion !== null) {
     $statsMenuItems = [
         [
             'key' => 'stats_resumen',
-            'label' => 'Resumen',
+            'label' => 'Dashboard General',
             'href' => BASE_URL . '/admin/estadisticas?vista=resumen',
         ],
         [
             'key' => 'stats_estratos',
-            'label' => 'Estratos',
+            'label' => 'Análisis Académico',
             'href' => BASE_URL . '/admin/estadisticas?vista=estratos',
         ],
         [
             'key' => 'stats_carreras',
-            'label' => 'Carreras',
+            'label' => 'Demográfico y Vulnerabilidad',
             'href' => BASE_URL . '/admin/estadisticas?vista=carreras',
         ],
     ];
