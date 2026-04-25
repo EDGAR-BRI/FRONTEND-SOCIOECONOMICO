@@ -59,27 +59,26 @@ if ($cssVersion !== null) {
 
     $current_page = isset($current_page) ? (string)$current_page : '';
 
-    // Menú desplegable de estadísticas. Para agregar más vistas,
-    // añade un ítem aquí y luego soporta la vista en AdminController@estadisticas.
-    $statsMenuItems = [
+    // Menú desplegable de reportes por vista.
+    $reportesMenuItems = [
         [
-            'key' => 'stats_resumen',
-            'label' => 'Resumen General',
-            'href' => BASE_URL . '/admin/estadisticas?vista=resumen',
+            'key' => 'reportes_dashboard_general',
+            'label' => 'Dashboard General',
+            'href' => BASE_URL . '/admin/reportes/dashboard-general',
         ],
         [
-            'key' => 'stats_estratos',
-            'label' => 'Estratos por Carrera',
-            'href' => BASE_URL . '/admin/estadisticas?vista=estratos',
+            'key' => 'reportes_analisis_academico',
+            'label' => 'Analisis Academico',
+            'href' => BASE_URL . '/admin/reportes/analisis-academico',
         ],
         [
-            'key' => 'stats_carreras',
-            'label' => 'Perfil Social',
-            'href' => BASE_URL . '/admin/estadisticas?vista=carreras',
+            'key' => 'reportes_demografico_vulnerabilidad',
+            'label' => 'Demografico y Vulnerabilidad',
+            'href' => BASE_URL . '/admin/reportes/demografico-vulnerabilidad',
         ],
     ];
 
-    $isStatsSection = ($current_page === 'stats' || strpos($current_page, 'stats_') === 0);
+    $isReportesSection = ($current_page === 'reportes' || strpos($current_page, 'reportes_') === 0);
 ?>
 
     <!-- Sidebar -->
@@ -91,23 +90,23 @@ if ($cssVersion !== null) {
             <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
                 <i class="fas fa-home w-5 text-center"></i> Dashboard
             </a>
-            <div class="space-y-1" data-dropdown data-open="<?php echo $isStatsSection ? '1' : '0'; ?>">
+            <div class="space-y-1" data-dropdown data-open="<?php echo $isReportesSection ? '1' : '0'; ?>">
                 <button
                     type="button"
-                    class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg <?php echo $isStatsSection ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>"
-                    aria-expanded="<?php echo $isStatsSection ? 'true' : 'false'; ?>"
+                    class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg <?php echo $isReportesSection ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>"
+                    aria-expanded="<?php echo $isReportesSection ? 'true' : 'false'; ?>"
                     data-dropdown-btn
                 >
                     <span class="flex items-center gap-3">
                         <i class="fas fa-chart-pie w-5 text-center"></i>
-                        <span>Estadísticas</span>
+                        <span>Reportes</span>
                     </span>
-                    <i class="fas fa-chevron-down text-xs transition-transform duration-200 <?php echo $isStatsSection ? 'rotate-180' : ''; ?>" data-dropdown-icon></i>
+                    <i class="fas fa-chevron-down text-xs transition-transform duration-200 <?php echo $isReportesSection ? 'rotate-180' : ''; ?>" data-dropdown-icon></i>
                 </button>
 
                 <div class="pl-6" data-dropdown-menu>
                     <div class="space-y-1">
-                        <?php foreach ($statsMenuItems as $item):
+                        <?php foreach ($reportesMenuItems as $item):
                             $itemKey = isset($item['key']) ? (string)$item['key'] : '';
                             $itemHref = isset($item['href']) ? (string)$item['href'] : '#';
                             $itemLabel = isset($item['label']) ? (string)$item['label'] : 'Vista';
@@ -152,10 +151,10 @@ if ($cssVersion !== null) {
                     <?php 
                         $titles = [
                             'dashboard' => 'Dashboard Overview',
-                            'stats' => 'Estadísticas',
-                            'stats_resumen' => 'Estadísticas · Resumen General',
-                            'stats_estratos' => 'Estadísticas · Composición de Estratos por Institución y Carreras',
-                            'stats_carreras' => 'Estadísticas · Perfil Socioeconómico por Carreras',
+                            'reportes' => 'Reportes',
+                            'reportes_dashboard_general' => 'Reportes · Dashboard General',
+                            'reportes_analisis_academico' => 'Reportes · Analisis Academico',
+                            'reportes_demografico_vulnerabilidad' => 'Reportes · Demografico y Vulnerabilidad',
                             'users' => 'Gestión de Usuarios',
                             'responses' => 'Respuestas Recibidas',
                             'catalogs' => 'Gestión de Catálogos (Opciones)'

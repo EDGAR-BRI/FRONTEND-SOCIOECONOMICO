@@ -22,7 +22,10 @@ $router->post('/:sede/formulario/submit', 'FormController@submit');
 
 // Rutas Admin
 $router->get('/admin', 'AdminController@index');
-$router->get('/admin/estadisticas', 'AdminController@estadisticas');
+$router->get('/admin/estadisticas', 'ReportesController@dashboardGeneral');
+$router->get('/admin/reportes/dashboard-general', 'ReportesController@dashboardGeneral');
+$router->get('/admin/reportes/analisis-academico', 'ReportesController@analisisAcademico');
+$router->get('/admin/reportes/demografico-vulnerabilidad', 'ReportesController@demograficoVulnerabilidad');
 $router->get('/admin/usuarios', 'AdminController@users');
 $router->get('/admin/respuestas', 'AdminController@responses');
 $router->get('/admin/respuestas/:id', 'AdminController@responseDetail');
