@@ -153,9 +153,9 @@ if ($cssVersion !== null) {
                         $titles = [
                             'dashboard' => 'Dashboard Overview',
                             'stats' => 'Estadísticas',
-                            'stats_resumen' => 'Estadísticas · Resumen',
-                            'stats_estratos' => 'Estadísticas · Estratos',
-                            'stats_carreras' => 'Estadísticas · Carreras',
+                            'stats_resumen' => 'Estadísticas · Dashboard General',
+                            'stats_estratos' => 'Estadísticas · Análisis Académico',
+                            'stats_carreras' => 'Estadísticas · Análisis Demográfico y de Vulnerabilidad',
                             'users' => 'Gestión de Usuarios',
                             'responses' => 'Respuestas Recibidas',
                             'catalogs' => 'Gestión de Catálogos (Opciones)'
