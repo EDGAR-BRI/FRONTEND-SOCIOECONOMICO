@@ -2,6 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-slate-100 text-slate-900 transition-colors duration-300;
+  }
+
+  html.dark body {
+    @apply bg-slate-950 text-slate-100;
+  }
+
+  html.dark .card,
+  html.dark .card-grit-home {
+    @apply bg-slate-900 border-slate-700 text-slate-100;
+  }
+
+  html.dark .label-field,
+  html.dark .text-gray-700,
+  html.dark .text-gray-600,
+  html.dark .text-gray-500,
+  html.dark .text-gray-800 {
+    color: inherit;
+  }
+
+  html.dark .input-field,
+  html.dark input,
+  html.dark textarea,
+  html.dark select {
+    @apply bg-slate-800 border-slate-600 text-slate-100 placeholder-slate-400;
+  }
+
+  html.dark .input-field:focus,
+  html.dark input:focus,
+  html.dark textarea:focus,
+  html.dark select:focus {
+    @apply border-primary2-400 ring-2 ring-primary2-500;
+  }
+
+  html.dark .bg-gray-100 {
+    @apply bg-slate-950;
+  }
+
+  html.dark .bg-gray-200 {
+    @apply bg-slate-700;
+  }
+
+  html.dark .bg-red-100 {
+    @apply bg-red-950 text-red-200 border-red-800;
+  }
+
+  *::selection {
+    @apply bg-primary2-500 text-white;
+  }
+}
+
 /* Estilos personalizados */
 @layer components {
   .btn-primary {
@@ -10,6 +71,10 @@
 
   .input-field {
     @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary2-500 focus:border-transparent;
+  }
+
+  .input-field:focus {
+    @apply outline-none shadow-lg;
   }
 
   .label-field {
@@ -50,8 +115,14 @@ input {
   transition: box-shadow 0.2s, border-color 0.2s;
 }
 
-input:focus {
+/* input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #3b82f6;
+  box-shadow: 0 0 0 2px #f63bb8;
   border-color: transparent;
 }
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  box-shadow: 0 0 0 2px #60fa65;
+} */
