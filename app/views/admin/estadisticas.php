@@ -295,70 +295,64 @@
                     Aplicar filtro
                 </button>
             </div>
-
-            <div class="text-xs text-gray-500 md:text-right">
-                <label class="block text-xs font-medium mb-1 select-none" aria-hidden="true">&nbsp;</label>
-                Contexto actual: <?php echo htmlspecialchars($stackedTitleFilter); ?>
-            </div>
         </form>
-    </div>
+    </div>  
 
     <div class="bg-white rounded-lg shadow-sm border p-7">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-gray-800">Distribución de Estratos</h3>
+            <h3 class="text-lg font-bold text-gray-800">Distribución de Estratos de la <?php echo htmlspecialchars($stackedTitleFilter); ?></h3>
             <span class="text-xs text-gray-500">Barras agrupadas (Valores absolutos)</span>
         </div>
-        <div class="w-full h-[1000px] relative">
+        <div class="w-full">
             <canvas id="chartGroupedCarreras"></canvas>
         </div>
     </div>
 
 <?php elseif ($statsView === 'carreras'): ?>
+        <div class="col-span-1 bg-white rounded-lg shadow-sm border p-7 mb-8 overflow-x-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Mapa de calor (Carreras vs Estratos)</h3>
+                <span class="text-xs text-gray-500">Mayor intensidad = mayor concentración</span>
+            </div>
 
-    <div class="bg-white rounded-lg shadow-sm border p-7 mb-8 overflow-x-auto">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-gray-800">Mapa de calor (Carreras vs Estratos)</h3>
-            <span class="text-xs text-gray-500">Mayor intensidad = mayor concentración</span>
-        </div>
-
-        <table class="min-w-full border border-gray-200 rounded-lg overflow-hidden text-sm">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-700 border-b">Carrera</th>
-                    <?php foreach ($estratosLabels as $estratoLabel): ?>
-                        <th class="px-4 py-3 text-center font-semibold text-gray-700 border-b">Estrato <?php echo htmlspecialchars($estratoLabel); ?></th>
-                    <?php endforeach; ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($heatmapMatrix as $carreraName => $row): ?>
-                    <tr class="border-b last:border-b-0">
-                        <td class="px-4 py-3 font-medium text-gray-700 bg-white"><?php echo htmlspecialchars($carreraName); ?></td>
-                        <?php foreach ($row as $value):
-                            $intensity = ($maxHeatValue > 0) ? ($value / $maxHeatValue) : 0;
-                            $alpha = 0.08 + ($intensity * 0.72);
-                            $textClass = $intensity > 0.55 ? 'text-white' : 'text-gray-700';
-                            $cellStyle = 'background-color: rgba(220, 38, 38, ' . number_format($alpha, 2, '.', '') . ');';
-                        ?>
-                            <td class="px-4 py-3 text-center font-semibold <?php echo $textClass; ?>" style="<?php echo $cellStyle; ?>">
-                                <?php echo (int)$value; ?>
-                            </td>
+            <table class=" min-w-full border border-gray-200 rounded-lg overflow-hidden text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-semibold text-gray-700 border-b">Carrera</th>
+                        <?php foreach ($estratosLabels as $estratoLabel): ?>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-700 border-b">Estrato <?php echo htmlspecialchars($estratoLabel); ?></th>
                         <?php endforeach; ?>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    <?php foreach ($heatmapMatrix as $carreraName => $row): ?>
+                        <tr class="border-b last:border-b-0">
+                            <td class="px-4 py-3 font-medium text-gray-700 bg-white"><?php echo htmlspecialchars($carreraName); ?></td>
+                            <?php foreach ($row as $value):
+                                $intensity = ($maxHeatValue > 0) ? ($value / $maxHeatValue) : 0;
+                                $alpha = 0.08 + ($intensity * 0.72);
+                                $textClass = $intensity > 0.55 ? 'text-white' : 'text-gray-700';
+                                $cellStyle = 'background-color: rgba(220, 38, 38, ' . number_format($alpha, 2, '.', '') . ');';
+                            ?>
+                                <td class="px-4 py-3 text-center font-semibold <?php echo $textClass; ?>" style="<?php echo $cellStyle; ?>">
+                                    <?php echo (int)$value; ?>
+                                </td>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
-    <div class="bg-white rounded-lg shadow-sm border p-7">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-gray-800">Sexo por estrato (barras agrupadas)</h3>
-            <span class="text-xs text-gray-500">Femenino vs Masculino en cada estrato</span>
+        <div class="bg-white col-span-1 rounded-lg shadow-sm border p-7">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Sexo por estrato (barras agrupadas)</h3>
+                <span class="text-xs text-gray-500">Femenino vs Masculino en cada estrato</span>
+            </div>
+            <div class="w-full h-[380px] relative">
+                <canvas id="chartGroupedSexoEstrato"></canvas>
+            </div>
         </div>
-        <div class="w-full h-[380px] relative">
-            <canvas id="chartGroupedSexoEstrato"></canvas>
-        </div>
-    </div>
 <?php endif; ?>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -479,7 +473,7 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
+                    maintainAspectRatio: true,
                     scales: {
                         x: {
                             ticks: { color: colors.gray600 },
@@ -494,7 +488,7 @@
                                 // stepSize obliga al motor a hacer divisiones exactas.
                                 // Ponle 5 si quieres que vaya 0, 5, 10, 15... 
                                 // o ponle 2 si prefieres 0, 2, 4, 6...
-                                stepSize: 1 
+                                stepSize: 2
                             },
                             grid: { color: 'rgba(0,0,0,0.08)' }
                         }
