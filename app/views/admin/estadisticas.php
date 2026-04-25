@@ -40,33 +40,34 @@
     $sexoFemenino = (int)round($totalEncuestas * 0.60);
     $sexoMasculino = max(0, $totalEncuestas - $sexoFemenino);
 
-    $carreraToFacultad = [
-        'Informática' => 'Ingeniería y Tecnología',
-        'Administración' => 'Ciencias Administrativas',
-        'Contaduría' => 'Ciencias Administrativas',
-        'Educación' => 'Ciencias de la Educación',
-        'Comunicación Social' => 'Ciencias Sociales',
-        'Enfermería' => 'Ciencias de la Salud',
-        'Psicología' => 'Ciencias de la Salud',
+    // Refactorización: Adaptación a lenguaje de Sedes/Institutos
+    $carreraToSede = [
+        'Informática' => 'Sede Central',
+        'Administración' => 'Sede Norte',
+        'Contaduría' => 'Sede Norte',
+        'Educación' => 'Sede Sur',
+        'Comunicación Social' => 'Sede Sur',
+        'Enfermería' => 'Instituto de Salud',
+        'Psicología' => 'Instituto de Salud',
     ];
 
-    $facultades = [];
+    $sedes = [];
     foreach ($carrerasLabels as $carreraName) {
-        $facultadName = isset($carreraToFacultad[$carreraName]) ? $carreraToFacultad[$carreraName] : 'General';
-        $facultades[$facultadName] = $facultadName;
+        $sedeName = isset($carreraToSede[$carreraName]) ? $carreraToSede[$carreraName] : 'Sede Central';
+        $sedes[$sedeName] = $sedeName;
     }
-    ksort($facultades);
-    $facultades = array_values($facultades);
+    ksort($sedes);
+    $sedes = array_values($sedes);
 
-    $selectedFacultad = isset($_GET['facultad']) ? trim((string)$_GET['facultad']) : '';
-    if ($selectedFacultad !== '' && !in_array($selectedFacultad, $facultades, true)) {
-        $selectedFacultad = '';
+    $selectedSede = isset($_GET['sede']) ? trim((string)$_GET['sede']) : '';
+    if ($selectedSede !== '' && !in_array($selectedSede, $sedes, true)) {
+        $selectedSede = '';
     }
 
     $availableCarreras = [];
     foreach ($carrerasLabels as $carreraName) {
-        $facultadName = isset($carreraToFacultad[$carreraName]) ? $carreraToFacultad[$carreraName] : 'General';
-        if ($selectedFacultad === '' || $selectedFacultad === $facultadName) {
+        $sedeName = isset($carreraToSede[$carreraName]) ? $carreraToSede[$carreraName] : 'Sede Central';
+        if ($selectedSede === '' || $selectedSede === $sedeName) {
             $availableCarreras[] = $carreraName;
         }
     }
@@ -78,8 +79,8 @@
 
     $filteredCarreras = [];
     foreach ($carreras as $name => $count) {
-        $facultadName = isset($carreraToFacultad[$name]) ? $carreraToFacultad[$name] : 'General';
-        if ($selectedFacultad !== '' && $facultadName !== $selectedFacultad) {
+        $sedeName = isset($carreraToSede[$name]) ? $carreraToSede[$name] : 'Sede Central';
+        if ($selectedSede !== '' && $sedeName !== $selectedSede) {
             continue;
         }
         if ($selectedCarrera !== '' && $name !== $selectedCarrera) {
@@ -89,12 +90,6 @@
     }
     if (empty($filteredCarreras)) {
         $filteredCarreras = $carreras;
-    }
-
-    $estratoWeightSeeds = [];
-    foreach ($estratosLabels as $estratoLabel) {
-        $seed = abs((int)crc32('w:' . $estratoLabel));
-        $estratoWeightSeeds[$estratoLabel] = 1 + ($seed % 100);
     }
 
     $matrixCarreraEstrato = [];
@@ -125,23 +120,21 @@
             $remaining--;
             $idx++;
         }
-
         $matrixCarreraEstrato[$carreraName] = $counts;
     }
 
-    $stackedLabels = array_values(array_keys($filteredCarreras));
-    $stackedDatasets = [];
+    // Refactorización: Calculando Valores Absolutos para Gráfico Agrupado
+    $groupedLabels = array_values(array_keys($filteredCarreras));
+    $groupedDatasets = [];
     foreach ($estratosLabels as $estratoLabel) {
-        $dataPct = [];
-        foreach ($stackedLabels as $carreraName) {
-            $careerTotal = isset($filteredCarreras[$carreraName]) ? (int)$filteredCarreras[$carreraName] : 0;
+        $dataAbs = [];
+        foreach ($groupedLabels as $carreraName) {
             $countInEstrato = isset($matrixCarreraEstrato[$carreraName][$estratoLabel]) ? (int)$matrixCarreraEstrato[$carreraName][$estratoLabel] : 0;
-            $pct = $careerTotal > 0 ? round(($countInEstrato / $careerTotal) * 100, 2) : 0;
-            $dataPct[] = $pct;
+            $dataAbs[] = $countInEstrato;
         }
-        $stackedDatasets[] = [
+        $groupedDatasets[] = [
             'label' => 'Estrato ' . $estratoLabel,
-            'data' => $dataPct,
+            'data' => $dataAbs,
         ];
     }
 
@@ -180,11 +173,12 @@
 
     $femaleSeries = array_values($femaleByEstrato);
     $maleSeries = array_values($maleByEstrato);
+    
     $stackedTitleFilter = 'Todas las carreras';
     if ($selectedCarrera !== '') {
         $stackedTitleFilter = 'Carrera: ' . $selectedCarrera;
-    } elseif ($selectedFacultad !== '') {
-        $stackedTitleFilter = 'Facultad: ' . $selectedFacultad;
+    } elseif ($selectedSede !== '') {
+        $stackedTitleFilter = 'Sede: ' . $selectedSede;
     }
 
     $responseRateFmt = number_format($tasaRespuesta, 1, ',', '.');
@@ -197,9 +191,9 @@
             <p class="text-sm text-gray-500">Filtra los datos por un rango de fechas específico.</p>
         </div>
 
-        <form method="GET" action="<?php echo BASE_URL; ?>/admin/estadisticas" class="flex flex-col sm:flex-row  gap-3">
+        <form method="GET" action="<?php echo BASE_URL; ?>/admin/estadisticas" class="flex flex-col sm:flex-row items-end gap-3">
             <input type="hidden" name="vista" value="<?php echo htmlspecialchars($statsView); ?>" />
-            <input type="hidden" name="facultad" value="<?php echo htmlspecialchars($selectedFacultad); ?>" />
+            <input type="hidden" name="sede" value="<?php echo htmlspecialchars($selectedSede); ?>" />
             <input type="hidden" name="carrera" value="<?php echo htmlspecialchars($selectedCarrera); ?>" />
 
             <div class="w-full sm:w-auto">
@@ -213,7 +207,7 @@
             </div>
 
             <div class="w-full sm:w-auto">
-                <label class="block text-xs font-medium text-white mb-1">.</label>
+                <label class="block text-xs font-medium mb-1 select-none" aria-hidden="true">&nbsp;</label>
                 <button type="submit" class="w-full sm:w-auto bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
                     Aplicar
                 </button>
@@ -244,26 +238,25 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div class="col-span-1 bg-white rounded-lg shadow-sm border p-7">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800">Distribución por sexo</h3>
-                <!-- <span class="text-xs text-gray-500">Dona</span> -->
             </div>
-            <div class="w-full" style="height: 360px;">
+            <div class="w-full h-[360px] relative">
                 <canvas id="chartSexo"></canvas>
             </div>
         </div>
-        <div class="col-span-2 bg-white rounded-lg shadow-sm border p-7">
+        <div class="col-span-1 lg:col-span-2 bg-white rounded-lg shadow-sm border p-7">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-gray-800">Distribución por estratos</h3>
-                <!-- <span class="text-xs text-gray-500">Barras verticales</span> -->
             </div>
-            <div class="w-full" style="height: 360px;">
-                <canvas id="chartEstratosGlobal"></canvas>
+            <div class="w-full relative">
+                <canvas class="w-full" id="chartEstratosGlobal"></canvas>
             </div>
         </div>
     </div>
+
 <?php elseif ($statsView === 'estratos'): ?>
 
     <div class="bg-white rounded-lg shadow-sm border p-6 mb-8">
@@ -273,12 +266,12 @@
             <input type="hidden" name="to" value="<?php echo htmlspecialchars($to); ?>" />
 
             <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">Facultad</label>
-                <select name="facultad" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
-                    <option value="">Todas</option>
-                    <?php foreach ($facultades as $facultad): ?>
-                        <option value="<?php echo htmlspecialchars($facultad); ?>" <?php echo ($selectedFacultad === $facultad) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($facultad); ?>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Sede / Instituto</label>
+                <select name="sede" class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                    <option value="">Todas las Sedes</option>
+                    <?php foreach ($sedes as $sede): ?>
+                        <option value="<?php echo htmlspecialchars($sede); ?>" <?php echo ($selectedSede === $sede) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($sede); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -297,14 +290,14 @@
             </div>
 
             <div>
-                <label class="block text-xs font-medium text-gray-600 mb-1">.</label>
+                <label class="block text-xs font-medium mb-1 select-none" aria-hidden="true">&nbsp;</label>
                 <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-lg">
                     Aplicar filtro
                 </button>
             </div>
 
             <div class="text-xs text-gray-500 md:text-right">
-                <label class="block text-xs font-medium text-gray-600 mb-1">.</label>
+                <label class="block text-xs font-medium mb-1 select-none" aria-hidden="true">&nbsp;</label>
                 Contexto actual: <?php echo htmlspecialchars($stackedTitleFilter); ?>
             </div>
         </form>
@@ -312,13 +305,14 @@
 
     <div class="bg-white rounded-lg shadow-sm border p-7">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-gray-800">Distribución por estratos (100% apilado)</h3>
-            <span class="text-xs text-gray-500">Cada barra representa el 100% de la carrera</span>
+            <h3 class="text-lg font-bold text-gray-800">Distribución de Estratos</h3>
+            <span class="text-xs text-gray-500">Barras agrupadas (Valores absolutos)</span>
         </div>
-        <div class="w-full" style="height: 420px;">
-            <canvas id="chartStackedCarreras"></canvas>
+        <div class="w-full h-[1000px] relative">
+            <canvas id="chartGroupedCarreras"></canvas>
         </div>
     </div>
+
 <?php elseif ($statsView === 'carreras'): ?>
 
     <div class="bg-white rounded-lg shadow-sm border p-7 mb-8 overflow-x-auto">
@@ -361,7 +355,7 @@
             <h3 class="text-lg font-bold text-gray-800">Sexo por estrato (barras agrupadas)</h3>
             <span class="text-xs text-gray-500">Femenino vs Masculino en cada estrato</span>
         </div>
-        <div class="w-full" style="height: 380px;">
+        <div class="w-full h-[380px] relative">
             <canvas id="chartGroupedSexoEstrato"></canvas>
         </div>
     </div>
@@ -377,11 +371,12 @@
 
     const sexoValues = <?php echo json_encode([$sexoFemenino, $sexoMasculino], JSON_UNESCAPED_UNICODE); ?>;
 
-    const stackedLabels = <?php echo json_encode($stackedLabels, JSON_UNESCAPED_UNICODE); ?>;
-    const stackedDatasets = <?php echo json_encode($stackedDatasets, JSON_UNESCAPED_UNICODE); ?>;
+    // Variables inyectadas para el Gráfico Agrupado
+    const groupedLabels = <?php echo json_encode($groupedLabels ?? [], JSON_UNESCAPED_UNICODE); ?>;
+    const groupedDatasets = <?php echo json_encode($groupedDatasets ?? [], JSON_UNESCAPED_UNICODE); ?>;
 
-    const femaleSeries = <?php echo json_encode($femaleSeries, JSON_UNESCAPED_UNICODE); ?>;
-    const maleSeries = <?php echo json_encode($maleSeries, JSON_UNESCAPED_UNICODE); ?>;
+    const femaleSeries = <?php echo json_encode($femaleSeries ?? [], JSON_UNESCAPED_UNICODE); ?>;
+    const maleSeries = <?php echo json_encode($maleSeries ?? [], JSON_UNESCAPED_UNICODE); ?>;
 
     const colors = {
         estratos: ['#1d4ed8', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'],
@@ -466,53 +461,51 @@
     }
 
     if (activeView === 'estratos') {                      
-        const ctxStacked = document.getElementById('chartStackedCarreras');
-        if (ctxStacked) {
-            const datasets = stackedDatasets.map((dataset, idx) => ({
-            label: dataset.label,
-            data: dataset.data,
-            // AQUÍ ESTÁ EL SECRETO: 
-            // Debes asegurarte de que el nombre coincida con lo que manda PHP.
-            // Si PHP lo manda como "dataset.estudiantes_reales", aquí debes poner:
-            absoluteValues: dataset.estudiantes_reales, 
-            
-            backgroundColor: colors.estratos[idx % colors.estratos.length],
-            borderWidth: 0,
-            borderRadius: 4
-        }));
-        console.log(stackedDatasets)
+        const ctxGrouped = document.getElementById('chartGroupedCarreras');
+        if (ctxGrouped) {
+            const datasets = groupedDatasets.map((dataset, idx) => ({
+                label: dataset.label,
+                data: dataset.data,
+                backgroundColor: colors.estratos[idx % colors.estratos.length],
+                borderWidth: 0,
+                borderRadius: 4
+            }));
 
-            new Chart(ctxStacked, {
+            new Chart(ctxGrouped, {
                 type: 'bar',
                 data: {
-                    labels: stackedLabels,
+                    labels: groupedLabels,
                     datasets: datasets
                 },
                 options: {
-                    indexAxis: 'y', // <--- ¡AÑADE ESTO! Convierte las barras a horizontales para mejor lectura
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { stacked: true, max: 100 }, // Ahora la X es el porcentaje
-                        y: { stacked: true }            // Ahora la Y son las carreras
+                        x: {
+                            ticks: { color: colors.gray600 },
+                            grid: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { 
+                                color: colors.gray600,
+                                callback: (value) => value,
+                                // AQUÍ ESTÁ LA MAGIA: 
+                                // stepSize obliga al motor a hacer divisiones exactas.
+                                // Ponle 5 si quieres que vaya 0, 5, 10, 15... 
+                                // o ponle 2 si prefieres 0, 2, 4, 6...
+                                stepSize: 1 
+                            },
+                            grid: { color: 'rgba(0,0,0,0.08)' }
+                        }
                     },
                     plugins: {
+                        legend: { position: 'bottom' },
                         tooltip: {
                             callbacks: {
-                                // La función 'label' controla el texto principal de la cajita
                                 label: function (context) {
-                                    // 1. Obtenemos el porcentaje
-                                    // Usamos parsed.x porque al hacer el gráfico horizontal (indexAxis: 'y'), el valor numérico ahora vive en el eje X.
-                                    const val = Number(context.parsed.x || 0).toFixed(1).replace('.', ',');
-                                    
-                                    // 2. Obtenemos el valor absoluto (las personas reales)
-                                    // context.dataIndex nos dice en qué barra exacta estamos parados (Ej: índice 2 = Carrera de Sistemas)
-                                    const dataIndex = context.dataIndex; 
-                                    // Buscamos en nuestro dataset personalizado el número real de estudiantes para esa barra
-                                    const absoluteVal = context.dataset.absoluteValues[dataIndex];
-                                    
-                                    // 3. Retornamos el texto final formateado maravillosamente
-                                    return `${context.dataset.label}: ${val}% (${absoluteVal} estudiantes)`;
+                                    const val = context.parsed.y;
+                                    return `${context.dataset.label}: ${val} estudiantes`;
                                 }
                             }
                         }
@@ -523,9 +516,9 @@
     }
 
     if (activeView === 'carreras') {
-        const ctxGrouped = document.getElementById('chartGroupedSexoEstrato');
-        if (ctxGrouped) {
-            new Chart(ctxGrouped, {
+        const ctxGroupedSexo = document.getElementById('chartGroupedSexoEstrato');
+        if (ctxGroupedSexo) {
+            new Chart(ctxGroupedSexo, {
                 type: 'bar',
                 data: {
                     labels: estratosLabels.map((label) => 'Estrato ' + label),
