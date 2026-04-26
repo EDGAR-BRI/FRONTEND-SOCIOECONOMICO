@@ -19,9 +19,9 @@
             <span class="absolute" style="left: 0; top: 0; bottom: 0; width: 50%; background-image: url('<?php echo BASE_URL; ?>/assets/img/IUJO-Barquisimeto-1024x1024.jpg'); background-position: center 27%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="absolute" style="right: 0; top: 0; bottom: 0; width: 50%; transform: translateX(-1px); background-image: url('<?php echo BASE_URL; ?>/assets/img/iujo-barquisimeto2.jpg'); background-position: center 50%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to right, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
-            <div class="relative flex flex-col items-center" style="z-index: 1;">
-                <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
-                <h2 class =" text-card" >IUJO Barquisimeto</h2>
+            <div class="relative z-10 flex flex-col h-full w-full items-center">
+                <img class="relative z-10 w-20 h-30 self-start" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
+                <span class="mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUJO Barquisimeto</span>
             </div>
         </a>
 
@@ -29,35 +29,35 @@
             <span class="absolute" style="left: 0; right: 0; top: 0; height: 50%; background-image: url('<?php echo BASE_URL; ?>/assets/img/iujo-petare-2024.jpg'); background-position: center 35%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="absolute" style="left: 0; right: 0; bottom: 0; height: 50%; background-image: url('<?php echo BASE_URL; ?>/assets/img/iujo-petare2-2024.jpg'); background-position: center 45%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to bottom, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
-            <div class="relative flex flex-col items-center" style="z-index: 1;">
+            <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
-                <h2 class =" text-card">IUJO Petare</h2>
+                <h2 class =" mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUJO Petare</h2>
             </div>
         </a>
         <a href="<?php echo BASE_URL; ?>/IUJO-CATIA/formulario" class= "style-card card-grit-home  lg:row-span-2 relative overflow-hidden">
             <span class="absolute" style="left: 0; right: 0; top: 0; height: 50%; background-image: url('<?php echo BASE_URL; ?>/assets/img/IUJO-Catia-768x768.jpg'); background-position: center 35%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="absolute" style="left: 0; right: 0; bottom: 0; height: 50%; background-image: url('<?php echo BASE_URL; ?>/assets/img/ITJO-2.jpeg'); background-position: center 45%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to bottom, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
-            <div class="relative flex flex-col items-center" style="z-index: 1;">
+            <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
-                <h2 class =" text-card">IUJO Catia</h2>
+                <h2 class =" mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUJO Catia</h2>
             </div>
         </a>
         <a href="<?php echo BASE_URL; ?>/IUJO-GUANARITO/formulario" class = "style-card card-grit-home bg-cover bg-center relative overflow-hidden">
             <span class="absolute" style="left: 0; right: 0; top: 0; height: 100%; background-image: url('<?php echo BASE_URL; ?>/assets/img/IUJO-Guanarito.jpg'); background-position: center 50%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to bottom, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
-            <div class="relative flex flex-col items-center" style="z-index: 1;">
+            <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
-                <h2 class =" text-card">IUJO Guanarito</h2>
+                <h2 class =" mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUJO Guanarito</h2>
             </div>
         </a>
         <a href="<?php echo BASE_URL; ?>/IUSF/formulario" class= "style-card lg:col-span-2 card-grit-home relative overflow-hidden">
             <span class="absolute" style="left: 0; top: 0; bottom: 0; width: 50%; background-image: url('<?php echo BASE_URL; ?>/assets/img/IUSF-1024x1024.jpg'); background-position: center 85%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="absolute" style="right: 0; top: 0; bottom: 0; width: 50%; transform: translateX(-1px); background-image: url('<?php echo BASE_URL; ?>/assets/img/iusf2.jpg'); background-position: center 45%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to right, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
-            <div class="relative flex flex-col items-center" style="z-index: 1;">
+            <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
-                <h2 class =" text-card">IUSF</h2>
+                <h2 class =" mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUSF</h2>
             </div>
         </a>
 
