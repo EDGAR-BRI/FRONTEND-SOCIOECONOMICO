@@ -5,7 +5,17 @@ $sexo = isset($data['sexo']) && is_array($data['sexo']) ? $data['sexo'] : ['labe
 $estratos = isset($data['estratos']) && is_array($data['estratos']) ? $data['estratos'] : ['labels' => [], 'values' => []];
 
 $totalEncuestados = isset($kpis['total_encuestados']) ? (int)$kpis['total_encuestados'] : 0;
-$totalPoblacion = isset($kpis['total_poblacion']) ? (int)$kpis['total_poblacion'] : 0;
+$diaMasEncuestasTotal = isset($kpis['dia_mas_encuestas_total']) ? (int)$kpis['dia_mas_encuestas_total'] : 0;
+$diaMasEncuestasFechaRaw = isset($kpis['dia_mas_encuestas_fecha']) ? (string)$kpis['dia_mas_encuestas_fecha'] : '';
+$diaMasEncuestasFecha = 'Sin datos';
+if ($diaMasEncuestasFechaRaw !== '') {
+    $dtDiaMas = \DateTime::createFromFormat('Y-m-d', $diaMasEncuestasFechaRaw);
+    if ($dtDiaMas instanceof \DateTime) {
+        $diaMasEncuestasFecha = $dtDiaMas->format('d/m/Y');
+    } else {
+        $diaMasEncuestasFecha = $diaMasEncuestasFechaRaw;
+    }
+}
 $tasaRespuesta = isset($kpis['tasa_respuesta']) ? (float)$kpis['tasa_respuesta'] : 0;
 $tiempoPromedioRespuestaMinutos = isset($kpis['tiempo_promedio_respuesta_minutos']) ? (float)$kpis['tiempo_promedio_respuesta_minutos'] : 0;
 $encuestasConTiempo = isset($kpis['encuestas_con_tiempo']) ? (int)$kpis['encuestas_con_tiempo'] : 0;
@@ -27,8 +37,8 @@ require __DIR__ . '/partials/estado.php';
     </div>
     <div class="bg-white rounded-lg shadow-sm border p-6">
         <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Día con más encuestas</p>
-        <h3 class="text-2xl font-bold text-gray-800"><?php echo number_format($totalPoblacion, 0, ',', '.'); ?></h3>
-        <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">03/04/2023</p>
+        <h3 class="text-2xl font-bold text-gray-800"><?php echo number_format($diaMasEncuestasTotal, 0, ',', '.'); ?></h3>
+        <p class="text-xs uppercase tracking-wide text-gray-500 mb-1"><?php echo htmlspecialchars($diaMasEncuestasFecha); ?></p>
     </div>
     <div class="bg-white rounded-lg shadow-sm border p-5">
         <p class="text-xs uppercase tracking-wide text-gray-500">Tiempo promedio de respuesta</p>
