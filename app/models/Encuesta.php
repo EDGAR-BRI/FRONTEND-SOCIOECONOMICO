@@ -54,6 +54,20 @@ class Encuesta
         $this->validateRequired('fuente_ingreso_id', 'La fuente de ingreso familiar es requerida');
         $this->validateRequired('ingreso_familiar_id', 'El ingreso familiar es requerido');
         $this->validateRequired('veracidad_id', 'La veracidad de la información es requerida');
+        $this->validateRequired('nivel_educacion_padre_id', 'El nivel de educación del padre es requerido');
+        $this->validateRequired('padre_trabaja', 'Debe indicar si el padre trabaja');
+        $this->validateRequired('tipo_empresa_padre_id', 'El tipo de empresa del padre es requerido');
+        $this->validateRequired('categoria_ocupacional_padre_id', 'La categoría ocupacional del padre es requerida');
+        $this->validateRequired('sector_trabajo_padre_id', 'El sector de trabajo del padre es requerido');
+        $this->validateRequired('padre_en_venezuela', 'Debe indicar si el padre está en Venezuela');
+        $this->validateRequired('padre_egresado_iujo', 'Debe indicar si el padre es egresado del IUJO');
+        $this->validateRequired('nivel_educacion_madre_id', 'El nivel de educación de la madre es requerido');
+        $this->validateRequired('madre_trabaja', 'Debe indicar si la madre trabaja');
+        $this->validateRequired('tipo_empresa_madre_id', 'El tipo de empresa de la madre es requerido');
+        $this->validateRequired('categoria_ocupacional_madre_id', 'La categoría ocupacional de la madre es requerida');
+        $this->validateRequired('sector_trabajo_madre_id', 'El sector de trabajo de la madre es requerido');
+        $this->validateRequired('madre_en_venezuela', 'Debe indicar si la madre está en Venezuela');
+        $this->validateRequired('madre_egresada_iujo', 'Debe indicar si la madre es egresada del IUJO');
 
         // Validaciones condicionales
         if ($this->get('hijos') == 1) {
@@ -155,23 +169,23 @@ class Encuesta
             // En BD/Backend existe el typo nivel_eduacion_padre_id; en formulario es nivel_educacion_padre_id
             'nivel_eduacion_padre_id' => $this->get('nivel_educacion_padre_id', $this->get('nivel_eduacion_padre_id')),
             // En el formulario se llama padre_trabaja
-            'trabaja_padre' => $this->get('padre_trabaja', $this->get('trabaja_padre', 0)),
+            'trabaja_padre' => $this->get('padre_trabaja', $this->get('trabaja_padre')),
             'tipo_empresa_padre_id' => $this->get('tipo_empresa_padre_id'),
             'categoria_ocupacional_padre_id' => $this->get('categoria_ocupacional_padre_id'),
             'sector_trabajo_padre_id' => $this->get('sector_trabajo_padre_id'),
-            'padre_en_venezuela' => $this->get('padre_en_venezuela', 1),
-            'padre_egresado_iujo' => $this->get('padre_egresado_iujo', 0),
+            'padre_en_venezuela' => $this->get('padre_en_venezuela'),
+            'padre_egresado_iujo' => $this->get('padre_egresado_iujo'),
 
             // Datos de la Madre
             // En BD/Backend existe el typo nivel_eduacion_madre_id; en formulario es nivel_educacion_madre_id
             'nivel_eduacion_madre_id' => $this->get('nivel_educacion_madre_id', $this->get('nivel_eduacion_madre_id')),
             // En el formulario se llama madre_trabaja
-            'trabaja_madre' => $this->get('madre_trabaja', $this->get('trabaja_madre', 0)),
+            'trabaja_madre' => $this->get('madre_trabaja', $this->get('trabaja_madre')),
             'tipo_empresa_madre_id' => $this->get('tipo_empresa_madre_id'),
             'categoria_ocupacional_madre_id' => $this->get('categoria_ocupacional_madre_id'),
             'sector_trabajo_madre_id' => $this->get('sector_trabajo_madre_id'),
-            'madre_en_venezuela' => $this->get('madre_en_venezuela', 1),
-            'madre_egresada_iujo' => $this->get('madre_egresada_iujo', 0),
+            'madre_en_venezuela' => $this->get('madre_en_venezuela'),
+            'madre_egresada_iujo' => $this->get('madre_egresada_iujo'),
 
             // Otros
             'veracidad_id' => $this->get('veracidad_id'),

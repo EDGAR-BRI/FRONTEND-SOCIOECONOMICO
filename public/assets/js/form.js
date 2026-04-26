@@ -111,6 +111,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function (e) {
+            const activeStep = document.querySelector('.form-step:not(.hidden)');
+            if (activeStep && !validateStep(activeStep)) {
+                e.preventDefault();
+                return false;
+            }
+
             const veracidad = document.getElementById('veracidad_id');
             if (veracidad && !veracidad.value) {
                 e.preventDefault();

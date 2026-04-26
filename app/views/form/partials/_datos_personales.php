@@ -3,21 +3,21 @@
 
     <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-            <label for="nombres" class="label-field">Nombres <span class="text-red-500">*</span></label>
+            <label for="nombres" class="label-field">Nombres <span class="text-primary2-500">*</span></label>
             <input type="text" id="nombres" name="nombres" required
                 value="<?php echo isset($old['nombres']) ? htmlspecialchars($old['nombres']) : ''; ?>"
                 class="input-field">
         </div>
 
         <div>
-            <label for="apellidos" class="label-field">Apellidos <span class="text-red-500">*</span></label>
+            <label for="apellidos" class="label-field">Apellidos <span class="text-primary2-500">*</span></label>
             <input type="text" id="apellidos" name="apellidos" required
                 value="<?php echo isset($old['apellidos']) ? htmlspecialchars($old['apellidos']) : ''; ?>"
                 class="input-field">
         </div>
 
         <div>
-            <label for="cedula" class="label-field">Cédula <span class="text-red-500">*</span></label>
+            <label for="cedula" class="label-field">Cédula <span class="text-primary2-500">*</span></label>
             <input type="text" pattern="^[0-9]{7,8}$"  id="cedula" name="cedula" required
                 value="<?php echo isset($old['cedula']) ? htmlspecialchars($old['cedula']) : ''; ?>"
                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
@@ -25,7 +25,7 @@
         </div>
 
         <div>
-            <label for="nacionalidad_id" class="label-field">Nacionalidad <span class="text-red-500">*</span></label>
+            <label for="nacionalidad_id" class="label-field">Nacionalidad <span class="text-primary2-500">*</span></label>
             <select id="nacionalidad_id" name="nacionalidad_id" required class="input-field">
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['nacionalidad'])): ?>
@@ -40,7 +40,7 @@
         </div>
 
         <div>
-            <label for="sexo_id" class="label-field">Sexo <span class="text-red-500">*</span></label>
+            <label for="sexo_id" class="label-field">Sexo <span class="text-primary2-500">*</span></label>
             <select id="sexo_id" name="sexo_id" required class="input-field">
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['sexo'])): ?>
@@ -55,21 +55,21 @@
         </div>
 
         <div>
-            <label for="fecha_nacimiento" class="label-field">Fecha de Nacimiento <span class="text-red-500">*</span></label>
+            <label for="fecha_nacimiento" class="label-field">Fecha de Nacimiento <span class="text-primary2-500">*</span></label>
             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required
                 value="<?php echo isset($old['fecha_nacimiento']) ? htmlspecialchars($old['fecha_nacimiento']) : ''; ?>"
                 class="input-field">
         </div>
 
         <div>
-            <label for="email" class="label-field">Correo Electrónico <span class="text-red-500">*</span></label>
+            <label for="email" class="label-field">Correo Electrónico <span class="text-primary2-500">*</span></label>
             <input type="email" id="email" name="email" required
                 value="<?php echo isset($old['email']) ? htmlspecialchars($old['email']) : ''; ?>"
                 class="input-field">
         </div>
 
         <div>
-            <label for="telefono" class="label-field">Teléfono <span class="text-red-500">*</span></label>
+            <label for="telefono" class="label-field">Teléfono <span class="text-primary2-500">*</span></label>
             <div class="grid grid-cols-3 gap-2">
                 <select name="prefijo" class="input-field col-span-1" id="prefijo">
                     <option value="">Seleccione...</option>
@@ -87,7 +87,7 @@
         </div>
 
         <div>
-            <label for="estado_civil_id" class="label-field">Estado Civil <span class="text-red-500">*</span></label>
+            <label for="estado_civil_id" class="label-field">Estado Civil <span class="text-primary2-500">*</span></label>
             <select id="estado_civil_id" name="estado_civil_id" required class="input-field">
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['estado_civil'])): ?>
@@ -101,7 +101,7 @@
             </select>
         </div>
         <div class="flex flex-col">
-            <label for="foto_cedula" class="label-field">Foto de la cédula</label>
+            <label for="foto_cedula" class="label-field">Foto de la cédula <span class="text-primary2-500">*</span></label>
             <label for="foto_cedula" class="input-field cursor-pointer inline-flex items-center justify-center gap-2 rounded-md border px-4 py-2 font-semibold transition duration-200 hover:bg-primary2-100 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700">
                 <i class="fa-solid  fa-address-card" aria-hidden="true"></i>
                 <span>Selecionar imagen</span>
@@ -111,7 +111,7 @@
         </div>
 
         <div class="md:col-span-2">
-            <label for="direccion" class="label-field">Dirección <span class="text-red-500">*</span></label>
+            <label for="direccion" class="label-field">Dirección <span class="text-primary2-500">*</span></label>
             <textarea id="direccion" name="direccion" required rows="3"
                 class="input-field"><?php echo isset($old['direccion']) ? htmlspecialchars($old['direccion']) : ''; ?></textarea>
         </div>

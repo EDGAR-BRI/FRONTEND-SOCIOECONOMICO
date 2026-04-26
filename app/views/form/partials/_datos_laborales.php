@@ -3,7 +3,7 @@
 
     <article class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-            <label for="condicion_laboral_id" class="label-field">Condición Laboral</label>
+            <label for="condicion_laboral_id" class="label-field">Condición Laboral <span class="text-primary2-500">*</span></label>
             <select id="condicion_laboral_id" name="condicion_laboral_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['condicion_laboral'])): ?>
@@ -18,7 +18,7 @@
         </div>
 
         <div>
-            <label for="relacion_laboral_id" class="label-field">Relación Laboral</label>
+            <label for="relacion_laboral_id" class="label-field">Relación Laboral <span class="text-primary2-500">*</span></label>
             <select id="relacion_laboral_id" name="relacion_laboral_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['relacion_laboral'])): ?>
@@ -33,7 +33,7 @@
         </div>
 
         <div>
-            <label for="tipo_organizacion_id" class="label-field">Tipo de Organización</label>
+            <label for="tipo_organizacion_id" class="label-field">Tipo de Organización <span class="text-primary2-500">*</span></label>
             <select id="tipo_organizacion_id" name="tipo_organizacion_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['tipo_organizacion'])): ?>
@@ -48,7 +48,7 @@
         </div>
 
         <div>
-            <label for="sector_trabajo_id" class="label-field">Sector de Trabajo</label>
+            <label for="sector_trabajo_id" class="label-field">Sector de Trabajo <span class="text-primary2-500">*</span></label>
             <select id="sector_trabajo_id" name="sector_trabajo_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['sector_trabajo'])): ?>
@@ -63,7 +63,7 @@
         </div>
 
         <div>
-            <label for="categoria_ocupacional_id" class="label-field">Categoría Ocupacional</label>
+            <label for="categoria_ocupacional_id" class="label-field">Categoría Ocupacional <span class="text-primary2-500">*</span></label>
             <select id="categoria_ocupacional_id" name="categoria_ocupacional_id" class="input-field" required>
                 <option value="">Seleccione...</option>
                 <?php if (isset($catalogos['categoria_ocupacional'])): ?>
