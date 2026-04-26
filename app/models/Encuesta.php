@@ -126,6 +126,9 @@ class Encuesta
     public function toArray()
     {
         return [
+            // Métrica de inicio del llenado
+            'inicio' => $this->get('inicio'),
+
             // Datos Personales
             'email' => $this->get('email'),
             'nombres' => $this->get('nombres'),
