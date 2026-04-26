@@ -106,7 +106,6 @@
         <table class="w-full text-left border-collapse whitespace-nowrap">
             <thead>
                 <tr class="bg-gray-50 text-gray-600 border-y">
-                    <th class="py-3 px-4 font-semibold text-sm">ID</th>
                     <th class="py-3 px-4 font-semibold text-sm">Estudiante</th>
                     <th class="py-3 px-4 font-semibold text-sm">Cédula</th>
                     <th class="py-3 px-4 font-semibold text-sm">Carrera</th>
@@ -119,7 +118,6 @@
                 <?php if (!empty($items)): ?>
                     <?php foreach ($items as $encuesta): ?>
                         <?php
-                            $id = isset($encuesta['id']) ? (int)$encuesta['id'] : 0;
                             $estudiante = isset($encuesta['estudiante']) ? (string)$encuesta['estudiante'] : '';
                             $cedula = isset($encuesta['cedula']) ? (string)$encuesta['cedula'] : '';
                             $carrera = isset($encuesta['carrera']) ? (string)$encuesta['carrera'] : '';
