@@ -118,6 +118,7 @@
                 <?php if (!empty($items)): ?>
                     <?php foreach ($items as $encuesta): ?>
                         <?php
+                            $id = isset($encuesta['id']) ? (int)$encuesta['id'] : 0;
                             $estudiante = isset($encuesta['estudiante']) ? (string)$encuesta['estudiante'] : '';
                             $cedula = isset($encuesta['cedula']) ? (string)$encuesta['cedula'] : '';
                             $carrera = isset($encuesta['carrera']) ? (string)$encuesta['carrera'] : '';

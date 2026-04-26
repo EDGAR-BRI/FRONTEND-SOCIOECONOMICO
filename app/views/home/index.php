@@ -9,7 +9,7 @@
             opacity: 0.24;
         }
     </style>
-    <section class="text-center mb-16">
+    <section class="text-center mb-6">
         <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 tracking-tight">Seleccione su Instituto</h1>
         <p class="text-xl text-gray-600 max-w-2xl mx-auto">Bienvenido al sistema de registro socioeconómico. Por favor, seleccione la sede a la que pertenece para continuar.</p>
     </section>
