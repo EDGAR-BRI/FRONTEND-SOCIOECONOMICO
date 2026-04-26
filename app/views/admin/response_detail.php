@@ -22,8 +22,52 @@
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="px-3 py-2 border rounded text-sm text-gray-700 hover:bg-gray-50">Volver</a>
+        <div class="flex items-center gap-2">
+            <?php if (!empty($isSuperAdmin) && isset($encuesta) && is_array($encuesta) && !empty($encuesta) && !empty($encuesta['id'])): ?>
+                <?php if (!empty($editMode)): ?>
+                    <a href="<?php echo BASE_URL; ?>/admin/respuestas/<?php echo (int)$encuesta['id']; ?>" class="px-3 py-2 border rounded text-sm text-gray-700 hover:bg-gray-50">Cancelar edición</a>
+                <?php else: ?>
+                    <a href="<?php echo BASE_URL; ?>/admin/respuestas/<?php echo (int)$encuesta['id']; ?>?edit=1" class="px-3 py-2 rounded text-sm text-white bg-blue-600 hover:bg-blue-700">Editar</a>
+                <?php endif; ?>
+            <?php endif; ?>
+            <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="px-3 py-2 border rounded text-sm text-gray-700 hover:bg-gray-50">Volver</a>
+        </div>
     </div>
+
+    <?php if (isset($flash) && is_array($flash) && !empty($flash['message'])): ?>
+        <?php $flashType = isset($flash['type']) ? (string)$flash['type'] : 'info'; ?>
+        <?php if ($flashType === 'success'): ?>
+            <div class="mb-4 rounded-md border border-green-200 bg-green-50 text-green-700 px-4 py-3 text-sm">
+                <div><?php echo htmlspecialchars((string)$flash['message']); ?></div>
+                <?php if (!empty($flash['errors']) && is_array($flash['errors'])): ?>
+                    <ul class="list-disc ml-5 mt-2 space-y-1">
+                        <?php foreach ($flash['errors'] as $field => $errs): ?>
+                            <?php if (is_array($errs)): ?>
+                                <?php foreach ($errs as $err): ?>
+                                    <li><?php echo htmlspecialchars((string)$field . ': ' . (string)$err); ?></li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        <?php else: ?>
+            <div class="mb-4 rounded-md border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm">
+                <div><?php echo htmlspecialchars((string)$flash['message']); ?></div>
+                <?php if (!empty($flash['errors']) && is_array($flash['errors'])): ?>
+                    <ul class="list-disc ml-5 mt-2 space-y-1">
+                        <?php foreach ($flash['errors'] as $field => $errs): ?>
+                            <?php if (is_array($errs)): ?>
+                                <?php foreach ($errs as $err): ?>
+                                    <li><?php echo htmlspecialchars((string)$field . ': ' . (string)$err); ?></li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
 
     <?php if (isset($apiError) && is_array($apiError) && !empty($apiError['message'])): ?>
         <div class="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -115,6 +159,101 @@
 
                 return $html;
             };
+
+            $catalogs = (isset($editCatalogs) && is_array($editCatalogs)) ? $editCatalogs : [];
+            $selectedActivos = array_map(function ($row) {
+                return isset($row['id']) ? (int)$row['id'] : 0;
+            }, $activos);
+            $selectedAmbientes = array_map(function ($row) {
+                return isset($row['id']) ? (int)$row['id'] : 0;
+            }, $ambientes);
+            $selectedServicios = array_map(function ($row) {
+                return isset($row['id']) ? (int)$row['id'] : 0;
+            }, $servicios);
+
+            $renderInput = function ($name, $label, $value, $type = 'text', $required = false) {
+                $req = $required ? 'required' : '';
+                $val = htmlspecialchars((string)$value);
+                echo '<div>';
+                echo '<label class="label-field">' . htmlspecialchars($label) . ($required ? ' <span class="text-red-500">*</span>' : '') . '</label>';
+                echo '<input type="' . htmlspecialchars($type) . '" name="' . htmlspecialchars($name) . '" value="' . $val . '" class="input-field w-full" ' . $req . '>';
+                echo '</div>';
+            };
+
+            $renderTextarea = function ($name, $label, $value) {
+                echo '<div class="md:col-span-2">';
+                echo '<label class="label-field">' . htmlspecialchars($label) . '</label>';
+                echo '<textarea name="' . htmlspecialchars($name) . '" rows="3" class="input-field w-full">' . htmlspecialchars((string)$value) . '</textarea>';
+                echo '</div>';
+            };
+
+            $renderSelect = function ($name, $label, $selectedValue, array $options, $required = false) {
+                $req = $required ? 'required' : '';
+                echo '<div>';
+                echo '<label class="label-field">' . htmlspecialchars($label) . ($required ? ' <span class="text-red-500">*</span>' : '') . '</label>';
+                echo '<select name="' . htmlspecialchars($name) . '" class="input-field w-full" ' . $req . '>';
+                echo '<option value="">Seleccione</option>';
+                foreach ($options as $opt) {
+                    if (!is_array($opt) || !isset($opt['id'])) {
+                        continue;
+                    }
+                    $optId = (int)$opt['id'];
+                    $optLabel = isset($opt['nombre']) ? (string)$opt['nombre'] : ('ID ' . $optId);
+                    if (isset($opt['siglas']) && trim((string)$opt['siglas']) !== '') {
+                        $optLabel = (string)$opt['siglas'] . ' - ' . $optLabel;
+                    }
+                    $isSelected = ((string)$selectedValue !== '' && (int)$selectedValue === $optId) ? 'selected' : '';
+                    echo '<option value="' . $optId . '" ' . $isSelected . '>' . htmlspecialchars($optLabel) . '</option>';
+                }
+                echo '</select>';
+                echo '</div>';
+            };
+
+            $renderYesNoSelect = function ($name, $label, $selectedValue) {
+                $selectedValue = (string)$selectedValue;
+                echo '<div>';
+                echo '<label class="label-field">' . htmlspecialchars($label) . '</label>';
+                echo '<select name="' . htmlspecialchars($name) . '" class="input-field w-full">';
+                echo '<option value="0" ' . ($selectedValue === '0' ? 'selected' : '') . '>No</option>';
+                echo '<option value="1" ' . ($selectedValue === '1' ? 'selected' : '') . '>Sí</option>';
+                echo '</select>';
+                echo '</div>';
+            };
+
+            $renderMultiSelect = function ($name, $label, array $options, array $selectedIds) {
+                echo '<div class="md:col-span-2">';
+                echo '<label class="label-field">' . htmlspecialchars($label) . '</label>';
+                echo '<select name="' . htmlspecialchars($name) . '[]" class="input-field w-full min-h-[120px]" multiple>';
+                foreach ($options as $opt) {
+                    if (!is_array($opt) || !isset($opt['id'])) {
+                        continue;
+                    }
+                    $optId = (int)$opt['id'];
+                    $optLabel = isset($opt['nombre']) ? (string)$opt['nombre'] : ('ID ' . $optId);
+                    $isSelected = in_array($optId, $selectedIds, true) ? 'selected' : '';
+                    echo '<option value="' . $optId . '" ' . $isSelected . '>' . htmlspecialchars($optLabel) . '</option>';
+                }
+                echo '</select>';
+                echo '</div>';
+            };
+
+            $fechaResumen = '-';
+            if (!empty($encuesta['creado']) && is_string($encuesta['creado'])) {
+                $fechaRaw = trim($encuesta['creado']);
+                if ($fechaRaw !== '') {
+                    try {
+                        $dt = new \DateTime($fechaRaw);
+                        $meses = [
+                            1 => 'ene', 2 => 'feb', 3 => 'mar', 4 => 'abr', 5 => 'may', 6 => 'jun',
+                            7 => 'jul', 8 => 'ago', 9 => 'sep', 10 => 'oct', 11 => 'nov', 12 => 'dic',
+                        ];
+                        $mes = isset($meses[(int)$dt->format('n')]) ? $meses[(int)$dt->format('n')] : $dt->format('m');
+                        $fechaResumen = $dt->format('d') . ' ' . $mes . ' ' . $dt->format('Y, h:i A');
+                    } catch (\Exception $e) {
+                        $fechaResumen = $fechaRaw;
+                    }
+                }
+            }
         ?>
 
         <div class="border rounded p-4 mb-6">
@@ -132,7 +271,7 @@
                 ?>
             </div>
             <div class="text-sm text-gray-700 mt-1">
-                Fecha: <?php echo !empty($encuesta['creado']) ? htmlspecialchars((string)$encuesta['creado']) : '-'; ?>
+                Fecha: <?php echo htmlspecialchars($fechaResumen); ?>
             </div>
             <div class="text-sm text-gray-700 mt-1">
                 Estrato: <?php
@@ -144,6 +283,91 @@
                 ?>
             </div>
         </div>
+
+        <?php if (!empty($isSuperAdmin) && !empty($editMode) && !empty($encuesta['id'])): ?>
+            <form method="POST" action="<?php echo BASE_URL; ?>/admin/respuestas/<?php echo (int)$encuesta['id']; ?>/update" class="border border-blue-200 rounded-lg p-6 mb-6 bg-blue-50/40">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-blue-900">Editar Respuesta</h2>
+                    <div class="text-xs text-blue-800">Campos de fecha de creación/inicio no son editables.</div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <?php $renderSelect('instituto_id', 'Instituto', $getValue('instituto_id'), isset($catalogs['instituto']) && is_array($catalogs['instituto']) ? $catalogs['instituto'] : [], true); ?>
+                    <?php $renderSelect('carrera_id', 'Carrera', $getValue('carrera_id'), isset($catalogs['carrera']) && is_array($catalogs['carrera']) ? $catalogs['carrera'] : [], true); ?>
+
+                    <?php $renderInput('nombres', 'Nombres', $getValue('nombres'), 'text', true); ?>
+                    <?php $renderInput('apellidos', 'Apellidos', $getValue('apellidos'), 'text', true); ?>
+                    <?php $renderInput('cedula', 'Cédula', $getValue('cedula'), 'text', true); ?>
+                    <?php $renderInput('email', 'Correo Electrónico', $getValue('email'), 'email', true); ?>
+                    <?php $renderInput('telefono', 'Teléfono', $getValue('telefono'), 'text', true); ?>
+                    <?php $renderInput('fecha_nacimiento', 'Fecha de Nacimiento', $getValue('fecha_nacimiento'), 'date', true); ?>
+
+                    <?php $renderSelect('nacionalidad_id', 'Nacionalidad', $getValue('nacionalidad_id'), isset($catalogs['nacionalidad']) && is_array($catalogs['nacionalidad']) ? $catalogs['nacionalidad'] : [], true); ?>
+                    <?php $renderSelect('sexo_id', 'Sexo', $getValue('sexo_id'), isset($catalogs['sexo']) && is_array($catalogs['sexo']) ? $catalogs['sexo'] : [], true); ?>
+                    <?php $renderSelect('estado_civil_id', 'Estado Civil', $getValue('estado_civil_id'), isset($catalogs['estado_civil']) && is_array($catalogs['estado_civil']) ? $catalogs['estado_civil'] : [], true); ?>
+                    <?php $renderSelect('tipo_estudiante_id', 'Tipo de Estudiante', $getValue('tipo_estudiante_id'), isset($catalogs['tipo_estudiante']) && is_array($catalogs['tipo_estudiante']) ? $catalogs['tipo_estudiante'] : [], true); ?>
+                    <?php $renderSelect('semestre_id', 'Semestre', $getValue('semestre_id'), isset($catalogs['semestre']) && is_array($catalogs['semestre']) ? $catalogs['semestre'] : [], true); ?>
+                    <?php $renderSelect('tipo_beca_id', 'Tipo de Beca', $getValue('tipo_beca_id'), isset($catalogs['tipo_beca']) && is_array($catalogs['tipo_beca']) ? $catalogs['tipo_beca'] : []); ?>
+
+                    <?php $renderYesNoSelect('hijos', '¿Tiene hijos?', $getValue('hijos')); ?>
+                    <?php $renderInput('numero_hijos', 'Número de Hijos', $getValue('numero_hijos'), 'number'); ?>
+                    <?php $renderYesNoSelect('estudio_fya', '¿Estudió en FyA?', $getValue('estudio_fya')); ?>
+                    <?php $renderInput('numero_habitantes', 'Número de Habitantes', $getValue('numero_habitantes'), 'number'); ?>
+                    <?php $renderInput('numero_ocupantes_familia', 'Número de Ocupantes de la Familia', $getValue('numero_ocupantes_familia'), 'number'); ?>
+
+                    <?php $renderInput('discapacidad', 'Discapacidad', $getValue('discapacidad')); ?>
+                    <?php $renderInput('enfermedad_cronica', 'Enfermedad Crónica', $getValue('enfermedad_cronica')); ?>
+                    <?php $renderInput('url_cedula', 'URL Cédula', $getValue('url_cedula'), 'text'); ?>
+                    <?php $renderTextarea('direccion', 'Dirección', $getValue('direccion')); ?>
+
+                    <?php $renderSelect('condicion_laboral_id', 'Condición Laboral', $getValue('condicion_laboral_id'), isset($catalogs['condicion_laboral']) && is_array($catalogs['condicion_laboral']) ? $catalogs['condicion_laboral'] : []); ?>
+                    <?php $renderSelect('trabajo_relacion_id', 'Relación Laboral', $getValue('trabajo_relacion_id', 'relacion_laboral_id'), isset($catalogs['relacion_laboral']) && is_array($catalogs['relacion_laboral']) ? $catalogs['relacion_laboral'] : []); ?>
+                    <?php $renderSelect('tipo_organizacion_id', 'Tipo de Organización', $getValue('tipo_organizacion_id'), isset($catalogs['tipo_organizacion']) && is_array($catalogs['tipo_organizacion']) ? $catalogs['tipo_organizacion'] : []); ?>
+                    <?php $renderSelect('sector_trabajo_id', 'Sector de Trabajo', $getValue('sector_trabajo_id'), isset($catalogs['sector_trabajo']) && is_array($catalogs['sector_trabajo']) ? $catalogs['sector_trabajo'] : []); ?>
+                    <?php $renderSelect('categoria_ocupacional_id', 'Categoría Ocupacional', $getValue('categoria_ocupacional_id'), isset($catalogs['categoria_ocupacional']) && is_array($catalogs['categoria_ocupacional']) ? $catalogs['categoria_ocupacional'] : []); ?>
+
+                    <?php $renderSelect('tipo_convivencia_id', 'Tipo de Convivencia', $getValue('tipo_convivencia_id'), isset($catalogs['tipo_convivencia']) && is_array($catalogs['tipo_convivencia']) ? $catalogs['tipo_convivencia'] : []); ?>
+                    <?php $renderSelect('tipo_vivienda_id', 'Tipo de Vivienda', $getValue('tipo_vivienda_id'), isset($catalogs['tipo_vivienda']) && is_array($catalogs['tipo_vivienda']) ? $catalogs['tipo_vivienda'] : []); ?>
+                    <?php $renderSelect('tenencia_vivienda_id', 'Tenencia de Vivienda', $getValue('tenencia_vivienda_id'), isset($catalogs['tenencia_vivienda']) && is_array($catalogs['tenencia_vivienda']) ? $catalogs['tenencia_vivienda'] : []); ?>
+                    <?php $renderSelect('frecuencia_servicio_agua_id', 'Frecuencia Servicio Agua', $getValue('frecuencia_servicio_agua_id'), isset($catalogs['frecuencia_servicio_agua']) && is_array($catalogs['frecuencia_servicio_agua']) ? $catalogs['frecuencia_servicio_agua'] : []); ?>
+                    <?php $renderSelect('frecuencia_servicio_aseo_id', 'Frecuencia Servicio Aseo', $getValue('frecuencia_servicio_aseo_id'), isset($catalogs['frecuencia_servicio_aseo']) && is_array($catalogs['frecuencia_servicio_aseo']) ? $catalogs['frecuencia_servicio_aseo'] : []); ?>
+                    <?php $renderSelect('frecuencia_servicio_electricidad_id', 'Frecuencia Servicio Electricidad', $getValue('frecuencia_servicio_electricidad_id'), isset($catalogs['frecuencia_servicio_electricidad']) && is_array($catalogs['frecuencia_servicio_electricidad']) ? $catalogs['frecuencia_servicio_electricidad'] : []); ?>
+                    <?php $renderSelect('frecuencia_servicio_gas_id', 'Frecuencia Servicio Gas', $getValue('frecuencia_servicio_gas_id'), isset($catalogs['frecuencia_servicio_gas']) && is_array($catalogs['frecuencia_servicio_gas']) ? $catalogs['frecuencia_servicio_gas'] : []); ?>
+
+                    <?php $renderSelect('transporte_id', 'Transporte', $getValue('transporte_id'), isset($catalogs['transporte']) && is_array($catalogs['transporte']) ? $catalogs['transporte'] : []); ?>
+                    <?php $renderSelect('dependencia_economica_id', 'Dependencia Económica', $getValue('dependencia_economica_id'), isset($catalogs['dependencia_economica']) && is_array($catalogs['dependencia_economica']) ? $catalogs['dependencia_economica'] : []); ?>
+                    <?php $renderSelect('fuente_ingreso_familiar_id', 'Fuente de Ingreso Familiar', $getValue('fuente_ingreso_familiar_id', 'fuente_ingreso_id'), isset($catalogs['fuente_ingreso_familiar']) && is_array($catalogs['fuente_ingreso_familiar']) ? $catalogs['fuente_ingreso_familiar'] : []); ?>
+                    <?php $renderSelect('ingreso_familiar_id', 'Ingreso Familiar', $getValue('ingreso_familiar_id'), isset($catalogs['ingreso_familiar']) && is_array($catalogs['ingreso_familiar']) ? $catalogs['ingreso_familiar'] : []); ?>
+
+                    <?php $renderSelect('nivel_eduacion_padre_id', 'Nivel Educación Padre', $getValue('nivel_eduacion_padre_id', 'nivel_educacion_padre_id'), isset($catalogs['nivel_educacion']) && is_array($catalogs['nivel_educacion']) ? $catalogs['nivel_educacion'] : []); ?>
+                    <?php $renderYesNoSelect('trabaja_padre', '¿Trabaja Padre?', $getValue('trabaja_padre', 'padre_trabaja')); ?>
+                    <?php $renderSelect('tipo_empresa_padre_id', 'Tipo Empresa Padre', $getValue('tipo_empresa_padre_id'), isset($catalogs['tipo_empresa']) && is_array($catalogs['tipo_empresa']) ? $catalogs['tipo_empresa'] : []); ?>
+                    <?php $renderSelect('categoria_ocupacional_padre_id', 'Categoría Ocupacional Padre', $getValue('categoria_ocupacional_padre_id'), isset($catalogs['categoria_ocupacional']) && is_array($catalogs['categoria_ocupacional']) ? $catalogs['categoria_ocupacional'] : []); ?>
+                    <?php $renderSelect('sector_trabajo_padre_id', 'Sector Trabajo Padre', $getValue('sector_trabajo_padre_id'), isset($catalogs['sector_trabajo']) && is_array($catalogs['sector_trabajo']) ? $catalogs['sector_trabajo'] : []); ?>
+                    <?php $renderYesNoSelect('padre_en_venezuela', '¿Padre en Venezuela?', $getValue('padre_en_venezuela')); ?>
+                    <?php $renderYesNoSelect('padre_egresado_iujo', '¿Padre egresado IUJO?', $getValue('padre_egresado_iujo')); ?>
+
+                    <?php $renderSelect('nivel_eduacion_madre_id', 'Nivel Educación Madre', $getValue('nivel_eduacion_madre_id', 'nivel_educacion_madre_id'), isset($catalogs['nivel_educacion']) && is_array($catalogs['nivel_educacion']) ? $catalogs['nivel_educacion'] : []); ?>
+                    <?php $renderYesNoSelect('trabaja_madre', '¿Trabaja Madre?', $getValue('trabaja_madre', 'madre_trabaja')); ?>
+                    <?php $renderSelect('tipo_empresa_madre_id', 'Tipo Empresa Madre', $getValue('tipo_empresa_madre_id'), isset($catalogs['tipo_empresa']) && is_array($catalogs['tipo_empresa']) ? $catalogs['tipo_empresa'] : []); ?>
+                    <?php $renderSelect('categoria_ocupacional_madre_id', 'Categoría Ocupacional Madre', $getValue('categoria_ocupacional_madre_id'), isset($catalogs['categoria_ocupacional']) && is_array($catalogs['categoria_ocupacional']) ? $catalogs['categoria_ocupacional'] : []); ?>
+                    <?php $renderSelect('sector_trabajo_madre_id', 'Sector Trabajo Madre', $getValue('sector_trabajo_madre_id'), isset($catalogs['sector_trabajo']) && is_array($catalogs['sector_trabajo']) ? $catalogs['sector_trabajo'] : []); ?>
+                    <?php $renderYesNoSelect('madre_en_venezuela', '¿Madre en Venezuela?', $getValue('madre_en_venezuela')); ?>
+                    <?php $renderYesNoSelect('madre_egresada_iujo', '¿Madre egresada IUJO?', $getValue('madre_egresada_iujo')); ?>
+
+                    <?php $renderSelect('veracidad_id', 'Veracidad', $getValue('veracidad_id'), isset($catalogs['veracidad']) && is_array($catalogs['veracidad']) ? $catalogs['veracidad'] : [], true); ?>
+
+                    <?php $renderMultiSelect('activos_vivienda', 'Activos de la Vivienda', isset($catalogs['activo_vivienda']) && is_array($catalogs['activo_vivienda']) ? $catalogs['activo_vivienda'] : [], $selectedActivos); ?>
+                    <?php $renderMultiSelect('ambientes_vivienda', 'Ambientes de la Vivienda', isset($catalogs['ambiente_vivienda']) && is_array($catalogs['ambiente_vivienda']) ? $catalogs['ambiente_vivienda'] : [], $selectedAmbientes); ?>
+                    <?php $renderMultiSelect('servicios_vivienda', 'Servicios de la Vivienda', isset($catalogs['servicio_vivienda']) && is_array($catalogs['servicio_vivienda']) ? $catalogs['servicio_vivienda'] : [], $selectedServicios); ?>
+                </div>
+
+                <div class="mt-6 flex items-center gap-3">
+                    <button type="submit" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Guardar cambios</button>
+                    <a href="<?php echo BASE_URL; ?>/admin/respuestas/<?php echo (int)$encuesta['id']; ?>" class="px-4 py-2 border rounded text-gray-700 hover:bg-gray-50">Cancelar</a>
+                </div>
+            </form>
+        <?php endif; ?>
 
         <div class="space-y-6">
             <section class="border rounded-lg p-6">

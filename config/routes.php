@@ -29,6 +29,7 @@ $router->get('/admin/reportes/demografico-vulnerabilidad', 'ReportesController@d
 $router->get('/admin/usuarios', 'AdminController@users');
 $router->get('/admin/respuestas', 'AdminController@responses');
 $router->get('/admin/respuestas/:id', 'AdminController@responseDetail');
+$router->post('/admin/respuestas/:id/update', 'AdminController@responseUpdate');
 $router->get('/admin/catalogos', 'AdminController@catalogs');
 
 // Acciones Admin Catálogos
