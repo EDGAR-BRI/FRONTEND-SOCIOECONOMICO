@@ -1,4 +1,4 @@
-<div id="Logo" class="group flex items-center justify-center gap-5 mt-auto mb-6 w-auto h-20 text-white">
+<div id="Logo" class="group flex items-center justify-center gap-5 mt-auto mb-6 w-auto h-20 text-black dark:text-white">
     <div class="flex items-center justify-center leading-none [&>svg]:w-auto [&>svg]:h-14 [&>svg]:block max-[600px]:[&>svg]:h-10">
         <?php include ROOT_PATH . '/assets/svg/IUJO.svg'; ?>
     </div>
