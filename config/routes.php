@@ -11,6 +11,7 @@ $router = new Router();
 // Rutas GET
 $router->get('/', 'HomeController@index');
 $router->get('/:sede/formulario', 'FormController@index');
+$router->get('/encuesta/check', 'FormController@checkDuplicados');
 $router->get('/login', 'AuthController@login');
 $router->get('/success', 'FormController@success');
 

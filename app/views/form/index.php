@@ -43,7 +43,8 @@
         </section>
 
         <?php $actionUrl = !empty($sede) ? BASE_URL . '/' . $sede . '/formulario/submit' : BASE_URL . '/submit'; ?>
-        <form id="socioeconomicForm" action="<?php echo $actionUrl; ?>" method="POST" class="space-y-6" enctype="multipart/form-data" data-api-base-url="<?php echo htmlspecialchars(API_BASE_URL); ?>">
+        <form id="socioeconomicForm" action="<?php echo $actionUrl; ?>" method="POST" class="space-y-6" enctype="multipart/form-data" data-api-base-url="<?php echo htmlspecialchars(API_BASE_URL); ?>" data-check-url="<?php echo htmlspecialchars(BASE_URL . '/encuesta/check'); ?>">
+            <input type="hidden" name="inicio" id="survey-start-date" value="">
 
             <!-- SECCIÓN 1: DATOS PERSONALES -->
             <section id="step-1" class="form-step hidden">
@@ -106,9 +107,32 @@
             </section>
         </form>
     </main>
+
+    <div id="init-modal" class="fixed inset-0 z-50" aria-hidden="true">
+        <div class="absolute inset-0 bg-black/40"></div>
+
+        <div class="relative mx-auto mt-16 w-full max-w-xl px-4">
+
+            <div class="bg-white rounded-lg shadow-sm border">
+
+                <div class="text-center px-6 py-4 border-b">
+                    <h4 id="init-modal-title" class="text-lg font-semibold text-gray-800">Iniciar Formulario Socioeconómico</h4>
+                </div>
+
+                <form id="init-form" class="p-6" novalidate>
+                    <p class=" text-center">Este formulario es exclusivo para estudiantes de la IUJO. Por favor, ingresa tu número de cédula para iniciar el proceso de llenado del formulario socioeconómico.</p>
+
+                    <div class="mt-6 flex justify-center gap-2">
+                        <button type="button" id="init-accept" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded shadow-sm text-sm font-medium transition">ACEPTAR</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </main>
 
 <!-- JavaScript para interactividad -->
 <script src="<?php echo BASE_URL; ?>/assets/js/form.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/js/empleo.js"></script>
 <script src="<?php echo BASE_URL; ?>/assets/js/familia.js"></script>
+<script src="<?php echo BASE_URL; ?>/assets/js/init-form.js"></script>

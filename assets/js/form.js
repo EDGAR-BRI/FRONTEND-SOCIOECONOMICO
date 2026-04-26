@@ -1,6 +1,8 @@
 // form.js - Interactividad del formulario socioeconómico
 
 document.addEventListener('DOMContentLoaded', function () {
+    let bypassSubmitValidation = false;
+
     const selects = document.querySelectorAll('select');
 
     selects.forEach(select => {
@@ -87,17 +89,99 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ===== CONFIRMACIÓN ANTES DE ENVIAR =====
     const form = document.querySelector('form');
+
+    async function validarDuplicadosPaso1(stepElement) {
+        const formEl = document.getElementById('socioeconomicForm');
+        const apiBaseUrl = formEl ? (formEl.dataset.apiBaseUrl || '').replace(/\/+$/, '') : '';
+        const checkUrl = formEl ? (formEl.dataset.checkUrl || '').trim() : '';
+        const root = stepElement || document;
+        const cedulaEl = root.querySelector('#cedula');
+        const emailEl = root.querySelector('#email');
+
+        if ((!checkUrl && !apiBaseUrl) || (!cedulaEl && !emailEl)) {
+            return true;
+        }
+
+        const cedula = cedulaEl ? (cedulaEl.value || '').trim() : '';
+        const email = emailEl ? (emailEl.value || '').trim() : '';
+
+        if (cedula === '' && email === '') {
+            return true;
+        }
+
+        try {
+            const qs = new URLSearchParams();
+            if (cedula !== '') qs.set('cedula', cedula);
+            if (email !== '') qs.set('email', email);
+
+            const endpoint = checkUrl || (apiBaseUrl + '/encuesta/check');
+
+            const resp = await fetch(endpoint + '?' + qs.toString(), {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+            });
+
+            const payload = await resp.json().catch(() => null);
+
+            if (cedulaEl) cedulaEl.setCustomValidity('');
+            if (emailEl) emailEl.setCustomValidity('');
+
+            if (!resp.ok || !payload || payload.success !== true || !payload.data) {
+                alert('No se pudo validar cédula/correo en este momento. Intente nuevamente.');
+                return false;
+            }
+
+            const cedulaExists = !!payload.data.cedula_exists;
+            const emailExists = !!payload.data.email_exists;
+
+            if (cedulaExists && cedulaEl) {
+                cedulaEl.setCustomValidity('Ya existe una encuesta registrada con esta cédula.');
+                cedulaEl.reportValidity();
+                cedulaEl.focus();
+                return false;
+            }
+
+            if (emailExists && emailEl) {
+                emailEl.setCustomValidity('Ya existe una encuesta registrada con este correo.');
+                emailEl.reportValidity();
+                emailEl.focus();
+                return false;
+            }
+
+            return true;
+        } catch (e) {
+            alert('No se pudo validar cédula/correo por un problema de conexión. Intente nuevamente.');
+            return false;
+        }
+    }
+
     if (form) {
-        form.addEventListener('submit', function (e) {
+        form.addEventListener('submit', async function (e) {
+            if (bypassSubmitValidation) {
+                bypassSubmitValidation = false;
+                return;
+            }
+
+            e.preventDefault();
+
+            const surveyStartDateInput = document.getElementById('survey-start-date');
+            if (surveyStartDateInput && !surveyStartDateInput.value) {
+                surveyStartDateInput.value = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            }
+
             const activeStep = document.querySelector('.form-step:not(.hidden)');
             if (activeStep && !validateStep(activeStep)) {
-                e.preventDefault();
+                return false;
+            }
+
+            const step1 = document.getElementById('step-1');
+            const duplicadosValidos = await validarDuplicadosPaso1(step1);
+            if (!duplicadosValidos) {
                 return false;
             }
 
             const veracidad = document.getElementById('veracidad_id');
             if (veracidad && !veracidad.value) {
-                e.preventDefault();
                 alert('Por favor, confirme la veracidad de la información antes de enviar.');
                 veracidad.focus();
                 return false;
@@ -106,8 +190,18 @@ document.addEventListener('DOMContentLoaded', function () {
             // Confirmación final
             const confirmacion = confirm('¿Está seguro de que desea enviar el formulario? Verifique que todos los datos sean correctos.');
             if (!confirmacion) {
-                e.preventDefault();
                 return false;
+            }
+
+            const formData = new FormData(form);
+            console.log('[Formulario socioeconómico] inicio:', formData.get('inicio'));
+            console.log('[Formulario socioeconómico] payload:', Array.from(formData.entries()));
+
+            bypassSubmitValidation = true;
+            if (typeof form.requestSubmit === 'function') {
+                form.requestSubmit();
+            } else {
+                form.submit();
             }
         });
     }
@@ -228,76 +322,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Chequeo temprano: en el paso 1 validar duplicados de cédula/email.
             if (currentStep.id === 'step-1') {
-                const formEl = document.getElementById('socioeconomicForm');
-                const apiBaseUrl = formEl ? (formEl.dataset.apiBaseUrl || '').replace(/\/+$/, '') : '';
-                const cedulaEl = currentStep.querySelector('#cedula');
-                const emailEl = currentStep.querySelector('#email');
+                const prevDisabled = this.disabled;
+                this.disabled = true;
 
-                if (apiBaseUrl && (cedulaEl || emailEl)) {
-                    const cedula = cedulaEl ? (cedulaEl.value || '').trim() : '';
-                    const email = emailEl ? (emailEl.value || '').trim() : '';
-
-                    // Solo consultar si hay algo que verificar
-                    if (cedula !== '' || email !== '') {
-                        // Evitar doble click mientras consulta
-                        const prevDisabled = this.disabled;
-                        this.disabled = true;
-
-                        try {
-                            const qs = new URLSearchParams();
-                            if (cedula !== '') qs.set('cedula', cedula);
-                            if (email !== '') qs.set('email', email);
-
-                            const resp = await fetch(apiBaseUrl + '/encuesta/check?' + qs.toString(), {
-                                method: 'GET',
-                                headers: { 'Accept': 'application/json' },
-                            });
-
-                            const payload = await resp.json().catch(() => null);
-
-                            // Resetear mensajes previos
-                            if (cedulaEl) cedulaEl.setCustomValidity('');
-                            if (emailEl) emailEl.setCustomValidity('');
-
-                            if (!resp.ok || !payload || payload.success !== true || !payload.data) {
-                                // Si falla el check, dejamos continuar (para no bloquear por un fallo de red).
-                                // El backend definitivo validará al enviar.
-                                showStep(nextStepId);
-                                return;
-                            }
-
-                            const cedulaExists = !!payload.data.cedula_exists;
-                            const emailExists = !!payload.data.email_exists;
-
-                            if (cedulaExists) {
-                                cedulaEl.setCustomValidity('Ya existe una encuesta registrada con esta cédula.');
-                            }
-                            if (emailExists) {
-                                emailEl.setCustomValidity('Ya existe una encuesta registrada con este correo.');
-                            }
-
-                            if (cedulaExists) {
-                                cedulaEl.reportValidity();
-                                cedulaEl.focus();
-                                return;
-                            }
-
-                            if (emailExists) {
-                                emailEl.reportValidity();
-                                emailEl.focus();
-                                return;
-                            }
-
-                            showStep(nextStepId);
-                            return;
-                        } catch (e) {
-                            // En caso de error de red/parseo, no bloqueamos el avance.
-                            showStep(nextStepId);
-                            return;
-                        } finally {
-                            this.disabled = prevDisabled;
-                        }
+                try {
+                    const duplicadosValidos = await validarDuplicadosPaso1(currentStep);
+                    if (!duplicadosValidos) {
+                        return;
                     }
+                } finally {
+                    this.disabled = prevDisabled;
                 }
             }
 
