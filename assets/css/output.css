@@ -1051,6 +1051,10 @@ html.dark body.admin-shell .card-grit-home:hover {
   left: 4rem;
 }
 
+.left-4 {
+  left: 1rem;
+}
+
 .left-\[6px\] {
   left: 6px;
 }
@@ -1081,10 +1085,6 @@ html.dark body.admin-shell .card-grit-home:hover {
 
 .top-4 {
   top: 1rem;
-}
-
-.left-4 {
-  left: 1rem;
 }
 
 .z-10 {
@@ -3098,10 +3098,6 @@ html.dark body.admin-shell .hover\:bg-gray-50:hover {
 
 .\[\&\>svg\]\:h-14>svg {
   height: 3.5rem;
-}
-
-.\[\&\>svg\]\:h-16>svg {
-  height: 4rem;
 }
 
 .\[\&\>svg\]\:h-20>svg {
