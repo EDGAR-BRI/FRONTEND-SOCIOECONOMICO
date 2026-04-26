@@ -9,41 +9,38 @@
 
 <!-- Dashboard Overview -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <!-- Card 1 -->
-    <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition">
+
+    <div class="bg-white rounded-lg shadow-sm border p-5">
         <div class="flex items-center">
-            <div class="p-3 bg-blue-100 rounded-full text-blue-500 mr-4">
-                <i class="fas fa-file-invoice text-xl"></i>
+            <div class="p-3 rounded-full text-primary2-400 mr-4">
+                <i class="fas fa-file-invoice text-3xl"></i>
             </div>
             <div>
-                <p class="text-gray-500 text-sm font-medium">Total Encuestas</p>
-                <h3 class="text-2xl font-bold text-gray-800"><?php echo $totalEncuestas !== null ? number_format($totalEncuestas, 0, ',', '.') : '—'; ?></h3>
+                <p class="text-xs uppercase tracking-wide text-gray-500">Total Encuestas</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $totalEncuestas !== null ? number_format($totalEncuestas, 0, ',', '.') : '—'; ?></h3>
             </div>
         </div>
     </div>
 
-    <!-- Card 2 -->
-    <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-green-500 hover:shadow-md transition">
+    <div class="bg-white rounded-lg shadow-sm border p-5">
         <div class="flex items-center">
-            <div class="p-3 bg-green-100 rounded-full text-green-500 mr-4">
-                <i class="fas fa-users text-xl"></i>
+            <div class="p-3 rounded-full text-primary2-400 mr-4">
+                <i class="fas fa-users text-3xl"></i>
             </div>
             <div>
-                <p class="text-gray-500 text-sm font-medium">Usuarios</p>
-                <h3 class="text-2xl font-bold text-gray-800"><?php echo $totalUsuarios !== null ? number_format($totalUsuarios, 0, ',', '.') : '—'; ?></h3>
+                <p class="text-xs uppercase tracking-wide text-gray-500">Usuarios</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $totalUsuarios !== null ? number_format($totalUsuarios, 0, ',', '.') : '—'; ?></h3>
             </div>
         </div>
     </div>
-
-    <!-- Card 3 -->
-    <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-yellow-500 hover:shadow-md transition">
+    <div class="bg-white rounded-lg shadow-sm border p-5">
         <div class="flex items-center">
-            <div class="p-3 bg-yellow-100 rounded-full text-yellow-500 mr-4">
-                <i class="fas fa-calendar-alt text-xl"></i>
+            <div class="p-3 rounded-full text-primary2-400 mr-4">
+                <i class="fas fa-calendar-alt text-3xl"></i>
             </div>
             <div>
-                <p class="text-gray-500 text-sm font-medium">Última encuesta</p>
-                <h3 class="text-2xl font-bold text-gray-800"><?php echo htmlspecialchars($ultimaEncuesta ?: '—'); ?></h3>
+                <p class="text-xs uppercase tracking-wide text-gray-500">Última encuesta</p>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $ultimaEncuesta !== null ? htmlspecialchars($ultimaEncuesta) : '—'; ?></h3>
             </div>
         </div>
     </div>
