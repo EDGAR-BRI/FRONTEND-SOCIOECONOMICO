@@ -75,11 +75,37 @@
             $type = ($f === 'numero' || $f === 'valor_estrato') ? 'number' : 'text';
             $fieldMeta[] = ['name' => $f, 'label' => $label, 'type' => $type];
         }
+
+        $formatColLabel = function ($col) {
+            $col = (string)$col;
+            $map = [
+                'valor_estrato' => 'Valor estrato',
+                'siglas' => 'Siglas',
+                'codigo' => 'Código',
+                'numero' => 'Número',
+                'nombre' => 'Nombre',
+            ];
+
+            if (isset($map[$col])) {
+                return $map[$col];
+            }
+
+            $label = str_replace('_', ' ', $col);
+            return ucfirst($label);
+        };
     ?>
 
     <div class="bg-white rounded-lg shadow-sm border p-4 md:col-span-1 h-fit">
         <h3 class="font-bold text-gray-800 mb-4 px-2">Categorías</h3>
-        <ul class="space-y-1 text-sm">
+        <div class="mb-3 px-2">
+            <input
+                type="text"
+                id="catalog-categories-search"
+                placeholder="Buscar categoría..."
+                class="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-primary-500 focus:border-primary-500 outline-none"
+            >
+        </div>
+        <ul id="catalog-categories-list" class="space-y-1 text-sm">
             <?php if (!empty($catalogosMenu) && is_array($catalogosMenu)): ?>
                 <?php foreach ($catalogosMenu as $item): ?>
                     <?php
@@ -95,7 +121,7 @@
                             ? 'bg-primary-50 text-primary-600 font-medium'
                             : 'hover:bg-gray-50 text-gray-600';
                     ?>
-                    <li>
+                    <li class="catalog-category-item" data-label="<?php echo htmlspecialchars(mb_strtolower($itemLabel, 'UTF-8'), ENT_QUOTES); ?>">
                         <a href="<?php echo htmlspecialchars($buildCatalogUrl($itemResource)); ?>" class="block w-full text-left px-3 py-2 rounded-md <?php echo $btnClass; ?>">
                             <?php echo htmlspecialchars($itemLabel); ?>
                         </a>
@@ -104,6 +130,10 @@
             <?php else: ?>
                 <li class="text-sm text-gray-500 px-3 py-2">No hay catálogos disponibles.</li>
             <?php endif; ?>
+
+            <li id="catalog-categories-empty" class="text-sm text-gray-500 px-3 py-2 hidden">
+                No hay categorías que coincidan.
+            </li>
         </ul>
     </div>
 
@@ -195,7 +225,7 @@
                     <th class="py-3 px-4 font-semibold text-sm w-16">ID/Valor</th>
                     <th class="py-3 px-4 font-semibold text-sm">Nombre a mostrar</th>
                     <?php foreach ($extraCols as $c): ?>
-                        <th class="py-3 px-4 font-semibold text-sm"><?php echo htmlspecialchars((string)$c); ?></th>
+                        <th class="py-3 px-4 font-semibold text-sm"><?php echo htmlspecialchars($formatColLabel($c)); ?></th>
                     <?php endforeach; ?>
                     <th class="py-3 px-4 font-semibold text-sm w-24 text-center">Estado</th>
                     <th class="py-3 px-4 font-semibold text-sm w-24 text-right">Acciones</th>
@@ -367,5 +397,53 @@
         tenantScoped: <?php echo json_encode($currentTenantScoped ? 1 : 0); ?>,
         fields: <?php echo json_encode(array_values($fields)); ?>
     };
+
+    (function () {
+        var input = document.getElementById('catalog-categories-search');
+        var list = document.getElementById('catalog-categories-list');
+        var empty = document.getElementById('catalog-categories-empty');
+
+        if (!input || !list) {
+            return;
+        }
+
+        var items = list.querySelectorAll('.catalog-category-item');
+        if (!items.length) {
+            return;
+        }
+
+        var normalize = function (value) {
+            value = (value || '').toString().toLowerCase();
+
+            if (typeof value.normalize === 'function') {
+                value = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            }
+
+            return value;
+        };
+
+        var applyFilter = function () {
+            var q = normalize(input.value);
+            var visible = 0;
+
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var rawLabel = item.getAttribute('data-label') || item.textContent || '';
+                var label = normalize(rawLabel);
+                var show = q === '' || label.indexOf(q) !== -1;
+
+                item.classList.toggle('hidden', !show);
+                if (show) {
+                    visible++;
+                }
+            }
+
+            if (empty) {
+                empty.classList.toggle('hidden', visible !== 0);
+            }
+        };
+
+        input.addEventListener('input', applyFilter);
+    })();
 </script>
 <script src="<?php echo $assetBase; ?>/js/admin-catalogs.js"></script>
