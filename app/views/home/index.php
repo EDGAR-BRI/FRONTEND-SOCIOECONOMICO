@@ -1,4 +1,8 @@
-<main class="container px-4 py-12 min-h-[80vh] bg-gray-100 r-0 l-0 mx-auto  flex flex-col">
+<main class="container relative px-4 py-12 min-h-[80vh] r-0 l-0 mx-auto flex flex-col">
+    <aside class="absolute top-4 right-4 z-50">
+        <?php include __DIR__ . '/../components/theme-toggle.php'; ?>
+    </aside>
+
     <style>
         .style-card .style-overlay {
             opacity: 0.60;
@@ -23,7 +27,9 @@
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to right, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
             <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <div class=" absolute top-4 left-4">
+                    <?php $logoColorMode = 'white'; ?>
                     <?php include APP_PATH . '/views/components/logo.php'; ?>
+                    <?php unset($logoColorMode); ?>
                 </div>
                 <!-- <img class="relative z-10 w-1/2 h-auto self-start" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo"> -->
                 <span class="mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUJO Barquisimeto</span>
@@ -36,7 +42,9 @@
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to bottom, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
             <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <div class=" absolute top-4 left-4">
+                    <?php $logoColorMode = 'white'; ?>
                     <?php include APP_PATH . '/views/components/logo.php'; ?>
+                    <?php unset($logoColorMode); ?>
                 </div>
                 <h2 class=" mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUJO Petare</h2>
             </div>
@@ -48,7 +56,9 @@
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to bottom, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
             <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <div class=" absolute top-4 left-4">
+                    <?php $logoColorMode = 'white'; ?>
                     <?php include APP_PATH . '/views/components/logo.php'; ?>
+                    <?php unset($logoColorMode); ?>
                 </div>  
                 <h2 class=" mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUJO Catia</h2>
             </div>
@@ -59,7 +69,9 @@
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to bottom, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
             <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <div class=" absolute top-4 left-4">
+                    <?php $logoColorMode = 'white'; ?>
                     <?php include APP_PATH . '/views/components/logo.php'; ?>
+                    <?php unset($logoColorMode); ?>
                 </div>
                 <h2 class=" mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUJO Guanarito</h2>
             </div>
@@ -72,7 +84,9 @@
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to right, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
             <div class="relative z-10 flex flex-col h-full w-full items-center">
                 <div class=" absolute top-4 left-4">
+                    <?php $logoColorMode = 'white'; ?>
                     <?php include APP_PATH . '/views/components/logo-IUSF.php'; ?>
+                    <?php unset($logoColorMode); ?>
                 </div>
                 <h2 class=" mt-auto self-end rounded-full bg-black/45 px-3 py-1 text-xl font-semibold tracking-wide text-white backdrop-blur-sm shadow-lg">IUSF</h2>
             </div>
