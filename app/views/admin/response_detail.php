@@ -236,24 +236,6 @@
                 echo '</select>';
                 echo '</div>';
             };
-
-            $fechaResumen = '-';
-            if (!empty($encuesta['creado']) && is_string($encuesta['creado'])) {
-                $fechaRaw = trim($encuesta['creado']);
-                if ($fechaRaw !== '') {
-                    try {
-                        $dt = new \DateTime($fechaRaw);
-                        $meses = [
-                            1 => 'ene', 2 => 'feb', 3 => 'mar', 4 => 'abr', 5 => 'may', 6 => 'jun',
-                            7 => 'jul', 8 => 'ago', 9 => 'sep', 10 => 'oct', 11 => 'nov', 12 => 'dic',
-                        ];
-                        $mes = isset($meses[(int)$dt->format('n')]) ? $meses[(int)$dt->format('n')] : $dt->format('m');
-                        $fechaResumen = $dt->format('d') . ' ' . $mes . ' ' . $dt->format('Y, h:i A');
-                    } catch (\Exception $e) {
-                        $fechaResumen = $fechaRaw;
-                    }
-                }
-            }
         ?>
 
         <div class="border rounded p-4 mb-6">
@@ -271,7 +253,7 @@
                 ?>
             </div>
             <div class="text-sm text-gray-700 mt-1">
-                Fecha: <?php echo htmlspecialchars($fechaResumen); ?>
+                Fecha: <?php echo !empty($encuesta['creado']) ? htmlspecialchars((string)$encuesta['creado']) : '-'; ?>
             </div>
             <div class="text-sm text-gray-700 mt-1">
                 Estrato: <?php
