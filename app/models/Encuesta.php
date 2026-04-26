@@ -79,7 +79,20 @@ class Encuesta
 
     private function validateRequired($field, $message)
     {
-        if (empty($this->get($field))) {
+        $value = $this->get($field);
+
+        // Importante: en PHP empty('0') es true, pero para radios Sí/No el 0 es válido.
+        if ($value === null) {
+            $this->errors[$field] = $message;
+            return;
+        }
+
+        if (is_string($value) && trim($value) === '') {
+            $this->errors[$field] = $message;
+            return;
+        }
+
+        if (is_array($value) && empty($value)) {
             $this->errors[$field] = $message;
         }
     }

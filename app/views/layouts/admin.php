@@ -121,9 +121,9 @@ if ($cssVersion !== null) {
 
     <!-- Sidebar -->
     <aside id="mobile-sidebar" class=" w-64 bg-white h-screen hidden fixed inset-y-0 left-0 z-50 md:grid md:grid-rows-[auto_1fr_auto] md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700">
-        <div class="p-6 border-b flex items-center gap-3 dark:border-slate-700">
+        <a class="p-6 border-b flex items-center gap-3 dark:border-slate-700" href="<?php echo BASE_URL; ?>/">
             <img class="h-10 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo" onerror="this.src='https://via.placeholder.com/40'">
-        </div>
+        </a>
         <nav class="p-4 space-y-2">
             <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>">
                 <i class="fas fa-home w-5 text-center"></i> Panel Principal
