@@ -40,13 +40,13 @@ require __DIR__ . '/partials/estado.php';
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
     <div class="bg-white rounded-lg shadow-sm border p-5 lg:col-span-1">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribucion por sexo</h3>
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribución por sexo</h3>
         <div class="h-80 relative">
             <canvas id="chartSexo"></canvas>
         </div>
     </div>
     <div class="bg-white rounded-lg shadow-sm border p-5 lg:col-span-2">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribucion por estrato</h3>
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribución por estrato</h3>
         <div class="h-80 relative">
             <canvas id="chartEstratos"></canvas>
         </div>
