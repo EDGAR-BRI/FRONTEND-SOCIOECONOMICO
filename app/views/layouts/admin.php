@@ -42,7 +42,7 @@ if ($cssVersion !== null) {
     <link rel="stylesheet" href="<?php echo $cssHref; ?>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal flex">
+<body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal flex h-screen overflow-hidden">
 
 <?php
     if (session_status() === PHP_SESSION_NONE) {
@@ -82,7 +82,7 @@ if ($cssVersion !== null) {
 ?>
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white min-h-screen shadow-lg hidden md:block">
+    <aside class="w-64 bg-white h-screen shadow-lg hidden md:block md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto">
         <div class="p-6 border-b flex items-center gap-3">
             <img class="h-10 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo" onerror="this.src='https://via.placeholder.com/40'">
         </div>
@@ -140,9 +140,9 @@ if ($cssVersion !== null) {
     </aside>
 
     <!-- Main Content wrapper -->
-    <div class="flex-1 flex flex-col min-h-screen transition-all duration-300">
+    <div class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 md:ml-64">
         <!-- Top Navbar -->
-        <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6">
+        <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6 sticky top-0 z-20 shrink-0">
             <div class="flex items-center h-10">
                 <button id="mobile-menu-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
                     <i class="fas fa-bars text-xl"></i>
@@ -178,15 +178,17 @@ if ($cssVersion !== null) {
         </header>
 
         <!-- Main Content -->
-        <main class="flex-1 p-6 bg-gray-100">
-            <!-- Renderiza la vista específica -->
-            <?php echo $content; ?>
+        <main class="flex-1 bg-gray-100 overflow-y-auto">
+            <div class="p-6">
+                <!-- Renderiza la vista específica -->
+                <?php echo $content; ?>
+            </div>
+
+            <!-- Footer -->
+            <footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
+                &copy; <?php echo date('Y'); ?> IUJO - Sistema de Administración Socioeconómico. Todos los derechos reservados.
+            </footer>
         </main>
-        
-        <!-- Footer -->
-        <footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
-            &copy; <?php echo date('Y'); ?> IUJO - Sistema de Administración Socioeconómico. Todos los derechos reservados.
-        </footer>
     </div>
 
     <script>
