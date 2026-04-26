@@ -4,10 +4,24 @@
     $totalUsuarios = isset($dashboardData['total_usuarios']) && $dashboardData['total_usuarios'] !== null ? (int)$dashboardData['total_usuarios'] : null;
     $ultimaEncuesta = isset($dashboardData['ultima_encuesta']) && $dashboardData['ultima_encuesta'] !== null ? (string)$dashboardData['ultima_encuesta'] : null;
 
+    $ultimaEncuestaBonita = null;
+    if ($ultimaEncuesta !== null && trim($ultimaEncuesta) !== '') {
+        try {
+            $dt = new DateTime($ultimaEncuesta);
+            $meses = [
+                1 => 'ene', 2 => 'feb', 3 => 'mar', 4 => 'abr', 5 => 'may', 6 => 'jun',
+                7 => 'jul', 8 => 'ago', 9 => 'sep', 10 => 'oct', 11 => 'nov', 12 => 'dic'
+            ];
+            $mes = $meses[(int)$dt->format('n')];
+            $ultimaEncuestaBonita = $dt->format('d') . ' ' . $mes . ' ' . $dt->format('Y, h:i A');
+        } catch (Exception $e) {
+            $ultimaEncuestaBonita = $ultimaEncuesta;
+        }
+    }
+
     $recientes = isset($encuestasRecientes) && is_array($encuestasRecientes) ? $encuestasRecientes : [];
 ?>
 
-<!-- Dashboard Overview -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
     <div class="bg-white rounded-lg shadow-sm border p-5">
@@ -33,6 +47,7 @@
             </div>
         </div>
     </div>
+    
     <div class="bg-white rounded-lg shadow-sm border p-5">
         <div class="flex items-center">
             <div class="p-3 rounded-full text-primary2-400 mr-4">
@@ -40,14 +55,14 @@
             </div>
             <div>
                 <p class="text-xs uppercase tracking-wide text-gray-500">Última encuesta</p>
-                <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $ultimaEncuesta !== null ? htmlspecialchars($ultimaEncuesta) : '—'; ?></h3>
+                <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $ultimaEncuestaBonita !== null ? htmlspecialchars($ultimaEncuestaBonita) : '—'; ?></h3>
             </div>
         </div>
     </div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Últimas Respuestas -->
+
     <div class="bg-white rounded-lg shadow-sm border p-6">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-bold text-gray-800">Últimas Encuestas</h3>
