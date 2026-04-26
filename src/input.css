@@ -58,6 +58,95 @@
     @apply bg-red-950 text-red-200 border-red-800;
   }
 
+  html.dark body.admin-shell {
+    @apply bg-slate-950 text-slate-100;
+  }
+
+  html.dark body.admin-shell .bg-white {
+    @apply bg-slate-900 text-slate-100;
+  }
+
+  html.dark body.admin-shell .border,
+  html.dark body.admin-shell .border-b,
+  html.dark body.admin-shell .border-t,
+  html.dark body.admin-shell .border-y {
+    border-color: rgb(51 65 85 / 1);
+  }
+
+  html.dark body.admin-shell .text-gray-800,
+  html.dark body.admin-shell .text-gray-700,
+  html.dark body.admin-shell .text-gray-600,
+  html.dark body.admin-shell .text-gray-500 {
+    color: rgb(226 232 240 / 1);
+  }
+
+  html.dark body.admin-shell .bg-gray-50 {
+    @apply bg-slate-800;
+  }
+
+  html.dark body.admin-shell table thead tr {
+    @apply bg-slate-800 text-slate-300;
+  }
+
+  html.dark body.admin-shell tbody tr:hover {
+    @apply bg-slate-800;
+  }
+
+  html.dark body.admin-shell tbody tr {
+    border-color: rgb(51 65 85 / 1);
+  }
+
+  html.dark body.admin-shell input,
+  html.dark body.admin-shell select,
+  html.dark body.admin-shell textarea {
+    @apply bg-slate-800 border-slate-600 text-slate-100 placeholder-slate-400;
+  }
+
+  html.dark body.admin-shell input:focus,
+  html.dark body.admin-shell select:focus,
+  html.dark body.admin-shell textarea:focus {
+    @apply border-primary2-400 ring-2 ring-primary2-500;
+  }
+
+  html.dark body.admin-shell .bg-gray-100 {
+    @apply bg-slate-950;
+  }
+
+  html.dark body.admin-shell .shadow-sm,
+  html.dark body.admin-shell .shadow-lg {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  }
+
+  html.dark body.admin-shell .bg-green-50 {
+    @apply bg-emerald-950 text-emerald-200 border-emerald-800;
+  }
+
+  html.dark body.admin-shell .bg-red-50 {
+    @apply bg-red-950 text-red-200 border-red-800;
+  }
+
+  html.dark body.admin-shell .bg-yellow-50 {
+    @apply bg-amber-950 text-amber-200 border-amber-800;
+  }
+
+  html.dark body.admin-shell .bg-blue-100,
+  html.dark body.admin-shell .bg-cyan-100,
+  html.dark body.admin-shell .bg-rose-100,
+  html.dark body.admin-shell .bg-purple-100 {
+    @apply bg-slate-800;
+  }
+
+  html.dark body.admin-shell .text-blue-500,
+  html.dark body.admin-shell .text-blue-600,
+  html.dark body.admin-shell .text-indigo-500,
+  html.dark body.admin-shell .text-green-500,
+  html.dark body.admin-shell .text-red-500,
+  html.dark body.admin-shell .text-purple-500,
+  html.dark body.admin-shell .text-cyan-600,
+  html.dark body.admin-shell .text-rose-600 {
+    color: rgb(248 250 252 / 1);
+  }
+
   input[type='radio'] {
     accent-color: #ef4444;
   }
