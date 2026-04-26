@@ -130,7 +130,6 @@
                                 : 'bg-gray-100 text-gray-700 border border-gray-300';
                         ?>
                         <tr class="hover:bg-gray-50">
-                            <td class="py-3 px-4">#<?php echo $id; ?></td>
                             <td class="py-3 px-4 font-medium text-gray-800"><?php echo htmlspecialchars($estudiante); ?></td>
                             <td class="py-3 px-4"><?php echo htmlspecialchars($cedula); ?></td>
                             <td class="py-3 px-4 text-gray-500"><?php echo htmlspecialchars($carrera); ?></td>
