@@ -35,19 +35,19 @@
             </div>
         </div>
     </div>
-
-    <div class="bg-white rounded-lg shadow-sm border p-5">
-        <div class="flex items-center">
-            <div class="p-3 rounded-full text-primary2-400 mr-4">
-                <i class="fas fa-users text-3xl"></i>
-            </div>
-            <div>
-                <p class="text-xs uppercase tracking-wide text-gray-500">Usuarios</p>
-                <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $totalUsuarios !== null ? number_format($totalUsuarios, 0, ',', '.') : '—'; ?></h3>
+    <?php if (isset($totalUsuarios)): ?>  
+        <div class="bg-white rounded-lg shadow-sm border p-5">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full text-primary2-400 mr-4">
+                    <i class="fas fa-users text-3xl"></i>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-wide text-gray-500">Usuarios</p>
+                    <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $totalUsuarios !== null ? number_format($totalUsuarios, 0, ',', '.') : '—'; ?></h3>
+                </div>
             </div>
         </div>
-    </div>
-    
+    <?php endif; ?>
     <div class="bg-white rounded-lg shadow-sm border p-5">
         <div class="flex items-center">
             <div class="p-3 rounded-full text-primary2-400 mr-4">
@@ -128,6 +128,36 @@
                 }
                 $dashIsSuperAdmin = ($dashRol === 'SUPER_ADMIN');
             ?>
+
+            <li>
+                <a href="<?php echo BASE_URL; ?>/admin/reportes/dashboard-general" class="flex items-center p-3 hover:bg-gray-50 rounded border transition">
+                    <div class="p-2 bg-indigo-100 text-indigo-600 rounded mr-3"><i class="fas fa-chart-pie"></i></div>
+                    <div>
+                        <p class="font-medium text-gray-800">Dashboard general</p>
+                        <p class="text-xs text-gray-500">Resumen ejecutivo con KPIs y distribución general.</p>
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a href="<?php echo BASE_URL; ?>/admin/reportes/analisis-academico" class="flex items-center p-3 hover:bg-gray-50 rounded border transition">
+                    <div class="p-2 bg-cyan-100 text-cyan-600 rounded mr-3"><i class="fas fa-layer-group"></i></div>
+                    <div>
+                        <p class="font-medium text-gray-800">Análisis académico</p>
+                        <p class="text-xs text-gray-500">Composición porcentual por carrera y estrato.</p>
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a href="<?php echo BASE_URL; ?>/admin/reportes/demografico-vulnerabilidad" class="flex items-center p-3 hover:bg-gray-50 rounded border transition">
+                    <div class="p-2 bg-rose-100 text-rose-600 rounded mr-3"><i class="fas fa-table"></i></div>
+                    <div>
+                        <p class="font-medium text-gray-800">Perfil social</p>
+                        <p class="text-xs text-gray-500">Mapa de calor y comparación demográfica por estrato.</p>
+                    </div>
+                </a>
+            </li>
 
             <?php if ($dashIsSuperAdmin): ?>
                 <li>
