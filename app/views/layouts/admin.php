@@ -63,17 +63,17 @@ if ($cssVersion !== null) {
     $reportesMenuItems = [
         [
             'key' => 'reportes_dashboard_general',
-            'label' => 'Dashboard General',
+            'label' => 'Resumen General',
             'href' => BASE_URL . '/admin/reportes/dashboard-general',
         ],
         [
             'key' => 'reportes_analisis_academico',
-            'label' => 'Analisis Academico',
+            'label' => 'Análisis Académico',
             'href' => BASE_URL . '/admin/reportes/analisis-academico',
         ],
         [
             'key' => 'reportes_demografico_vulnerabilidad',
-            'label' => 'Demografico y Vulnerabilidad',
+            'label' => 'Perfil social',
             'href' => BASE_URL . '/admin/reportes/demografico-vulnerabilidad',
         ],
     ];
@@ -88,7 +88,7 @@ if ($cssVersion !== null) {
         </div>
         <nav class="p-4 space-y-2">
             <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
-                <i class="fas fa-home w-5 text-center"></i> Dashboard
+                <i class="fas fa-home w-5 text-center"></i> Panel Principal
             </a>
             <div class="space-y-1" data-dropdown data-open="<?php echo $isReportesSection ? '1' : '0'; ?>">
                 <button
@@ -150,11 +150,11 @@ if ($cssVersion !== null) {
                 <h2 class="text-xl font-semibold text-gray-800 ml-4 md:ml-0">
                     <?php 
                         $titles = [
-                            'dashboard' => 'Dashboard Overview',
+                            'dashboard' => 'Panel Principal',
                             'reportes' => 'Reportes',
-                            'reportes_dashboard_general' => 'Reportes · Dashboard General',
-                            'reportes_analisis_academico' => 'Reportes · Analisis Academico',
-                            'reportes_demografico_vulnerabilidad' => 'Reportes · Demografico y Vulnerabilidad',
+                            'reportes_dashboard_general' => 'Reportes · Resumen General',
+                            'reportes_analisis_academico' => 'Reportes · Análisis Académico',
+                            'reportes_demografico_vulnerabilidad' => 'Reportes · Perfil Socioeconómico por Carreras',
                             'users' => 'Gestión de Usuarios',
                             'responses' => 'Respuestas Recibidas',
                             'catalogs' => 'Gestión de Catálogos (Opciones)'
