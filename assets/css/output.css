@@ -1080,6 +1080,10 @@ html.dark body.admin-shell .card-grit-home:hover {
   top: 1rem;
 }
 
+.bottom-0 {
+  bottom: 0px;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -1484,6 +1488,14 @@ html.dark body.admin-shell .card-grit-home:hover {
 
 .grid-rows-\[1fr_auto\] {
   grid-template-rows: 1fr auto;
+}
+
+.grid-rows-\[1\] {
+  grid-template-rows: 1;
+}
+
+.grid-rows-\[auto_1fr_auto\] {
+  grid-template-rows: auto 1fr auto;
 }
 
 .flex-col {
@@ -2820,6 +2832,10 @@ html.dark body.admin-shell .hover\:bg-gray-50:hover {
     display: block;
   }
 
+  .md\:grid {
+    display: grid;
+  }
+
   .md\:hidden {
     display: none;
   }
@@ -2846,6 +2862,10 @@ html.dark body.admin-shell .hover\:bg-gray-50:hover {
 
   .md\:grid-cols-5 {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .md\:grid-rows-\[auto_1fr_auto\] {
+    grid-template-rows: auto 1fr auto;
   }
 
   .md\:flex-row {

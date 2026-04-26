@@ -48,6 +48,7 @@ HTML;
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,14 +58,16 @@ HTML;
     <link rel="stylesheet" href="<?php echo $cssHref; ?>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body class="admin-shell bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal flex h-screen overflow-hidden transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
 
-<?php
+    <?php
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
     $sidebarRol = null;
-    if (isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user'])
+    if (
+        isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user'])
         && isset($_SESSION['auth_user']['rol']) && is_array($_SESSION['auth_user']['rol'])
         && !empty($_SESSION['auth_user']['rol']['codigo'])
     ) {
@@ -123,10 +126,10 @@ HTML;
     ];
 
     $isReportesSection = ($current_page === 'reportes' || strpos($current_page, 'reportes_') === 0);
-?>
+    ?>
 
     <!-- Sidebar -->
-    <aside id="mobile-sidebar" class="w-64 bg-white h-screen shadow-lg hidden fixed inset-y-0 left-0 z-50 md:block md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700">
+    <aside id="mobile-sidebar" class=" w-64 bg-white h-screen hidden fixed inset-y-0 left-0 z-50 md:grid md:grid-rows-[auto_1fr_auto] md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700">
         <div class="p-6 border-b flex items-center gap-3 dark:border-slate-700">
             <img class="h-10 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo" onerror="this.src='https://via.placeholder.com/40'">
         </div>
@@ -139,8 +142,7 @@ HTML;
                     type="button"
                     class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo $isReportesSection ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>"
                     aria-expanded="<?php echo $isReportesSection ? 'true' : 'false'; ?>"
-                    data-dropdown-btn
-                >
+                    data-dropdown-btn>
                     <span class="flex items-center gap-3">
                         <i class="fas fa-chart-pie w-5 text-center"></i>
                         <span>Reportes</span>
@@ -158,16 +160,12 @@ HTML;
                         ?>
                             <a
                                 href="<?php echo htmlspecialchars($itemHref); ?>"
-
-                        <!-- Mobile Sidebar Backdrop -->
-                        <div id="mobile-sidebar-backdrop" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"></div>
-                                class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-colors duration-200 <?php echo $isActive ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>"
-                            >
+                                class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-colors duration-200 <?php echo $isActive ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>">
                                 <span class="w-5 text-center">•</span>
                                 <span><?php echo htmlspecialchars($itemLabel); ?></span>
                             </a>
                         <?php endforeach; ?>
-                                    <button id="mobile-menu-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none" aria-controls="mobile-sidebar" aria-expanded="false">
+                    </div>
                 </div>
             </div>
             <?php if ($isSuperAdmin): ?>
@@ -184,6 +182,12 @@ HTML;
                 </a>
             <?php endif; ?>
         </nav>
+        <!-- Form para Logout -->
+        <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="py-4 text-sm border-t mt-2 dark:border-slate-700">
+            <button type="submit" class="text-red-500 hover:text-red-700 font-medium flex items-center gap-2 dark:text-red-300 dark:hover:text-red-200">
+                <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Cerrar Sesión</span>
+            </button>
+        </form>
     </aside>
 
     <!-- Mobile Sidebar Backdrop -->
@@ -198,28 +202,32 @@ HTML;
                     <i class="fas fa-bars text-xl"></i>
                 </button>
                 <h2 class="text-xl font-semibold text-gray-800 ml-4 md:ml-0 dark:text-slate-100">
-                    <?php 
-                        $titles = [
-                            'dashboard' => 'Panel Principal',
-                            'reportes' => 'Reportes',
-                            'reportes_dashboard_general' => 'Reportes · Resumen General',
-                            'reportes_analisis_academico' => 'Reportes · Análisis Académico',
-                            'reportes_demografico_vulnerabilidad' => 'Reportes · Perfil Socioeconómico por Carreras',
-                            'users' => 'Gestión de Usuarios',
-                            'responses' => 'Respuestas Recibidas',
-                            'catalogs' => 'Configuración de Opciones para las Encuestas'
-                        ];
-                        echo isset($titles[$current_page]) ? $titles[$current_page] : 'Administración';
+                    <?php
+                    $titles = [
+                        'dashboard' => 'Panel Principal',
+                        'reportes' => 'Reportes',
+                        'reportes_dashboard_general' => 'Reportes · Resumen General',
+                        'reportes_analisis_academico' => 'Reportes · Análisis Académico',
+                        'reportes_demografico_vulnerabilidad' => 'Reportes · Perfil Socioeconómico por Carreras',
+                        'users' => 'Gestión de Usuarios',
+                        'responses' => 'Respuestas Recibidas',
+                        'catalogs' => 'Configuración de Opciones para las Encuestas'
+                    ];
+                    echo isset($titles[$current_page]) ? $titles[$current_page] : 'Administración';
                     ?>
                 </h2>
             </div>
-            
+
             <div class="flex items-center gap-4">
                 <label class="inline-flex items-center relative cursor-pointer shrink-0" for="themeToggleAdmin" aria-label="Cambiar entre modo claro y oscuro">
                     <input class="peer hidden" id="themeToggleAdmin" type="checkbox" />
                     <div class="relative w-[52px] h-[28px] bg-slate-200 peer-checked:bg-zinc-500 rounded-full after:absolute after:content-[''] after:w-[22px] after:h-[22px] after:bg-gradient-to-r from-orange-500 to-yellow-400 peer-checked:after:from-zinc-900 peer-checked:after:to-zinc-900 after:rounded-full after:top-[3px] after:left-[3px] active:after:w-[28px] peer-checked:after:left-[49px] peer-checked:after:translate-x-[-100%] shadow-sm duration-300 after:duration-300 after:shadow-md"></div>
-                    <svg height="0" width="100" viewBox="0 0 24 24" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" class="fill-white peer-checked:opacity-60 absolute w-3.5 h-3.5 left-[6px]"><path d="M12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5ZM13,0h-2V5h2V0Zm0,19h-2v5h2v-5ZM5,11H0v2H5v-2Zm19,0h-5v2h5v-2Zm-2.81-6.78l-1.41-1.41-3.54,3.54,1.41,1.41,3.54-3.54ZM7.76,17.66l-1.41-1.41-3.54,3.54,1.41,1.41,3.54-3.54Zm0-11.31l-3.54-3.54-1.41,1.41,3.54,3.54,1.41-1.41Zm13.44,13.44l-3.54-3.54-1.41,1.41,3.54,3.54,1.41-1.41Z"></path></svg>
-                    <svg height="512" width="512" viewBox="0 0 24 24" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" class="fill-black opacity-60 peer-checked:opacity-70 peer-checked:fill-white absolute w-3.5 h-3.5 right-[6px]"><path d="M12.009,24A12.067,12.067,0,0,1,.075,10.725,12.121,12.121,0,0,1,10.1.152a13,13,0,0,1,5.03.206,2.5,2.5,0,0,1,1.8,1.8,2.47,2.47,0,0,1-.7,2.425c-4.559,4.168-4.165,10.645.807,14.412h0a2.5,2.5,0,0,1-.7,4.319A13.875,13.875,0,0,1,12.009,24Zm.074-22a10.776,10.776,0,0,0-1.675.127,10.1,10.1,0,0,0-8.344,8.8A9.928,9.928,0,0,0,4.581,18.7a10.473,10.473,0,0,0,11.093,2.734.5.5,0,0,0,.138-.856h0C9.883,16.1,9.417,8.087,14.865,3.124a.459.459,0,0,0,.127-.465.491.491,0,0,0-.356-.362A10.68,10.68,0,0,0,12.083,2ZM20.5,12a1,1,0,0,1-.97-.757l-.358-1.43L17.74,9.428a1,1,0,0,1,.035-1.94l1.4-.325.351-1.406a1,1,0,0,1,1.94,0l.355,1.418,1.418.355a1,1,0,0,1,0,1.94l-1.418.355-.355,1.418A1,1,0,0,1,20.5,12ZM16,14a1,1,0,0,0,2,0A1,1,0,0,0,16,14Zm6,4a1,1,0,0,0,2,0A1,1,0,0,0,22,18Z"></path></svg>
+                    <svg height="0" width="100" viewBox="0 0 24 24" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" class="fill-white peer-checked:opacity-60 absolute w-3.5 h-3.5 left-[6px]">
+                        <path d="M12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5,5,2.24,5,5-2.24,5-5,5ZM13,0h-2V5h2V0Zm0,19h-2v5h2v-5ZM5,11H0v2H5v-2Zm19,0h-5v2h5v-2Zm-2.81-6.78l-1.41-1.41-3.54,3.54,1.41,1.41,3.54-3.54ZM7.76,17.66l-1.41-1.41-3.54,3.54,1.41,1.41,3.54-3.54Zm0-11.31l-3.54-3.54-1.41,1.41,3.54,3.54,1.41-1.41Zm13.44,13.44l-3.54-3.54-1.41,1.41,3.54,3.54,1.41-1.41Z"></path>
+                    </svg>
+                    <svg height="512" width="512" viewBox="0 0 24 24" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" class="fill-black opacity-60 peer-checked:opacity-70 peer-checked:fill-white absolute w-3.5 h-3.5 right-[6px]">
+                        <path d="M12.009,24A12.067,12.067,0,0,1,.075,10.725,12.121,12.121,0,0,1,10.1.152a13,13,0,0,1,5.03.206,2.5,2.5,0,0,1,1.8,1.8,2.47,2.47,0,0,1-.7,2.425c-4.559,4.168-4.165,10.645.807,14.412h0a2.5,2.5,0,0,1-.7,4.319A13.875,13.875,0,0,1,12.009,24Zm.074-22a10.776,10.776,0,0,0-1.675.127,10.1,10.1,0,0,0-8.344,8.8A9.928,9.928,0,0,0,4.581,18.7a10.473,10.473,0,0,0,11.093,2.734.5.5,0,0,0,.138-.856h0C9.883,16.1,9.417,8.087,14.865,3.124a.459.459,0,0,0,.127-.465.491.491,0,0,0-.356-.362A10.68,10.68,0,0,0,12.083,2ZM20.5,12a1,1,0,0,1-.97-.757l-.358-1.43L17.74,9.428a1,1,0,0,1,.035-1.94l1.4-.325.351-1.406a1,1,0,0,1,1.94,0l.355,1.418,1.418.355a1,1,0,0,1,0,1.94l-1.418.355-.355,1.418A1,1,0,0,1,20.5,12ZM16,14a1,1,0,0,0,2,0A1,1,0,0,0,16,14Zm6,4a1,1,0,0,0,2,0A1,1,0,0,0,22,18Z"></path>
+                    </svg>
                 </label>
                 <div class="text-right leading-tight max-w-[14rem]">
                     <div class="text-sm font-semibold text-gray-700 truncate dark:text-slate-100" title="<?php echo htmlspecialchars((string)$headerUserName); ?>">
@@ -231,17 +239,12 @@ HTML;
                         </div>
                     <?php endif; ?>
                 </div>
-                <!-- Form para Logout -->
-                <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="m-0">
-                    <button type="submit" class="text-red-500 hover:text-red-700 font-medium flex items-center gap-2 dark:text-red-300 dark:hover:text-red-200">
-                        <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Cerrar Sesión</span>
-                    </button>
-                </form>
+
             </div>
         </header>
 
         <!-- Main Content -->
-        <main class="flex-1 bg-gray-100 overflow-y-auto">
+        <main class="flex-1 grid grid-rows-[1fr_auto] bg-gray-100 overflow-y-auto">
             <div class="p-6">
                 <!-- Renderiza la vista específica -->
                 <?php echo $content; ?>
@@ -255,102 +258,103 @@ HTML;
     </div>
 
     <script>
-    (function () {
-        const themeToggle = document.getElementById('themeToggleAdmin');
-        const root = document.documentElement;
-        if (themeToggle) {
-            themeToggle.checked = root.classList.contains('dark');
-            themeToggle.addEventListener('change', function () {
-                const isDark = this.checked;
-                root.classList.toggle('dark', isDark);
-                root.dataset.theme = isDark ? 'dark' : 'light';
-                localStorage.setItem('socioeconomico-theme', isDark ? 'dark' : 'light');
-            });
-        }
-
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileSidebar = document.getElementById('mobile-sidebar');
-        const mobileBackdrop = document.getElementById('mobile-sidebar-backdrop');
-
-        const isMobile = () => window.innerWidth < 768;
-
-        const closeMobileSidebar = () => {
-            if (!mobileSidebar || !mobileBackdrop) return;
-            mobileSidebar.classList.add('hidden');
-            mobileBackdrop.classList.add('hidden');
-            if (mobileMenuBtn) {
-                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        (function() {
+            const themeToggle = document.getElementById('themeToggleAdmin');
+            const root = document.documentElement;
+            if (themeToggle) {
+                themeToggle.checked = root.classList.contains('dark');
+                themeToggle.addEventListener('change', function() {
+                    const isDark = this.checked;
+                    root.classList.toggle('dark', isDark);
+                    root.dataset.theme = isDark ? 'dark' : 'light';
+                    localStorage.setItem('socioeconomico-theme', isDark ? 'dark' : 'light');
+                });
             }
-        };
 
-        const openMobileSidebar = () => {
-            if (!mobileSidebar || !mobileBackdrop) return;
-            mobileSidebar.classList.remove('hidden');
-            mobileBackdrop.classList.remove('hidden');
-            if (mobileMenuBtn) {
-                mobileMenuBtn.setAttribute('aria-expanded', 'true');
-            }
-        };
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const mobileBackdrop = document.getElementById('mobile-sidebar-backdrop');
 
-        if (mobileMenuBtn && mobileSidebar && mobileBackdrop) {
-            mobileMenuBtn.addEventListener('click', () => {
-                if (!isMobile()) return;
-                const isHidden = mobileSidebar.classList.contains('hidden');
-                if (isHidden) {
-                    openMobileSidebar();
-                } else {
-                    closeMobileSidebar();
+            const isMobile = () => window.innerWidth < 768;
+
+            const closeMobileSidebar = () => {
+                if (!mobileSidebar || !mobileBackdrop) return;
+                mobileSidebar.classList.add('hidden');
+                mobileBackdrop.classList.add('hidden');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
                 }
-            });
+            };
 
-            mobileBackdrop.addEventListener('click', closeMobileSidebar);
-
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape') {
-                    closeMobileSidebar();
+            const openMobileSidebar = () => {
+                if (!mobileSidebar || !mobileBackdrop) return;
+                mobileSidebar.classList.remove('hidden');
+                mobileBackdrop.classList.remove('hidden');
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.setAttribute('aria-expanded', 'true');
                 }
-            });
+            };
 
-            const sidebarLinks = mobileSidebar.querySelectorAll('a[href]');
-            sidebarLinks.forEach((link) => {
-                link.addEventListener('click', () => {
-                    if (isMobile()) {
+            if (mobileMenuBtn && mobileSidebar && mobileBackdrop) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    if (!isMobile()) return;
+                    const isHidden = mobileSidebar.classList.contains('hidden');
+                    if (isHidden) {
+                        openMobileSidebar();
+                    } else {
                         closeMobileSidebar();
                     }
                 });
+
+                mobileBackdrop.addEventListener('click', closeMobileSidebar);
+
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        closeMobileSidebar();
+                    }
+                });
+
+                const sidebarLinks = mobileSidebar.querySelectorAll('a[href]');
+                sidebarLinks.forEach((link) => {
+                    link.addEventListener('click', () => {
+                        if (isMobile()) {
+                            closeMobileSidebar();
+                        }
+                    });
+                });
+
+                window.addEventListener('resize', () => {
+                    if (!isMobile()) {
+                        closeMobileSidebar();
+                    }
+                });
+            }
+
+            const dropdowns = document.querySelectorAll('[data-dropdown]');
+            dropdowns.forEach((root) => {
+                const btn = root.querySelector('[data-dropdown-btn]');
+                const menu = root.querySelector('[data-dropdown-menu]');
+                const icon = root.querySelector('[data-dropdown-icon]');
+                if (!btn || !menu) return;
+
+                const setOpen = (open) => {
+                    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                    menu.classList.toggle('hidden', !open);
+                    if (icon) icon.classList.toggle('rotate-180', open);
+                    root.setAttribute('data-open', open ? '1' : '0');
+                };
+
+                const initialOpen = root.getAttribute('data-open') === '1';
+                setOpen(initialOpen);
+
+                btn.addEventListener('click', () => {
+                    const isOpen = root.getAttribute('data-open') === '1';
+                    setOpen(!isOpen);
+                });
             });
-
-            window.addEventListener('resize', () => {
-                if (!isMobile()) {
-                    closeMobileSidebar();
-                }
-            });
-        }
-
-        const dropdowns = document.querySelectorAll('[data-dropdown]');
-        dropdowns.forEach((root) => {
-            const btn = root.querySelector('[data-dropdown-btn]');
-            const menu = root.querySelector('[data-dropdown-menu]');
-            const icon = root.querySelector('[data-dropdown-icon]');
-            if (!btn || !menu) return;
-
-            const setOpen = (open) => {
-                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-                menu.classList.toggle('hidden', !open);
-                if (icon) icon.classList.toggle('rotate-180', open);
-                root.setAttribute('data-open', open ? '1' : '0');
-            };
-
-            const initialOpen = root.getAttribute('data-open') === '1';
-            setOpen(initialOpen);
-
-            btn.addEventListener('click', () => {
-                const isOpen = root.getAttribute('data-open') === '1';
-                setOpen(!isOpen);
-            });
-        });
-    })();
+        })();
     </script>
 
 </body>
+
 </html>
