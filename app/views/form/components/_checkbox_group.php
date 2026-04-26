@@ -17,12 +17,12 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-2">
         <?php if (!empty($options)): ?>
             <?php foreach ($options as $item): ?>
-                <label class="flex items-center gap-1 p-3 border border-gray-200 rounded-lg cursor-pointer transition-colors duration-200 hover:border-blue-500 hover:bg-blue-50">
+                <label class="flex items-center gap-1 p-3 border border-gray-200 rounded-lg cursor-pointer transition-colors duration-200 hover:border-primary2-500 hover:bg-primary2-100">
                     <input type="checkbox"
                         name="<?php echo htmlspecialchars($name); ?>"
                         value="<?php echo $item['id']; ?>"
                         <?php echo (isset($oldData) && is_array($oldData) && in_array($item['id'], $oldData)) ? 'checked' : ''; ?>
-                        class="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 accent-blue-600 cursor-pointer flex-shrink-0 ml-1">
+                        class="w-5 h-5 text-primary2-600 bg-gray-100 border-gray-300 rounded focus:ring-primary2-500 accent-primary2-600 cursor-pointer flex-shrink-0 ml-1">
 
                     <span class="ml-3 text-sm text-slate-600 font-medium select-none leading-snug">
                         <?php echo htmlspecialchars($item['nombre']); ?>
