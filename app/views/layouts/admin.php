@@ -73,7 +73,7 @@ if ($cssVersion !== null) {
         ],
         [
             'key' => 'reportes_demografico_vulnerabilidad',
-            'label' => 'Perfil social',
+            'label' => 'Perfil Social',
             'href' => BASE_URL . '/admin/reportes/demografico-vulnerabilidad',
         ],
     ];
