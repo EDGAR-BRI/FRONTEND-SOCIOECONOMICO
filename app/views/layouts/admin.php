@@ -133,7 +133,7 @@ if ($cssVersion !== null) {
             </a>
             <?php if ($isSuperAdmin): ?>
                 <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-600 hover:bg-gray-50'; ?>">
-                    <i class="fas fa-list w-5 text-center"></i> Catálogos
+                    <i class="fas fa-list w-5 text-center"></i> Configuración
                 </a>
             <?php endif; ?>
         </nav>
@@ -157,7 +157,7 @@ if ($cssVersion !== null) {
                             'reportes_demografico_vulnerabilidad' => 'Reportes · Perfil Socioeconómico por Carreras',
                             'users' => 'Gestión de Usuarios',
                             'responses' => 'Respuestas Recibidas',
-                            'catalogs' => 'Gestión de Catálogos (Opciones)'
+                            'catalogs' => 'Configuración de Opciones para las Encuestas'
                         ];
                         echo isset($titles[$current_page]) ? $titles[$current_page] : 'Administración';
                     ?>
