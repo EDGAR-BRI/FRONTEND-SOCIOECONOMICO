@@ -16,8 +16,8 @@
 
     <section class="grid grid-col-1 grid-rows-1 lg:grid-cols-3 lg:grid-rows-3 gap-6 p-6 justify-center ">
         <a href="<?php echo BASE_URL; ?>/IUJO-BQTO/formulario" class= "style-card lg:col-span-2 card-grit-home relative overflow-hidden">
-            <span class="absolute" style="left: 0; top: 0; bottom: 0; width: calc(50% + 1px); background-image: url('<?php echo BASE_URL; ?>/assets/img/IUJO-Barquisimeto-1024x1024.jpg'); background-position: center 38%; background-size: cover; background-repeat: no-repeat;"></span>
-            <span class="absolute" style="right: 0; top: 0; bottom: 0; width: calc(50% + 1px); background-image: url('<?php echo BASE_URL; ?>/assets/img/iujo-barquisimeto2.jpg'); background-position: center 50%; background-size: cover; background-repeat: no-repeat;"></span>
+            <span class="absolute" style="left: 0; top: 0; bottom: 0; width: 50%; background-image: url('<?php echo BASE_URL; ?>/assets/img/IUJO-Barquisimeto-1024x1024.jpg'); background-position: center 27%; background-size: cover; background-repeat: no-repeat;"></span>
+            <span class="absolute" style="right: 0; top: 0; bottom: 0; width: 50%; transform: translateX(-1px); background-image: url('<?php echo BASE_URL; ?>/assets/img/iujo-barquisimeto2.jpg'); background-position: center 50%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to right, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
             <div class="relative flex flex-col items-center" style="z-index: 1;">
                 <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
@@ -51,9 +51,9 @@
                 <h2 class =" text-card">IUJO Guanarito</h2>
             </div>
         </a>
-        <a href="<?php echo BASE_URL; ?>/IUSF/formulario" class= "style-card card-grit-home lg:col-span-2 relative overflow-hidden">
-            <span class="absolute" style="left: 0; top: 0; bottom: 0; width: calc(50% + 1px); background-image: url('<?php echo BASE_URL; ?>/assets/img/IUSF-1024x1024.jpg'); background-position: center 90%; background-size: cover; background-repeat: no-repeat;"></span>
-            <span class="absolute" style="right: 0; top: 0; bottom: 0; width: calc(50% + 1px); background-image: url('<?php echo BASE_URL; ?>/assets/img/iusf2.jpg'); background-position: center 50%; background-size: cover; background-repeat: no-repeat;"></span>
+        <a href="<?php echo BASE_URL; ?>/IUSF/formulario" class= "style-card lg:col-span-2 card-grit-home relative overflow-hidden">
+            <span class="absolute" style="left: 0; top: 0; bottom: 0; width: 50%; background-image: url('<?php echo BASE_URL; ?>/assets/img/IUSF-1024x1024.jpg'); background-position: center 85%; background-size: cover; background-repeat: no-repeat;"></span>
+            <span class="absolute" style="right: 0; top: 0; bottom: 0; width: 50%; transform: translateX(-1px); background-image: url('<?php echo BASE_URL; ?>/assets/img/iusf2.jpg'); background-position: center 45%; background-size: cover; background-repeat: no-repeat;"></span>
             <span class="style-overlay absolute inset-0" style="background: linear-gradient(to right, rgba(11, 17, 32, 0.70), rgba(18, 27, 46, 0.50));"></span>
             <div class="relative flex flex-col items-center" style="z-index: 1;">
                 <img src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
