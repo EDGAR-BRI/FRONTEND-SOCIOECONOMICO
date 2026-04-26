@@ -58,6 +58,14 @@
     @apply bg-red-950 text-red-200 border-red-800;
   }
 
+  input[type='radio'] {
+    accent-color: #ef4444;
+  }
+
+  html.dark input[type='radio'] {
+    accent-color: #f87171;
+  }
+
   *::selection {
     @apply bg-primary2-500 text-white;
   }
