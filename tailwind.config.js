@@ -7,6 +7,18 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        heartbeat: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '20%': { transform: 'scale(0.92)' },
+          '40%': { transform: 'scale(1.08)' },
+          '60%': { transform: 'scale(0.98)' },
+          '80%': { transform: 'scale(1.03)' },
+        },
+      },
+      animation: {
+        heartbeat: 'heartbeat 0.9s ease-in-out infinite',
+      },
       fontFamily: {
         'sans': ['Chiron GoRound TC', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
       },

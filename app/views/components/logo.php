@@ -1,0 +1,11 @@
+<div id="Logo" class="group flex items-center justify-center gap-5 mt-auto mb-6 w-auto h-20 text-white">
+    <div class="flex items-center justify-center leading-none [&>svg]:w-auto [&>svg]:h-14 [&>svg]:block max-[600px]:[&>svg]:h-10">
+        <?php include ROOT_PATH . '/assets/svg/IUJO.svg'; ?>
+    </div>
+        <div class="flex items-center justify-center leading-none [&>svg]:w-auto [&>svg]:h-20 [&>svg]:block max-[600px]:[&>svg]:h-10 group-hover:animate-heartbeat origin-center will-change-transform">
+        <?php include ROOT_PATH . '/public/assets/svg/FyA-logo.svg'; ?>
+    </div>
+    <div class="flex items-center justify-center leading-none [&>svg]:w-auto [&>svg]:h-14 [&>svg]:block max-[600px]:[&>svg]:h-10">
+        <?php include ROOT_PATH . '/assets/svg/IUJO-letras.svg'; ?>
+    </div>
+</div>
