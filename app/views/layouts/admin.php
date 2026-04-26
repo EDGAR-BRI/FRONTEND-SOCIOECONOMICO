@@ -82,7 +82,7 @@ if ($cssVersion !== null) {
 ?>
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-white h-screen shadow-lg hidden md:block md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto">
+    <aside id="mobile-sidebar" class="w-64 bg-white h-screen shadow-lg hidden fixed inset-y-0 left-0 z-50 md:block md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto">
         <div class="p-6 border-b flex items-center gap-3">
             <img class="h-10 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo" onerror="this.src='https://via.placeholder.com/40'">
         </div>
@@ -139,12 +139,15 @@ if ($cssVersion !== null) {
         </nav>
     </aside>
 
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="mobile-sidebar-backdrop" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"></div>
+
     <!-- Main Content wrapper -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 md:ml-64">
         <!-- Top Navbar -->
         <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6 sticky top-0 z-20 shrink-0">
             <div class="flex items-center h-10">
-                <button id="mobile-menu-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
+                <button id="mobile-menu-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none" aria-controls="mobile-sidebar" aria-expanded="false">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
                 <h2 class="text-xl font-semibold text-gray-800 ml-4 md:ml-0">
@@ -178,8 +181,8 @@ if ($cssVersion !== null) {
         </header>
 
         <!-- Main Content -->
-        <main class="flex-1 bg-gray-100 overflow-y-auto">
-            <div class="p-6">
+        <main class="flex-1 bg-gray-100 overflow-y-auto flex flex-col">
+            <div class="p-6 flex-1">
                 <!-- Renderiza la vista específica -->
                 <?php echo $content; ?>
             </div>
@@ -193,6 +196,65 @@ if ($cssVersion !== null) {
 
     <script>
     (function () {
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileBackdrop = document.getElementById('mobile-sidebar-backdrop');
+
+        const isMobile = () => window.innerWidth < 768;
+
+        const closeMobileSidebar = () => {
+            if (!mobileSidebar || !mobileBackdrop) return;
+            mobileSidebar.classList.add('hidden');
+            mobileBackdrop.classList.add('hidden');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            }
+        };
+
+        const openMobileSidebar = () => {
+            if (!mobileSidebar || !mobileBackdrop) return;
+            mobileSidebar.classList.remove('hidden');
+            mobileBackdrop.classList.remove('hidden');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.setAttribute('aria-expanded', 'true');
+            }
+        };
+
+        if (mobileMenuBtn && mobileSidebar && mobileBackdrop) {
+            mobileMenuBtn.addEventListener('click', () => {
+                if (!isMobile()) return;
+                const isHidden = mobileSidebar.classList.contains('hidden');
+                if (isHidden) {
+                    openMobileSidebar();
+                } else {
+                    closeMobileSidebar();
+                }
+            });
+
+            mobileBackdrop.addEventListener('click', closeMobileSidebar);
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeMobileSidebar();
+                }
+            });
+
+            const sidebarLinks = mobileSidebar.querySelectorAll('a[href]');
+            sidebarLinks.forEach((link) => {
+                link.addEventListener('click', () => {
+                    if (isMobile()) {
+                        closeMobileSidebar();
+                    }
+                });
+            });
+
+            window.addEventListener('resize', () => {
+                if (!isMobile()) {
+                    closeMobileSidebar();
+                }
+            });
+        }
+
         const dropdowns = document.querySelectorAll('[data-dropdown]');
         dropdowns.forEach((root) => {
             const btn = root.querySelector('[data-dropdown-btn]');
