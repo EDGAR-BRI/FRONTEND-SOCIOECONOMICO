@@ -332,6 +332,65 @@ class FormController extends Controller
         ]);
     }
 
+    public function checkDuplicados()
+    {
+        header('Content-Type: application/json; charset=UTF-8');
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $sedeActual = isset($_SESSION['sede_actual']) ? (string)$_SESSION['sede_actual'] : '';
+        $this->configurarTenantPorSede($sedeActual);
+
+        $params = [];
+        if (isset($_GET['cedula']) && trim((string)$_GET['cedula']) !== '') {
+            $params['cedula'] = trim((string)$_GET['cedula']);
+        }
+        if (isset($_GET['email']) && trim((string)$_GET['email']) !== '') {
+            $params['email'] = trim((string)$_GET['email']);
+        }
+
+        try {
+            $response = $this->apiService->get('/encuesta/check', $params);
+            $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
+
+            if (is_array($payload) && array_key_exists('success', $payload)) {
+                http_response_code(!empty($response['success']) ? 200 : (isset($response['status']) ? (int)$response['status'] : 400));
+                echo json_encode($payload);
+                return;
+            }
+
+            if (!empty($response['success']) && is_array($payload)) {
+                http_response_code(200);
+                echo json_encode([
+                    'success' => true,
+                    'data' => $payload,
+                    'message' => 'Validación de duplicados completada',
+                ]);
+                return;
+            }
+
+            http_response_code(isset($response['status']) ? (int)$response['status'] : 400);
+            echo json_encode([
+                'success' => false,
+                'data' => [
+                    'errors' => ['No se pudo validar duplicados en este momento.'],
+                ],
+                'message' => 'Error al validar duplicados',
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(503);
+            echo json_encode([
+                'success' => false,
+                'data' => [
+                    'errors' => ['Servicio de validación no disponible.'],
+                ],
+                'message' => 'Error de conexión al validar duplicados',
+            ]);
+        }
+    }
+
     private function validateFotoCedulaUpload()
     {
         if (!isset($_FILES['foto_cedula']) || !is_array($_FILES['foto_cedula'])) {
