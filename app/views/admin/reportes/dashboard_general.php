@@ -47,7 +47,7 @@ require __DIR__ . '/partials/estado.php';
     </div>
     <div class="bg-white rounded-lg shadow-sm border p-5">
         <p class="text-xs uppercase tracking-wide text-gray-500">Moda de estrato</p>
-        <h3 class="text-2xl font-bold text-indigo-700 mt-1"><?php echo htmlspecialchars($modaEstrato); ?></h3>
+        <h3 class="text-2xl font-bold text-indigo-700 mt-1"><?php echo "Estrato " . htmlspecialchars($modaEstrato); ?></h3>
     </div>
 </div>
 
