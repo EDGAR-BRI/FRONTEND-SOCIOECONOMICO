@@ -1080,6 +1080,10 @@ html.dark body.admin-shell .card-grit-home:hover {
   top: 1rem;
 }
 
+.bottom-0 {
+  bottom: 0px;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -1088,12 +1092,12 @@ html.dark body.admin-shell .card-grit-home:hover {
   z-index: 20;
 }
 
-.z-40 {
-  z-index: 40;
-}
-
 .z-50 {
   z-index: 50;
+}
+
+.z-40 {
+  z-index: 40;
 }
 
 .col-span-1 {
@@ -1387,10 +1391,6 @@ html.dark body.admin-shell .card-grit-home:hover {
   max-width: 72rem;
 }
 
-.max-w-\[14rem\] {
-  max-width: 14rem;
-}
-
 .max-w-\[480px\] {
   max-width: 480px;
 }
@@ -1405,6 +1405,10 @@ html.dark body.admin-shell .card-grit-home:hover {
 
 .max-w-xl {
   max-width: 36rem;
+}
+
+.max-w-\[14rem\] {
+  max-width: 14rem;
 }
 
 .flex-1 {
@@ -1474,8 +1478,24 @@ html.dark body.admin-shell .card-grit-home:hover {
   grid-template-rows: repeat(1, minmax(0, 1fr));
 }
 
+.grid-rows-2 {
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.grid-rows-\[\] {
+  grid-template-rows: ;
+}
+
 .grid-rows-\[1fr_auto\] {
   grid-template-rows: 1fr auto;
+}
+
+.grid-rows-\[1\] {
+  grid-template-rows: 1;
+}
+
+.grid-rows-\[auto_1fr_auto\] {
+  grid-template-rows: auto 1fr auto;
 }
 
 .flex-col {
