@@ -55,6 +55,35 @@ if ($cssVersion !== null) {
     ) {
         $sidebarRol = (string)$_SESSION['auth_user']['rol']['codigo'];
     }
+
+    $authUser = (isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user'])) ? $_SESSION['auth_user'] : [];
+    $headerUserName = 'Administrador';
+    if (!empty($authUser['nombre_completo']) && is_string($authUser['nombre_completo'])) {
+        $headerUserName = trim((string)$authUser['nombre_completo']);
+    } elseif (!empty($authUser['ci']) && is_string($authUser['ci'])) {
+        $headerUserName = 'CI ' . trim((string)$authUser['ci']);
+    }
+
+    $headerUserMeta = '';
+    if (isset($authUser['rol']) && is_array($authUser['rol']) && !empty($authUser['rol']['nombre'])) {
+        $headerUserMeta = (string)$authUser['rol']['nombre'];
+    } elseif (isset($authUser['rol']) && is_array($authUser['rol']) && !empty($authUser['rol']['codigo'])) {
+        $headerUserMeta = (string)$authUser['rol']['codigo'];
+    }
+
+    if (isset($authUser['instituto']) && is_array($authUser['instituto'])) {
+        $institutoTxt = '';
+        if (!empty($authUser['instituto']['siglas']) && is_string($authUser['instituto']['siglas'])) {
+            $institutoTxt = (string)$authUser['instituto']['siglas'];
+        } elseif (!empty($authUser['instituto']['nombre']) && is_string($authUser['instituto']['nombre'])) {
+            $institutoTxt = (string)$authUser['instituto']['nombre'];
+        }
+
+        if ($institutoTxt !== '') {
+            $headerUserMeta = ($headerUserMeta !== '') ? ($headerUserMeta . ' · ' . $institutoTxt) : $institutoTxt;
+        }
+    }
+
     $isSuperAdmin = ($sidebarRol === 'SUPER_ADMIN');
 
     $current_page = isset($current_page) ? (string)$current_page : '';
@@ -168,8 +197,15 @@ if ($cssVersion !== null) {
             </div>
             
             <div class="flex items-center gap-4">
-                <div class="text-sm font-medium text-gray-600">
-                    Admin
+                <div class="text-right leading-tight max-w-[14rem]">
+                    <div class="text-sm font-semibold text-gray-700 truncate" title="<?php echo htmlspecialchars((string)$headerUserName); ?>">
+                        <?php echo htmlspecialchars((string)$headerUserName); ?>
+                    </div>
+                    <?php if ($headerUserMeta !== ''): ?>
+                        <div class="text-xs text-gray-500 truncate" title="<?php echo htmlspecialchars((string)$headerUserMeta); ?>">
+                            <?php echo htmlspecialchars((string)$headerUserMeta); ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <!-- Form para Logout -->
                 <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="m-0">

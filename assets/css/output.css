@@ -1222,6 +1222,10 @@ html.dark input[type='radio'] {
   max-width: 36rem;
 }
 
+.max-w-\[14rem\] {
+  max-width: 14rem;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1387,6 +1391,12 @@ html.dark input[type='radio'] {
 
 .overflow-y-auto {
   overflow-y: auto;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .whitespace-nowrap {
