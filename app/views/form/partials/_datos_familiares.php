@@ -25,7 +25,7 @@
                 <label class="inline-flex items-center">
                     <input type="radio" name="padre_trabaja" value="1" required
                         <?php echo (isset($old['padre_trabaja']) && $old['padre_trabaja'] == '1') ? 'checked' : ''; ?>
-                        class="mr-2">
+                        class="mr-2 active:bg-pryimary2-500">
                     Sí
                 </label>
                 <label class="inline-flex items-center">
