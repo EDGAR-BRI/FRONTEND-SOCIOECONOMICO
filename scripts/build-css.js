@@ -57,6 +57,13 @@ function main() {
   const srcInput = path.join(projectRoot, 'src', 'input.css');
   const outCss = path.join(projectRoot, 'assets', 'css', 'output.css');
 
+  // Keep fonts under assets so @font-face urls in compiled CSS resolve correctly.
+  const publicFonts = path.join(projectRoot, 'public', 'fonts');
+  const assetsFonts = path.join(projectRoot, 'assets', 'fonts');
+  if (fs.existsSync(publicFonts)) {
+    copyDir(publicFonts, assetsFonts);
+  }
+
   const extraArgs = process.argv.slice(2);
   runTailwind(['-i', srcInput, '-o', outCss, ...extraArgs]);
 
