@@ -32,19 +32,6 @@ if ($cssVersion !== null) {
     $cssHref .= '?v=' . $cssVersion;
 }
 
-$themeScript = <<<'HTML'
-<script>
-(function () {
-    const storageKey = 'socioeconomico-theme';
-    const root = document.documentElement;
-    const savedTheme = localStorage.getItem(storageKey);
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = savedTheme || (prefersDark ? 'dark' : 'light');
-    root.classList.toggle('dark', theme === 'dark');
-    root.dataset.theme = theme;
-}());
-</script>
-HTML;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -54,7 +41,11 @@ HTML;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($title) ? htmlspecialchars($title) : 'Panel de Administración'; ?></title>
     <link rel="icon" href="<?php echo BASE_URL; ?>/assets/FeyAlegria.svg" type="image/x-icon">
-    <?php echo $themeScript; ?>
+    <?php
+    $themeComponentMode = 'bootstrap';
+    include __DIR__ . '/../components/theme-toggle.php';
+    unset($themeComponentMode);
+    ?>
     <link rel="stylesheet" href="<?php echo $cssHref; ?>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -183,7 +174,7 @@ HTML;
             <?php endif; ?>
         </nav>
         <!-- Form para Logout -->
-        <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="py-4 text-sm border-t mt-2 dark:border-slate-700">
+        <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="p-4 text-sm border-t mt-2 dark:border-slate-700">
             <button type="submit" class="text-red-500 hover:text-red-700 font-medium flex items-center gap-2 dark:text-red-300 dark:hover:text-red-200">
                 <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Cerrar Sesión</span>
             </button>
@@ -255,18 +246,6 @@ HTML;
 
     <script>
         (function() {
-            const themeToggle = document.getElementById('themeToggleAdmin');
-            const root = document.documentElement;
-            if (themeToggle) {
-                themeToggle.checked = root.classList.contains('dark');
-                themeToggle.addEventListener('change', function() {
-                    const isDark = this.checked;
-                    root.classList.toggle('dark', isDark);
-                    root.dataset.theme = isDark ? 'dark' : 'light';
-                    localStorage.setItem('socioeconomico-theme', isDark ? 'dark' : 'light');
-                });
-            }
-
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobileSidebar = document.getElementById('mobile-sidebar');
             const mobileBackdrop = document.getElementById('mobile-sidebar-backdrop');
