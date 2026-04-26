@@ -88,11 +88,12 @@ require __DIR__ . '/partials/estado.php';
     if (!canvas || labels.length === 0) {
         return;
     }
+    const labelsWithStratos = labels.map((label) => 'Estrato ' + label);
 
     new Chart(canvas, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels: labelsWithStratos,
             datasets: [
                 {
                     label: 'Femenino',

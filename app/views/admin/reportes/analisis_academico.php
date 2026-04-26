@@ -10,7 +10,7 @@ require __DIR__ . '/partials/estado.php';
 <div class="bg-white rounded-lg shadow-sm border p-5">
     <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold text-gray-800">Composición por estratos en carreras</h3>
-        <span class="text-xs text-gray-500">Barras apiladas</span>
+        <span class="text-xs text-gray-500">Barras por porcentaje</span>
     </div>
     <div class="w-full ">
         <canvas id="chartAnalisisAcademico"></canvas>

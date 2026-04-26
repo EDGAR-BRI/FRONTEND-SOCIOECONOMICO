@@ -613,8 +613,30 @@ class AdminController extends Controller
 
         $id = is_numeric($id) ? (int)$id : 0;
 
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $authUser = isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user']) ? $_SESSION['auth_user'] : [];
+        $actorRol = (isset($authUser['rol']) && is_array($authUser['rol']) && !empty($authUser['rol']['codigo']))
+            ? (string)$authUser['rol']['codigo']
+            : null;
+        $isSuperAdmin = ($actorRol === 'SUPER_ADMIN');
+        $editMode = $isSuperAdmin && isset($_GET['edit']) && (string)$_GET['edit'] === '1';
+
         $encuesta = null;
         $apiError = null;
+        $flash = null;
+        $editCatalogs = [];
+
+        if (!empty($_SESSION['flash_message'])) {
+            $flash = [
+                'type' => isset($_SESSION['flash_type']) ? (string)$_SESSION['flash_type'] : 'info',
+                'message' => (string)$_SESSION['flash_message'],
+                'errors' => isset($_SESSION['flash_errors']) && is_array($_SESSION['flash_errors']) ? $_SESSION['flash_errors'] : [],
+            ];
+        }
+        unset($_SESSION['flash_type'], $_SESSION['flash_message'], $_SESSION['flash_errors']);
 
         if ($id <= 0) {
             $apiError = ['status' => 400, 'message' => 'ID inválido'];
@@ -653,6 +675,10 @@ class AdminController extends Controller
                     'message' => 'Error de conexión con el servidor: ' . $e->getMessage(),
                 ];
             }
+
+            if ($isSuperAdmin && $encuesta !== null) {
+                $editCatalogs = $this->buildEncuestaEditCatalogs($encuesta);
+            }
         }
 
         $this->view('admin/response_detail', [
@@ -660,7 +686,213 @@ class AdminController extends Controller
             'current_page' => 'responses',
             'encuesta' => $encuesta,
             'apiError' => $apiError,
+            'flash' => $flash,
+            'isSuperAdmin' => $isSuperAdmin,
+            'editMode' => $editMode,
+            'editCatalogs' => $editCatalogs,
         ], 'admin');
+    }
+
+    public function responseUpdate($id)
+    {
+        $this->checkAuth();
+        $this->requireSuperAdmin();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $id = is_numeric($id) ? (int)$id : 0;
+        if ($id <= 0) {
+            $_SESSION['flash_type'] = 'error';
+            $_SESSION['flash_message'] = 'ID inválido para actualizar.';
+            $this->redirect(BASE_URL . '/admin/respuestas');
+            return;
+        }
+
+        $post = $_POST;
+
+        $payload = [
+            'email' => isset($post['email']) ? trim((string)$post['email']) : null,
+            'nombres' => isset($post['nombres']) ? trim((string)$post['nombres']) : null,
+            'apellidos' => isset($post['apellidos']) ? trim((string)$post['apellidos']) : null,
+            'cedula' => isset($post['cedula']) ? trim((string)$post['cedula']) : null,
+            'telefono' => isset($post['telefono']) ? trim((string)$post['telefono']) : null,
+            'fecha_nacimiento' => isset($post['fecha_nacimiento']) ? trim((string)$post['fecha_nacimiento']) : null,
+            'direccion' => isset($post['direccion']) ? trim((string)$post['direccion']) : null,
+            'hijos' => isset($post['hijos']) ? (int)$post['hijos'] : 0,
+            'numero_hijos' => isset($post['numero_hijos']) && $post['numero_hijos'] !== '' ? (int)$post['numero_hijos'] : 0,
+            'discapacidad' => isset($post['discapacidad']) ? trim((string)$post['discapacidad']) : null,
+            'enfermedad_cronica' => isset($post['enfermedad_cronica']) ? trim((string)$post['enfermedad_cronica']) : null,
+            'estudio_fya' => isset($post['estudio_fya']) ? (int)$post['estudio_fya'] : 0,
+            'numero_habitantes' => isset($post['numero_habitantes']) && $post['numero_habitantes'] !== '' ? (int)$post['numero_habitantes'] : null,
+            'numero_ocupantes_familia' => isset($post['numero_ocupantes_familia']) && $post['numero_ocupantes_familia'] !== '' ? (int)$post['numero_ocupantes_familia'] : null,
+            'url_cedula' => isset($post['url_cedula']) ? trim((string)$post['url_cedula']) : null,
+
+            'instituto_id' => $this->toNullableInt(isset($post['instituto_id']) ? $post['instituto_id'] : null),
+            'nacionalidad_id' => $this->toNullableInt(isset($post['nacionalidad_id']) ? $post['nacionalidad_id'] : null),
+            'sexo_id' => $this->toNullableInt(isset($post['sexo_id']) ? $post['sexo_id'] : null),
+            'tipo_estudiante_id' => $this->toNullableInt(isset($post['tipo_estudiante_id']) ? $post['tipo_estudiante_id'] : null),
+            'carrera_id' => $this->toNullableInt(isset($post['carrera_id']) ? $post['carrera_id'] : null),
+            'semestre_id' => $this->toNullableInt(isset($post['semestre_id']) ? $post['semestre_id'] : null),
+            'estado_civil_id' => $this->toNullableInt(isset($post['estado_civil_id']) ? $post['estado_civil_id'] : null),
+            'condicion_laboral_id' => $this->toNullableInt(isset($post['condicion_laboral_id']) ? $post['condicion_laboral_id'] : null),
+            'trabajo_relacion_id' => $this->toNullableInt(isset($post['trabajo_relacion_id']) ? $post['trabajo_relacion_id'] : null),
+            'tipo_organizacion_id' => $this->toNullableInt(isset($post['tipo_organizacion_id']) ? $post['tipo_organizacion_id'] : null),
+            'sector_trabajo_id' => $this->toNullableInt(isset($post['sector_trabajo_id']) ? $post['sector_trabajo_id'] : null),
+            'categoria_ocupacional_id' => $this->toNullableInt(isset($post['categoria_ocupacional_id']) ? $post['categoria_ocupacional_id'] : null),
+            'tipo_convivencia_id' => $this->toNullableInt(isset($post['tipo_convivencia_id']) ? $post['tipo_convivencia_id'] : null),
+            'tipo_vivienda_id' => $this->toNullableInt(isset($post['tipo_vivienda_id']) ? $post['tipo_vivienda_id'] : null),
+            'tenencia_vivienda_id' => $this->toNullableInt(isset($post['tenencia_vivienda_id']) ? $post['tenencia_vivienda_id'] : null),
+            'frecuencia_servicio_agua_id' => $this->toNullableInt(isset($post['frecuencia_servicio_agua_id']) ? $post['frecuencia_servicio_agua_id'] : null),
+            'frecuencia_servicio_aseo_id' => $this->toNullableInt(isset($post['frecuencia_servicio_aseo_id']) ? $post['frecuencia_servicio_aseo_id'] : null),
+            'frecuencia_servicio_electricidad_id' => $this->toNullableInt(isset($post['frecuencia_servicio_electricidad_id']) ? $post['frecuencia_servicio_electricidad_id'] : null),
+            'frecuencia_servicio_gas_id' => $this->toNullableInt(isset($post['frecuencia_servicio_gas_id']) ? $post['frecuencia_servicio_gas_id'] : null),
+            'transporte_id' => $this->toNullableInt(isset($post['transporte_id']) ? $post['transporte_id'] : null),
+            'dependencia_economica_id' => $this->toNullableInt(isset($post['dependencia_economica_id']) ? $post['dependencia_economica_id'] : null),
+            'fuente_ingreso_familiar_id' => $this->toNullableInt(isset($post['fuente_ingreso_familiar_id']) ? $post['fuente_ingreso_familiar_id'] : null),
+            'ingreso_familiar_id' => $this->toNullableInt(isset($post['ingreso_familiar_id']) ? $post['ingreso_familiar_id'] : null),
+            'nivel_eduacion_padre_id' => $this->toNullableInt(isset($post['nivel_eduacion_padre_id']) ? $post['nivel_eduacion_padre_id'] : null),
+            'trabaja_padre' => isset($post['trabaja_padre']) ? (int)$post['trabaja_padre'] : 0,
+            'tipo_empresa_padre_id' => $this->toNullableInt(isset($post['tipo_empresa_padre_id']) ? $post['tipo_empresa_padre_id'] : null),
+            'categoria_ocupacional_padre_id' => $this->toNullableInt(isset($post['categoria_ocupacional_padre_id']) ? $post['categoria_ocupacional_padre_id'] : null),
+            'sector_trabajo_padre_id' => $this->toNullableInt(isset($post['sector_trabajo_padre_id']) ? $post['sector_trabajo_padre_id'] : null),
+            'padre_en_venezuela' => isset($post['padre_en_venezuela']) ? (int)$post['padre_en_venezuela'] : 0,
+            'padre_egresado_iujo' => isset($post['padre_egresado_iujo']) ? (int)$post['padre_egresado_iujo'] : 0,
+            'nivel_eduacion_madre_id' => $this->toNullableInt(isset($post['nivel_eduacion_madre_id']) ? $post['nivel_eduacion_madre_id'] : null),
+            'trabaja_madre' => isset($post['trabaja_madre']) ? (int)$post['trabaja_madre'] : 0,
+            'tipo_empresa_madre_id' => $this->toNullableInt(isset($post['tipo_empresa_madre_id']) ? $post['tipo_empresa_madre_id'] : null),
+            'categoria_ocupacional_madre_id' => $this->toNullableInt(isset($post['categoria_ocupacional_madre_id']) ? $post['categoria_ocupacional_madre_id'] : null),
+            'sector_trabajo_madre_id' => $this->toNullableInt(isset($post['sector_trabajo_madre_id']) ? $post['sector_trabajo_madre_id'] : null),
+            'madre_en_venezuela' => isset($post['madre_en_venezuela']) ? (int)$post['madre_en_venezuela'] : 0,
+            'madre_egresada_iujo' => isset($post['madre_egresada_iujo']) ? (int)$post['madre_egresada_iujo'] : 0,
+            'veracidad_id' => $this->toNullableInt(isset($post['veracidad_id']) ? $post['veracidad_id'] : null),
+            'tipo_beca_id' => $this->toNullableInt(isset($post['tipo_beca_id']) ? $post['tipo_beca_id'] : null),
+
+            'activos_vivienda' => isset($post['activos_vivienda']) && is_array($post['activos_vivienda']) ? array_values($post['activos_vivienda']) : [],
+            'ambientes_vivienda' => isset($post['ambientes_vivienda']) && is_array($post['ambientes_vivienda']) ? array_values($post['ambientes_vivienda']) : [],
+            'servicios_vivienda' => isset($post['servicios_vivienda']) && is_array($post['servicios_vivienda']) ? array_values($post['servicios_vivienda']) : [],
+        ];
+
+        try {
+            if (!empty($_SESSION['auth_token'])) {
+                $this->apiService->setHeader('Authorization', 'Bearer ' . (string)$_SESSION['auth_token']);
+            }
+
+            $response = $this->apiService->put('/encuesta/' . $id, $payload);
+            $respData = isset($response['data']) && is_array($response['data']) ? $response['data'] : [];
+
+            if (!empty($response['success'])) {
+                $_SESSION['flash_type'] = 'success';
+                $_SESSION['flash_message'] = 'Encuesta actualizada correctamente.';
+                $this->redirect(BASE_URL . '/admin/respuestas/' . $id);
+                return;
+            }
+
+            $message = 'No se pudo actualizar la encuesta.';
+            if (isset($respData['message']) && is_string($respData['message']) && trim($respData['message']) !== '') {
+                $message = trim($respData['message']);
+            }
+
+            $_SESSION['flash_type'] = 'error';
+            $_SESSION['flash_message'] = $message;
+            $_SESSION['flash_errors'] = (isset($respData['data']) && is_array($respData['data']) && isset($respData['data']['errors']) && is_array($respData['data']['errors']))
+                ? $respData['data']['errors']
+                : [];
+
+            $this->redirect(BASE_URL . '/admin/respuestas/' . $id . '?edit=1');
+        } catch (\Exception $e) {
+            $_SESSION['flash_type'] = 'error';
+            $_SESSION['flash_message'] = 'Error de conexión con el servidor: ' . $e->getMessage();
+            $this->redirect(BASE_URL . '/admin/respuestas/' . $id . '?edit=1');
+        }
+    }
+
+    private function toNullableInt($value)
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        if (!is_numeric($value)) {
+            return null;
+        }
+        return (int)$value;
+    }
+
+    private function fetchSimpleCatalog($resource)
+    {
+        try {
+            $response = $this->catalogoService->catalogo($resource);
+            $payload = isset($response['data']) && is_array($response['data']) ? $response['data'] : null;
+            if (!empty($response['success']) && $payload) {
+                $data = (isset($payload['success']) && array_key_exists('data', $payload) && is_array($payload['data']))
+                    ? $payload['data']
+                    : $payload;
+                return is_array($data) ? $data : [];
+            }
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        return [];
+    }
+
+    private function buildEncuestaEditCatalogs(array $encuesta)
+    {
+        $catalogs = [
+            'instituto' => $this->fetchSimpleCatalog('instituto'),
+            'nacionalidad' => $this->fetchSimpleCatalog('nacionalidad'),
+            'sexo' => $this->fetchSimpleCatalog('sexo'),
+            'tipo_estudiante' => $this->fetchSimpleCatalog('tipo-estudiante'),
+            'semestre' => $this->fetchSimpleCatalog('semestre'),
+            'estado_civil' => $this->fetchSimpleCatalog('estado-civil'),
+            'tipo_beca' => $this->fetchSimpleCatalog('tipo-beca'),
+            'condicion_laboral' => $this->fetchSimpleCatalog('condicion-laboral'),
+            'relacion_laboral' => $this->fetchSimpleCatalog('relacion-laboral'),
+            'tipo_organizacion' => $this->fetchSimpleCatalog('tipo_organizacion'),
+            'sector_trabajo' => $this->fetchSimpleCatalog('sector-trabajo'),
+            'categoria_ocupacional' => $this->fetchSimpleCatalog('categoria-ocupacional'),
+            'tipo_convivencia' => $this->fetchSimpleCatalog('tipo-convivencia'),
+            'tipo_vivienda' => $this->fetchSimpleCatalog('tipo-vivienda'),
+            'tenencia_vivienda' => $this->fetchSimpleCatalog('tenencia-vivienda'),
+            'frecuencia_servicio_agua' => $this->fetchSimpleCatalog('frecuencia-agua'),
+            'frecuencia_servicio_aseo' => $this->fetchSimpleCatalog('frecuencia-aseo'),
+            'frecuencia_servicio_electricidad' => $this->fetchSimpleCatalog('frecuencia-electricidad'),
+            'frecuencia_servicio_gas' => $this->fetchSimpleCatalog('frecuencia-gas'),
+            'transporte' => $this->fetchSimpleCatalog('transporte'),
+            'dependencia_economica' => $this->fetchSimpleCatalog('dependencia-economica'),
+            'fuente_ingreso_familiar' => $this->fetchSimpleCatalog('fuente-ingreso'),
+            'ingreso_familiar' => $this->fetchSimpleCatalog('ingreso-familiar'),
+            'nivel_educacion' => $this->fetchSimpleCatalog('nivel-educacion'),
+            'tipo_empresa' => $this->fetchSimpleCatalog('tipo-empresa'),
+            'veracidad' => $this->fetchSimpleCatalog('veracidad'),
+            'activo_vivienda' => $this->fetchSimpleCatalog('activo-vivienda'),
+            'ambiente_vivienda' => $this->fetchSimpleCatalog('ambiente-vivienda'),
+            'servicio_vivienda' => $this->fetchSimpleCatalog('servicio-vivienda'),
+            'carrera' => [],
+        ];
+
+        $carreraParams = [];
+        if (!empty($encuesta['instituto_id']) && is_numeric($encuesta['instituto_id'])) {
+            $carreraParams['instituto_id'] = (int)$encuesta['instituto_id'];
+        }
+
+        try {
+            $carrerasResp = $this->catalogoService->catalogo('carrera', $carreraParams);
+            $carrerasPayload = isset($carrerasResp['data']) && is_array($carrerasResp['data']) ? $carrerasResp['data'] : null;
+            if (!empty($carrerasResp['success']) && $carrerasPayload) {
+                $carrerasData = (isset($carrerasPayload['success']) && array_key_exists('data', $carrerasPayload) && is_array($carrerasPayload['data']))
+                    ? $carrerasPayload['data']
+                    : $carrerasPayload;
+                if (is_array($carrerasData)) {
+                    $catalogs['carrera'] = $carrerasData;
+                }
+            }
+        } catch (\Exception $e) {
+            $catalogs['carrera'] = [];
+        }
+
+        return $catalogs;
     }
 
     /**
