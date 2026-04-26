@@ -39,6 +39,14 @@
             $qs = http_build_query($params);
             return BASE_URL . '/admin/respuestas' . ($qs ? ('?' . $qs) : '');
         };
+
+        $estratoBadgeClasses = [
+            1 => 'bg-primary2-50 text-primary2-900 border border-primary2-200',
+            2 => 'bg-primary2-100 text-primary2-800 border border-primary2-300',
+            3 => 'bg-primary2-200 text-primary2-800 border border-primary2-400',
+            4 => 'bg-primary2-300 text-primary2-900 border border-primary2-500',
+            5 => 'bg-primary2-500 text-white border border-primary2-600',
+        ];
     ?>
 
     <?php if (isset($apiError) && is_array($apiError) && !empty($apiError['message'])): ?>
@@ -118,6 +126,10 @@
                             $creado = isset($encuesta['creado']) ? (string)$encuesta['creado'] : '';
                             $estrato = array_key_exists('estrato', $encuesta) ? $encuesta['estrato'] : null;
                             $hasEstrato = $estrato !== null && $estrato !== '';
+                            $estratoNum = is_numeric($estrato) ? (int)$estrato : null;
+                            $estratoBadgeClass = ($estratoNum !== null && isset($estratoBadgeClasses[$estratoNum]))
+                                ? $estratoBadgeClasses[$estratoNum]
+                                : 'bg-gray-100 text-gray-700 border border-gray-300';
                         ?>
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-4">#<?php echo $id; ?></td>
@@ -127,7 +139,7 @@
                             <td class="py-3 px-4"><?php echo htmlspecialchars($creado); ?></td>
                             <td class="py-3 px-4">
                                 <?php if ($hasEstrato): ?>
-                                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-medium border border-green-200"><?php echo htmlspecialchars((string)$estrato); ?></span>
+                                    <span class="px-2 py-1 rounded text-xs font-medium inline-block <?php echo htmlspecialchars($estratoBadgeClass); ?>"><?php echo htmlspecialchars((string)$estrato); ?></span>
                                 <?php else: ?>
                                     <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-medium border border-gray-200">Pendiente</span>
                                 <?php endif; ?>
