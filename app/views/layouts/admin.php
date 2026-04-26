@@ -40,7 +40,8 @@ if ($cssVersion !== null) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($title) ? htmlspecialchars($title) : 'Panel de Administración'; ?></title>
-    <link rel="icon" href="<?php echo BASE_URL; ?>/assets/FeyAlegria.svg" type="image/x-icon">
+    <link rel="icon" href="<?php echo $assetBase; ?>/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="<?php echo $assetBase; ?>/favicon.ico" type="image/x-icon">
     <?php
     $themeComponentMode = 'bootstrap';
     include __DIR__ . '/../components/theme-toggle.php';
