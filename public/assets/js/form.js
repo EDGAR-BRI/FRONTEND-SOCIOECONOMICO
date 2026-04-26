@@ -1,28 +1,6 @@
 // form.js - Interactividad del formulario socioeconómico
 
 document.addEventListener('DOMContentLoaded', function () {
-    const themeStorageKey = 'socioeconomico-theme';
-    const root = document.documentElement;
-    const themeToggle = document.getElementById('themeToggle');
-
-    function setTheme(theme) {
-        const isDark = theme === 'dark';
-        root.classList.toggle('dark', isDark);
-        root.dataset.theme = theme;
-        localStorage.setItem(themeStorageKey, theme);
-        if (themeToggle) {
-            themeToggle.checked = isDark;
-        }
-    }
-
-    if (themeToggle) {
-        themeToggle.checked = root.classList.contains('dark');
-
-        themeToggle.addEventListener('change', function () {
-            setTheme(this.checked ? 'dark' : 'light');
-        });
-    }
-
     const selects = document.querySelectorAll('select');
 
     selects.forEach(select => {
@@ -137,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // ===== GESTIÓN DE PASOS DEL FORMULARIO =====
     const steps = document.querySelectorAll('.form-step');
     const progressBar = document.getElementById('progressBar');
+    const testOnlyStepId = form ? (form.dataset.testOnlyStep || '').trim() : '';
+    const isTestOnlyStepMode = testOnlyStepId !== '';
 
     // Función para mostrar un paso específico y ocultar los demás
     function showStep(stepId) {
@@ -208,16 +188,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Inicializar visualización de pasos
     // Ocultar todos menos el primero si no se ha hecho ya
-    steps.forEach((step, index) => {
-        if (index === 0) { // Índice 0 corresponde a la sección 1
-            step.classList.remove('hidden');
-        } else {
-            step.classList.add('hidden');
+    if (isTestOnlyStepMode) {
+        showStep(testOnlyStepId);
+
+        document.querySelectorAll('.next-step, .prev-step').forEach(button => {
+            button.classList.add('hidden');
+        });
+
+        const progressSection = progressBar ? progressBar.closest('section') : null;
+        if (progressSection) {
+            progressSection.classList.add('hidden');
         }
-    });
+    } else {
+        steps.forEach((step, index) => {
+            if (index === 0) { // Índice 0 corresponde a la sección 1
+                step.classList.remove('hidden');
+            } else {
+                step.classList.add('hidden');
+            }
+        });
+    }
 
     // Actualizar barra de progreso para iniciar en el paso 1
-    if (progressBar && steps.length > 0) {
+    if (progressBar && steps.length > 0 && !isTestOnlyStepMode) {
         progressBar.style.width = `${(1 / steps.length) * 100}%`;
     }
 

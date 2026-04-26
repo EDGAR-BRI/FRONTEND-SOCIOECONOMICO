@@ -82,41 +82,44 @@
             </select>
         </div>
 
-        <div>
-            <label class="label-field">¿Está en Venezuela?<span class="text-primary2-500">*</span></label>
-            <div class="flex gap-4">
-                <label class="inline-flex items-center">
-                    <input type="radio" name="padre_en_venezuela" value="1" required
-                        <?php echo (isset($old['padre_en_venezuela']) && $old['padre_en_venezuela'] == '1') ? 'checked' : ''; ?>
-                        class="mr-2">
-                    Sí
-                </label>
-                <label class="inline-flex items-center">
-                    <input type="radio" name="padre_en_venezuela" value="0"
-                        <?php echo (isset($old['padre_en_venezuela']) && $old['padre_en_venezuela'] == '0') ? 'checked' : ''; ?>
-                        class="mr-2">
-                    No
-                </label>
-            </div>
-        </div>
 
-        <div>
-            <label class="label-field">¿Es egresado del IUJO?<span class="text-primary2-500">*</span></label>
-            <div class="flex gap-4">
-                <label class="inline-flex items-center">
-                    <input type="radio" name="padre_egresado_iujo" value="1" required
-                        <?php echo (isset($old['padre_egresado_iujo']) && $old['padre_egresado_iujo'] == '1') ? 'checked' : ''; ?>
-                        class="mr-2">
-                    Sí
-                </label>
-                <label class="inline-flex items-center">
-                    <input type="radio" name="padre_egresado_iujo" value="0"
-                        <?php echo (isset($old['padre_egresado_iujo']) && $old['padre_egresado_iujo'] == '0') ? 'checked' : ''; ?>
-                        class="mr-2">
-                    No
-                </label>
+        <article class="flex justify-between">
+            <div>
+                <label class="label-field">¿Está en Venezuela?<span class="text-primary2-500">*</span></label>
+                <div class="flex gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="padre_en_venezuela" value="1" required
+                            <?php echo (isset($old['padre_en_venezuela']) && $old['padre_en_venezuela'] == '1') ? 'checked' : ''; ?>
+                            class="mr-2">
+                        Sí
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="padre_en_venezuela" value="0"
+                            <?php echo (isset($old['padre_en_venezuela']) && $old['padre_en_venezuela'] == '0') ? 'checked' : ''; ?>
+                            class="mr-2">
+                        No
+                    </label>
+                </div>
             </div>
-        </div>
+
+            <div>
+                <label class="label-field">¿Es egresado del IUJO?<span class="text-primary2-500">*</span></label>
+                <div class="flex gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="padre_egresado_iujo" value="1" required
+                            <?php echo (isset($old['padre_egresado_iujo']) && $old['padre_egresado_iujo'] == '1') ? 'checked' : ''; ?>
+                            class="mr-2">
+                        Sí
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="padre_egresado_iujo" value="0"
+                            <?php echo (isset($old['padre_egresado_iujo']) && $old['padre_egresado_iujo'] == '0') ? 'checked' : ''; ?>
+                            class="mr-2">
+                        No
+                    </label>
+                </div>
+            </div>
+        </article>
     </div>
 
     <!-- DATOS DE LA MADRE -->
@@ -200,40 +203,45 @@
             </select>
         </div>
 
-        <div>
-            <label class="label-field">¿Está en Venezuela?<span class="text-primary2-500">*</span></label>
-            <div class="flex gap-4">
-                <label class="inline-flex items-center">
-                    <input type="radio" name="madre_en_venezuela" value="1" required
-                        <?php echo (isset($old['madre_en_venezuela']) && $old['madre_en_venezuela'] == '1') ? 'checked' : ''; ?>
-                        class="mr-2">
-                    Sí
-                </label>
-                <label class="inline-flex items-center">
-                    <input type="radio" name="madre_en_venezuela" value="0"
-                        <?php echo (isset($old['madre_en_venezuela']) && $old['madre_en_venezuela'] == '0') ? 'checked' : ''; ?>
-                        class="mr-2">
-                    No
-                </label>
-            </div>
-        </div>
+        <article class="flex justify-between">
 
-        <div>
-            <label class="label-field">¿Es egresada del IUJO? <span class="text-primary2-500">*</span></label>
-            <div class="flex gap-4">
-                <label class="inline-flex items-center">
-                    <input type="radio" name="madre_egresada_iujo" value="1" required
-                        <?php echo (isset($old['madre_egresada_iujo']) && $old['madre_egresada_iujo'] == '1') ? 'checked' : ''; ?>
-                        class="mr-2">
-                    Sí
-                </label>
-                <label class="inline-flex items-center">
-                    <input type="radio" name="madre_egresada_iujo" value="0"
-                        <?php echo (isset($old['madre_egresada_iujo']) && $old['madre_egresada_iujo'] == '0') ? 'checked' : ''; ?>
-                        class="mr-2">
-                    No
-                </label>
+
+            <div>
+                <label class="label-field">¿Está en Venezuela?<span class="text-primary2-500">*</span></label>
+                <div class="flex gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="madre_en_venezuela" value="1" required
+                            <?php echo (isset($old['madre_en_venezuela']) && $old['madre_en_venezuela'] == '1') ? 'checked' : ''; ?>
+                            class="mr-2">
+                        Sí
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="madre_en_venezuela" value="0"
+                            <?php echo (isset($old['madre_en_venezuela']) && $old['madre_en_venezuela'] == '0') ? 'checked' : ''; ?>
+                            class="mr-2">
+                        No
+                    </label>
+                </div>
             </div>
-        </div>
+
+            <div>
+                <label class="label-field">¿Es egresada del IUJO? <span class="text-primary2-500">*</span></label>
+                <div class="flex gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="madre_egresada_iujo" value="1" required
+                            <?php echo (isset($old['madre_egresada_iujo']) && $old['madre_egresada_iujo'] == '1') ? 'checked' : ''; ?>
+                            class="mr-2">
+                        Sí
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" name="madre_egresada_iujo" value="0"
+                            <?php echo (isset($old['madre_egresada_iujo']) && $old['madre_egresada_iujo'] == '0') ? 'checked' : ''; ?>
+                            class="mr-2">
+                        No
+                    </label>
+                </div>
+            </div>
+        </article>
+
     </div>
 </div>
