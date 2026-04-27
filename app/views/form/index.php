@@ -7,7 +7,7 @@
         <!-- Header -->
         <header class="card mb-6 flex items-center justify-between p-6 sm:flex-row sm:items-center flex-col gap-4">
             <!-- <div class=" absolute top-4 left-4"> -->
-                    <?php include APP_PATH . '/views/components/logo.php'; ?>
+                <?php include APP_PATH . '/views/components/logo.php'; ?>
                 <!-- </div> -->
             <article class="sm:text-start text-center">
                 <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">Formulario Socioeconómico</h1>
