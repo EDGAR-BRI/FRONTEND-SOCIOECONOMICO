@@ -155,6 +155,10 @@
     container-type: inline-size;
   }
 
+  .container-logo {
+    @apply absolute top-0 left-0 w-full h-full flex gap-0 group-hover:scale-110 transition-transform duration-500
+  }
+
   @container (min-width: 700px) {
     .card-bqto-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
