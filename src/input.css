@@ -1,16 +1,73 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* 1. RUTAS DE CONTENIDO */
+@source "../app/views/**/*.php";
+@source "../public/**/*.html";
+/* Safelist para selectores dinámicos (dark mode) */
+@layer theme {
+  @supports selector(:is(.dark *)) {
+    .dark {
+      /* Esta declaración vacía asegura que .dark no sea purgado */
+    }
+  }
+}
+
+/* 2. CONFIGURACIÓN DEL TEMA (Reemplaza a tailwind.config.js) */
+@theme {
+  /* Dark mode configurado para activarse con clase .dark en html */
+  --dark-mode: class;
+  
+  --font-sans: "Chiron GoRound TC", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Colores primarios */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  /* Colores secundarios (primary2) */
+  --color-primary2-50: #fef2f2;
+  --color-primary2-100: #fee2e2;
+  --color-primary2-200: #fecaca;
+  --color-primary2-300: #fca5a5;
+  --color-primary2-400: #f87171;
+  --color-primary2-500: #ef4444;
+  --color-primary2-600: #dc2626;
+  --color-primary2-700: #b91c1c;
+  --color-primary2-800: #991b1b;
+  --color-primary2-900: #7f1d1d;
+
+  /* Animación Heartbeat integrada al motor de Tailwind */
+  --animate-heartbeat: heartbeat 0.9s ease-in-out infinite;
+  
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(0.9); }
+    75% { transform: scale(1.05); }
+  }
+}
+
+/* 3. TUS ESTILOS BASE Y COMPONENTES */
 @layer base {
-
   @font-face {
     font-family: 'Chiron GoRound TC';
     src: url('../fonts/ChironGoRoundTC-VariableFont_wght.woff2') format('woff2-variations'),
-         url('../fonts/ChironGoRoundTC-VariableFont_wght.woff2') format('woff2');
+      url('../fonts/ChironGoRoundTC-VariableFont_wght.woff2') format('woff2');
     font-weight: 100 900;
     font-style: normal;
     font-display: swap;
+  }
+
+  @font-face {
+    font-family: Helvetica HeNeueCondensedBold;
+    src: url();
   }
 
   html {
@@ -25,152 +82,34 @@
     @apply bg-slate-100 text-slate-900 transition-colors duration-300;
   }
 
-  html.dark body {
-    @apply bg-slate-950 text-slate-100;
-  }
-
-  html.dark .card,
-  html.dark .card-grit-home {
-    @apply bg-slate-900 border-slate-700 text-slate-100;
-  }
-
-  html.dark .label-field,
-  html.dark .text-gray-700,
-  html.dark .text-gray-600,
-  html.dark .text-gray-500,
-  html.dark .text-gray-800 {
-    color: inherit;
-  }
-
-  html.dark .input-field,
-  html.dark input,
-  html.dark textarea,
-  html.dark select {
-    @apply bg-slate-800 border-slate-600 text-slate-100 placeholder-slate-400;
-  }
-
-  html.dark .input-field:focus,
-  html.dark input:focus,
-  html.dark textarea:focus,
-  html.dark select:focus {
-    @apply border-primary2-400 ring-2 ring-primary2-500;
-  }
-
-  html.dark .bg-gray-100 {
-    @apply bg-slate-950;
-  }
-
-  html.dark .bg-gray-200 {
-    @apply bg-slate-700;
-  }
-
-  html.dark .bg-red-100 {
-    @apply bg-red-950 text-red-200 border-red-800;
-  }
-
-  html.dark body.admin-shell {
-    @apply bg-slate-950 text-slate-100;
-  }
-
-  html.dark body.admin-shell .bg-white {
-    @apply bg-slate-900 text-slate-100;
-  }
-
-  html.dark body.admin-shell .border,
-  html.dark body.admin-shell .border-b,
-  html.dark body.admin-shell .border-t,
-  html.dark body.admin-shell .border-y {
-    border-color: rgb(51 65 85 / 1);
-  }
-
-  html.dark body.admin-shell .text-gray-800,
-  html.dark body.admin-shell .text-gray-700,
-  html.dark body.admin-shell .text-gray-600,
-  html.dark body.admin-shell .text-gray-500 {
-    color: rgb(226 232 240 / 1);
-  }
-
-  html.dark body.admin-shell .bg-gray-50 {
-    @apply bg-slate-800;
-  }
-
-  html.dark body.admin-shell table thead tr {
-    @apply bg-slate-800 text-slate-300;
-  }
-
-  html.dark body.admin-shell tbody tr:hover {
-    @apply bg-slate-800;
-  }
-
-  html.dark body.admin-shell tbody tr {
-    border-color: rgb(51 65 85 / 1);
-  }
-
-  html.dark body.admin-shell input,
-  html.dark body.admin-shell select,
-  html.dark body.admin-shell textarea {
-    @apply bg-slate-800 border-slate-600 text-slate-100 placeholder-slate-400;
-  }
-
-  html.dark body.admin-shell input:focus,
-  html.dark body.admin-shell select:focus,
-  html.dark body.admin-shell textarea:focus {
-    @apply border-primary2-400 ring-2 ring-primary2-500;
-  }
-
-  html.dark body.admin-shell .bg-gray-100 {
-    @apply bg-slate-950;
-  }
-
-  html.dark body.admin-shell .shadow-sm,
-  html.dark body.admin-shell .shadow-lg {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-  }
-
-  html.dark body.admin-shell .bg-green-50 {
-    @apply bg-emerald-950 text-emerald-200 border-emerald-800;
-  }
-
-  html.dark body.admin-shell .bg-red-50 {
-    @apply bg-red-950 text-red-200 border-red-800;
-  }
-
-  html.dark body.admin-shell .bg-yellow-50 {
-    @apply bg-amber-950 text-amber-200 border-amber-800;
-  }
-
-  html.dark body.admin-shell .bg-blue-100,
-  html.dark body.admin-shell .bg-cyan-100,
-  html.dark body.admin-shell .bg-rose-100,
-  html.dark body.admin-shell .bg-purple-100 {
-    @apply bg-slate-800;
-  }
-
-  html.dark body.admin-shell .text-blue-500,
-  html.dark body.admin-shell .text-blue-600,
-  html.dark body.admin-shell .text-indigo-500,
-  html.dark body.admin-shell .text-green-500,
-  html.dark body.admin-shell .text-red-500,
-  html.dark body.admin-shell .text-purple-500,
-  html.dark body.admin-shell .text-cyan-600,
-  html.dark body.admin-shell .text-rose-600 {
-    color: rgb(248 250 252 / 1);
-  }
-
   input[type='radio'] {
     accent-color: #ef4444;
-  }
-
-  html.dark input[type='radio'] {
-    accent-color: #f87171;
   }
 
   *::selection {
     @apply bg-primary2-500 text-white;
   }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: gray transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 9999px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
-/* Estilos personalizados */
 @layer components {
   .btn-primary {
     @apply bg-primary2-600 hover:bg-primary2-700 text-white font-semibold py-2 px-6 rounded-md transition duration-200;
@@ -193,36 +132,40 @@
   }
 
   .card-grit-home {
-    @apply rounded-xl border border-gray-300 shadow-lg hover:shadow-sm hover:border-gray-400 hover:border-2 bg-white p-2 hover:translate-x-1 hover:translate-y-1 transition-transform duration-300
+    @apply rounded-xl border border-gray-300 shadow-lg hover:shadow-sm hover:border-gray-400 hover:border-2 bg-white p-2 hover:translate-x-1 hover:translate-y-1 transition-transform duration-300;
   }
 
   .text-card {
-    @apply text-xl px-4 py-2 font-semibold
+    @apply text-xl px-4 py-2 font-semibold;
+  }
+
+  .style-card .style-overlay {
+    opacity: 0.60;
+    transition: opacity 0.35s ease;
+    @apply opacity-90 hover:contrast-150 hover:saturate-150 hover:opacity-100 transition-opacity duration-500;
+  }
+
+  .style-card:hover .style-overlay {
+    opacity: 0.24;
+  }
+
+  /* Mantengo tus reglas de Container Queries personalizadas por si tienes HTML viejo que dependa de ellas */
+  .card-bqto-container {
+    container-type: inline-size;
+  }
+
+  @container (min-width: 700px) {
+    .card-bqto-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 }
 
-/* Estilos adicionales */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
-
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(1.1);
-  }
-  50% {
-    transform: scale(0.9);
-  }
-  75% {
-    transform: scale(1.05);
-  }
-}
-
 
 input {
   width: 100%;
@@ -237,14 +180,139 @@ input {
   transition: box-shadow 0.2s, border-color 0.2s;
 }
 
-/* input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #f63bb8;
-  border-color: transparent;
+/* ===== DARK MODE STYLES (CSS PURO FUERA DE CAPAS) ===== */
+.dark body {
+  @apply bg-slate-950 text-slate-100;
 }
 
-html.dark input:focus,
-html.dark textarea:focus,
-html.dark select:focus {
-  box-shadow: 0 0 0 2px #60fa65;
-} */
+.dark .card,
+.dark .card-grit-home {
+  @apply bg-slate-900 border-slate-700 text-slate-100;
+}
+
+.dark .label-field,
+.dark .text-gray-700,
+.dark .text-gray-600,
+.dark .text-gray-500,
+.dark .text-gray-800 {
+  color: inherit;
+}
+
+.dark .input-field,
+.dark input,
+.dark textarea,
+.dark select {
+  @apply bg-slate-800 border-slate-600 text-slate-100 placeholder-slate-400;
+}
+
+.dark .input-field:focus,
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  @apply border-primary2-400 ring-2 ring-primary2-500;
+}
+
+.dark .bg-gray-100 {
+  @apply bg-slate-950;
+}
+
+.dark .bg-gray-200 {
+  @apply bg-slate-700;
+}
+
+.dark .bg-red-100 {
+  @apply bg-red-950 text-red-200 border-red-800;
+}
+
+.dark body.admin-shell {
+  @apply bg-slate-950 text-slate-100;
+}
+
+.dark body.admin-shell .bg-white {
+  @apply bg-slate-900 text-slate-100;
+}
+
+.dark body.admin-shell .border,
+.dark body.admin-shell .border-b,
+.dark body.admin-shell .border-t,
+.dark body.admin-shell .border-y {
+  border-color: rgb(51 65 85 / 1);
+}
+
+.dark body.admin-shell .text-gray-800,
+.dark body.admin-shell .text-gray-700,
+.dark body.admin-shell .text-gray-600,
+.dark body.admin-shell .text-gray-500 {
+  color: rgb(226 232 240 / 1);
+}
+
+.dark body.admin-shell .bg-gray-50 {
+  @apply bg-slate-800;
+}
+
+.dark body.admin-shell table thead tr {
+  @apply bg-slate-800 text-slate-300;
+}
+
+.dark body.admin-shell tbody tr:hover {
+  @apply bg-slate-800;
+}
+
+.dark body.admin-shell tbody tr {
+  border-color: rgb(51 65 85 / 1);
+}
+
+.dark body.admin-shell input,
+.dark body.admin-shell select,
+.dark body.admin-shell textarea {
+  @apply bg-slate-800 border-slate-600 text-slate-100 placeholder-slate-400;
+}
+
+.dark body.admin-shell input:focus,
+.dark body.admin-shell select:focus,
+.dark body.admin-shell textarea:focus {
+  @apply border-primary2-400 ring-2 ring-primary2-500;
+}
+
+.dark body.admin-shell .bg-gray-100 {
+  @apply bg-slate-950;
+}
+
+.dark body.admin-shell .shadow-sm,
+.dark body.admin-shell .shadow-lg {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+}
+
+.dark body.admin-shell .bg-green-50 {
+  @apply bg-emerald-950 text-emerald-200 border-emerald-800;
+}
+
+.dark body.admin-shell .bg-red-50 {
+  @apply bg-red-950 text-red-200 border-red-800;
+}
+
+.dark body.admin-shell .bg-yellow-50 {
+  @apply bg-amber-950 text-amber-200 border-amber-800;
+}
+
+.dark body.admin-shell .bg-blue-100,
+.dark body.admin-shell .bg-cyan-100,
+.dark body.admin-shell .bg-rose-100,
+.dark body.admin-shell .bg-purple-100 {
+  @apply bg-slate-800;
+}
+
+.dark body.admin-shell .text-blue-500,
+.dark body.admin-shell .text-blue-600,
+.dark body.admin-shell .text-indigo-500,
+.dark body.admin-shell .text-green-500,
+.dark body.admin-shell .text-red-500,
+.dark body.admin-shell .text-purple-500,
+.dark body.admin-shell .text-cyan-600,
+.dark body.admin-shell .text-rose-600 {
+  color: rgb(248 250 252 / 1);
+}
+
+.dark input[type='radio'] {
+  accent-color: #f87171;
+}
