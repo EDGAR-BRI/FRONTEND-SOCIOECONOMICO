@@ -43,10 +43,7 @@ class AdminController extends Controller
      */
     private function isAuthenticated()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        return !empty($_SESSION['auth_user']) && !empty($_SESSION['auth_token']);
+        return $this->hasValidAuthSession();
     }
 
     private function actorRolCodigo()

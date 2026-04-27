@@ -16,11 +16,7 @@ class AdminUsersController extends Controller
 
     private function checkAuth()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (empty($_SESSION['auth_user']) || empty($_SESSION['auth_token'])) {
+        if (!$this->hasValidAuthSession()) {
             $this->redirect(BASE_URL . '/login');
         }
 

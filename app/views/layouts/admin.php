@@ -122,8 +122,8 @@ if ($cssVersion !== null) {
 
     <!-- Sidebar -->
     <aside id="mobile-sidebar" class=" w-64 bg-white h-screen hidden fixed inset-y-0 left-0 z-50 md:grid md:grid-rows-[auto_1fr_auto] md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700">
-        <a class="p-6 border-b flex items-center gap-3 dark:border-slate-700" href="<?php echo BASE_URL; ?>/">
-            <img class="h-10 w-auto" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo" onerror="this.src='https://via.placeholder.com/40'">
+        <a class="border-b flex justify-center h-full items-center gap-3 dark:border-slate-700" href="<?php echo BASE_URL; ?>/">
+            <?php include APP_PATH . '/views/components/logo-short.php'; ?>
         </a>
         <nav class="p-4 space-y-2">
             <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>">
@@ -188,7 +188,7 @@ if ($cssVersion !== null) {
     <!-- Main Content wrapper -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 md:ml-64">
         <!-- Top Navbar -->
-        <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6 sticky top-0 z-20 shrink-0 transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700 dark:shadow-slate-950/40">
+        <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6 sticky top-0 z-20 shrink-0 transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700 h-24 border-b dark:shadow-slate-950/40">
             <div class="flex items-center h-10">
                 <button id="mobile-menu-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none" aria-controls="mobile-sidebar" aria-expanded="false">
                     <i class="fas fa-bars text-xl"></i>
@@ -223,10 +223,10 @@ if ($cssVersion !== null) {
                     <?php endif; ?>
                 </div>
                 <?php
-                    $themeToggleId = 'themeToggleAdmin';
-                    $themeToggleAriaLabel = 'Cambiar entre modo claro y oscuro';
-                    include __DIR__ . '/../components/theme-toggle.php';
-                    unset($themeToggleId, $themeToggleAriaLabel);
+                $themeToggleId = 'themeToggleAdmin';
+                $themeToggleAriaLabel = 'Cambiar entre modo claro y oscuro';
+                include __DIR__ . '/../components/theme-toggle.php';
+                unset($themeToggleId, $themeToggleAriaLabel);
                 ?>
             </div>
         </header>

@@ -7,6 +7,72 @@ namespace Core;
  */
 class Controller
 {
+    protected function ensureSessionStarted()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
+
+    protected function clearAuthSession()
+    {
+        $this->ensureSessionStarted();
+        unset($_SESSION['auth_user']);
+        unset($_SESSION['auth_token']);
+    }
+
+    protected function isSessionTokenExpired($token)
+    {
+        if (!is_string($token) || trim($token) === '') {
+            return true;
+        }
+
+        $parts = explode('.', $token);
+        if (count($parts) !== 3) {
+            return true;
+        }
+
+        $payloadB64 = strtr($parts[1], '-_', '+/');
+        $remainder = strlen($payloadB64) % 4;
+        if ($remainder > 0) {
+            $payloadB64 .= str_repeat('=', 4 - $remainder);
+        }
+
+        $payloadJson = base64_decode($payloadB64, true);
+        if ($payloadJson === false) {
+            return true;
+        }
+
+        $payload = json_decode($payloadJson, true);
+        if (!is_array($payload)) {
+            return true;
+        }
+
+        $exp = isset($payload['exp']) ? (int)$payload['exp'] : 0;
+        if ($exp <= 0) {
+            return true;
+        }
+
+        return time() >= $exp;
+    }
+
+    protected function hasValidAuthSession()
+    {
+        $this->ensureSessionStarted();
+
+        if (empty($_SESSION['auth_user']) || empty($_SESSION['auth_token'])) {
+            return false;
+        }
+
+        if ($this->isSessionTokenExpired((string)$_SESSION['auth_token'])) {
+            $this->clearAuthSession();
+            $_SESSION['login_error'] = 'Tu sesión expiró. Inicia sesión nuevamente.';
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Carga una vista
      * 
