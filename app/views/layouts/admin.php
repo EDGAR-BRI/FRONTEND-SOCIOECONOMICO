@@ -1,10 +1,5 @@
 <?php
-// para que se pueda mover el proyecto a cualquier carpeta y no se rompan las imagenes
-if (!isset($assetBase)) {
-    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
-    $basePath = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
-    $assetBase = $basePath . '/assets';
-}
+$assetBase = BASE_URL . '/assets';
 
 // Cache busting: avoid browser hard-cache when output.css changes.
 // Determine which CSS file exists in the current entrypoint's assets folder.
@@ -14,8 +9,7 @@ $cssCandidates = ['output.css'];
 $cssFile = 'output.css';
 $cssVersion = null;
 
-$scriptFilename = $_SERVER['SCRIPT_FILENAME'] ?? '';
-$assetsDiskDir = $scriptFilename ? (dirname($scriptFilename) . DIRECTORY_SEPARATOR . 'assets') : '';
+$assetsDiskDir = ROOT_PATH . DIRECTORY_SEPARATOR . 'assets';
 foreach ($cssCandidates as $candidate) {
     $candidateDiskPath = $assetsDiskDir
         ? ($assetsDiskDir . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . $candidate)

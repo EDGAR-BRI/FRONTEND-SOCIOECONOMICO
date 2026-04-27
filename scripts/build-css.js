@@ -66,14 +66,6 @@ function main() {
 
   const extraArgs = process.argv.slice(2);
   runTailwind(['-i', srcInput, '-o', outCss, ...extraArgs]);
-
-  // Sync /assets -> /public/assets so it works when serving from /public
-  const srcAssets = path.join(projectRoot, 'assets');
-  const destAssets = path.join(projectRoot, 'public', 'assets');
-
-  if (fs.existsSync(srcAssets)) {
-    copyDir(srcAssets, destAssets);
-  }
 }
 
 main();
