@@ -1,7 +1,11 @@
     <Header class=" flex items-center backdrop-blur-sm w-full z-50 justify-between gap-4 flex-wrap mb-6 px-8 py-4 rounded-lg  shadow-md">
-        <div class="h-1">
-            <?php include APP_PATH . '/views/components/logo.php'; ?>
-
+        <div id="Logo" class="group flex items-center justify-center gap-2 sm:gap-5 mt-auto mb-6 w-auto h-10 sm:h-16 md:h-20 overflow-hidden">
+            <div class="flex items-center justify-center leading-none [&>svg]:w-auto [&>svg]:h-8 sm:[&>svg]:h-12 md:[&>svg]:h-14 [&>svg]:block <?php echo $logoTextClass; ?>">
+                <?php include ROOT_PATH . '/assets/svg/IUJO.svg'; ?>
+            </div>
+            <div class="flex items-center justify-center leading-none [&>svg]:w-auto [&>svg]:h-10 sm:[&>svg]:h-16 md:[&>svg]:h-20 [&>svg]:block group-hover:animate-heartbeat origin-center will-change-transform">
+                <?php include ROOT_PATH . '/assets/svg/FyA-logo.svg'; ?>
+            </div>
         </div>
         <h1 class=" text-3xl font-bold">Bienvenido al sistema de registro socioeconómico</h1>
         <div class="flex justify-center items-center gap-4">
