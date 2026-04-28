@@ -74,7 +74,6 @@
               <div class="relative z-10 flex flex-col h-full w-full items-center">
                   <div class=" absolute top-4 left-4">
                       <?php $logoColorMode = 'white'; ?>
-                      <?php $sede = 'IUSF'; ?>
                       <?php include APP_PATH . '/views/components/logo.php'; ?>
                       <?php unset($sede, $logoColorMode); ?>
                   </div>
