@@ -1,17 +1,11 @@
-  <Header class=" flex items-center backdrop-blur-sm w-full z-50 justify-between gap-4 flex-wrap mb-6 px-8 py-2 rounded-lg  shadow-md">
-      <div class="w-full max-w-[10rem] sm:max-w-[12rem] md:max-w-[14rem] shrink-0">
-          <?php include APP_PATH . '/views/components/logo.php'; ?>
-
-      </div>
-      <h1 class=" text-3xl font-bold">Sistema de registro socioeconómico</h1>
-      <div class="flex justify-center items-center gap-4">
+  <aside class=" absolute right-0 top-0 flex z-50 p-4 gap-4 ">
+       <div class="flex justify-center items-center gap-4">
           <a href="admin">
               <i class="fa-solid text-xl fa-user-shield"></i>
           </a>
           <?php include __DIR__ . '/../components/theme-toggle.php'; ?>
       </div>
-
-  </Header>
+  </aside>
 
   <main class=" relative px-4 py-12 min-h-[80vh] r-0 l-0 mx-auto flex flex-col">
 

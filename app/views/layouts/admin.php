@@ -180,7 +180,7 @@ if ($cssVersion !== null) {
     <div id="mobile-sidebar-backdrop" class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"></div>
 
     <!-- Main Content wrapper -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 md:ml-64">
+    <main class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 md:ml-64">
         <!-- Top Navbar -->
         <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6 sticky top-0 z-20 shrink-0 transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700 h-24 border-b dark:shadow-slate-950/40">
             <div class="flex items-center h-10">
@@ -237,7 +237,7 @@ if ($cssVersion !== null) {
                 &copy; <?php echo date('Y'); ?> IUJO - Sistema de Administración Socioeconómico. Todos los derechos reservados.
             </footer>
         </main>
-    </div>
+    </main>
 
     <script>
         (function() {
