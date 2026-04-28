@@ -163,7 +163,7 @@ if ($cssVersion !== null) {
             <?php endif; ?>
         </nav>
         <!-- Form para Logout -->
-        <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="p-4 text-sm border-t mt-2 border-gray-200">
+        <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="p-4 text-sm border-t mt-2">
             <button type="submit" class="text-red-500 hover:text-red-700 font-medium flex items-center gap-2  ">
                 <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Cerrar Sesión</span>
             </button>
