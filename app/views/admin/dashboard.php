@@ -38,7 +38,7 @@
                 <i class="fas fa-file-invoice text-3xl"></i>
             </div>
             <div>
-                <p class="text-xs uppercase tracking-wide text-gray-500">Total Encuestas</p>
+                <p class="text-xs uppercase tracking-wide text-gray-1000">Total Encuestas</p>
                 <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $totalEncuestas !== null ? number_format($totalEncuestas, 0, ',', '.') : '—'; ?></h3>
             </div>
         </div>
@@ -50,7 +50,7 @@
                     <i class="fas fa-users text-3xl"></i>
                 </div>
                 <div>
-                    <p class="text-xs uppercase tracking-wide text-gray-500">Usuarios</p>
+                    <p class="text-xs uppercase tracking-wide text-gray-1000">Usuarios</p>
                     <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $totalUsuarios !== null ? number_format($totalUsuarios, 0, ',', '.') : '—'; ?></h3>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                 <i class="fas fa-calendar-alt text-3xl"></i>
             </div>
             <div>
-                <p class="text-xs uppercase tracking-wide text-gray-500">Última encuesta</p>
+                <p class="text-xs uppercase tracking-wide text-gray-1000">Última encuesta</p>
                 <h3 class="text-2xl font-bold text-gray-800 mt-1"><?php echo $ultimaEncuestaBonita !== null ? htmlspecialchars($ultimaEncuestaBonita) : '—'; ?></h3>
             </div>
         </div>
@@ -79,7 +79,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-gray-50 text-gray-600 text-sm">
+                    <tr class="bg-gray-100 text-gray-600 text-sm">
                         <th class="py-2 px-4 border-b">Estudiante</th>
                         <th class="py-2 px-4 border-b">Cédula</th>
                         <th class="py-2 px-4 border-b">Fecha</th>
@@ -89,7 +89,7 @@
                 <tbody class="text-sm">
                     <?php if (empty($recientes)): ?>
                         <tr>
-                            <td class="py-6 px-4 text-gray-500" colspan="4">No hay encuestas para mostrar.</td>
+                            <td class="py-6 px-4 text-gray-1000" colspan="4">No hay encuestas para mostrar.</td>
                         </tr>
                     <?php else: ?>
                         <?php foreach ($recientes as $row): ?>
@@ -103,7 +103,7 @@
                                     ? $estratoBadgeClasses[$estratoNum]
                                     : 'bg-gray-100 text-gray-700 border border-gray-300';
                             ?>
-                            <tr>
+                            <tr class="border-b hover:bg-gray-100 transition-colors">
                                 <td class="py-3 px-4 border-b"><?php echo htmlspecialchars($estudiante ?: '—'); ?></td>
                                 <td class="py-3 px-4 border-b"><?php echo htmlspecialchars($cedula ?: '—'); ?></td>
                                 <td class="py-3 px-4 border-b"><?php echo htmlspecialchars($fecha ?: '—'); ?></td>
@@ -141,51 +141,51 @@
             ?>
 
             <li>
-                <a href="<?php echo BASE_URL; ?>/admin/reportes/dashboard-general" class="flex items-center p-3 hover:bg-gray-50 rounded border transition">
+                <a href="<?php echo BASE_URL; ?>/admin/reportes/dashboard-general" class="flex items-center p-3 hover:bg-gray-100 rounded border transition">
                     <div class="p-2 bg-indigo-100 text-indigo-600 rounded mr-3"><i class="fas fa-chart-pie"></i></div>
                     <div>
                         <p class="font-medium text-gray-800">Dashboard general</p>
-                        <p class="text-xs text-gray-500">Resumen ejecutivo con KPIs y distribución general.</p>
+                        <p class="text-xs text-gray-1000">Resumen ejecutivo con KPIs y distribución general.</p>
                     </div>
                 </a>
             </li>
 
             <li>
-                <a href="<?php echo BASE_URL; ?>/admin/reportes/analisis-academico" class="flex items-center p-3 hover:bg-gray-50 rounded border transition">
+                <a href="<?php echo BASE_URL; ?>/admin/reportes/analisis-academico" class="flex items-center p-3 hover:bg-gray-100 rounded border transition">
                     <div class="p-2 bg-cyan-100 text-cyan-600 rounded mr-3"><i class="fas fa-layer-group"></i></div>
                     <div>
                         <p class="font-medium text-gray-800">Análisis académico</p>
-                        <p class="text-xs text-gray-500">Composición porcentual por carrera y estrato.</p>
+                        <p class="text-xs text-gray-1000">Composición porcentual por carrera y estrato.</p>
                     </div>
                 </a>
             </li>
 
             <li>
-                <a href="<?php echo BASE_URL; ?>/admin/reportes/demografico-vulnerabilidad" class="flex items-center p-3 hover:bg-gray-50 rounded border transition">
+                <a href="<?php echo BASE_URL; ?>/admin/reportes/demografico-vulnerabilidad" class="flex items-center p-3 hover:bg-gray-100 rounded border transition">
                     <div class="p-2 bg-rose-100 text-rose-600 rounded mr-3"><i class="fas fa-table"></i></div>
                     <div>
                         <p class="font-medium text-gray-800">Perfil social</p>
-                        <p class="text-xs text-gray-500">Mapa de calor y comparación demográfica por estrato.</p>
+                        <p class="text-xs text-gray-1000">Mapa de calor y comparación demográfica por estrato.</p>
                     </div>
                 </a>
             </li>
 
             <?php if ($dashIsSuperAdmin): ?>
                 <li>
-                    <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center p-3 hover:bg-gray-50 rounded border transition">
+                    <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center p-3 hover:bg-gray-100 rounded border transition">
                         <div class="p-2 bg-blue-100 text-blue-500 rounded mr-3"><i class="fas fa-user-plus"></i></div>
                         <div>
                             <p class="font-medium text-gray-800">Añadir nuevo usuario</p>
-                            <p class="text-xs text-gray-500">Gestionar permisos de acceso al dashboard.</p>
+                            <p class="text-xs text-gray-1000">Gestionar permisos de acceso al dashboard.</p>
                         </div>
                     </a>
                 </li>
                 <li>
-                    <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center p-3 hover:bg-gray-50 rounded border transition">
+                    <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center p-3 hover:bg-gray-100 rounded border transition">
                         <div class="p-2 bg-purple-100 text-purple-500 rounded mr-3"><i class="fas fa-edit"></i></div>
                         <div>
                             <p class="font-medium text-gray-800">Modificar Catálogos</p>
-                            <p class="text-xs text-gray-500">Añade o edita las opciones del formulario socioeconómico.</p>
+                            <p class="text-xs text-gray-1000">Añade o edita las opciones del formulario socioeconómico.</p>
                         </div>
                     </a>
                 </li>
