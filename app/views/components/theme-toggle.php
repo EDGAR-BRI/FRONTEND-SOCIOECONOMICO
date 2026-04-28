@@ -84,6 +84,12 @@ $toggleAriaLabel = isset($themeToggleAriaLabel) && is_string($themeToggleAriaLab
         });
     });
 
+    window.addEventListener('storage', (event) => {
+        if (event.key === storageKey && event.newValue) {
+            applyTheme(event.newValue, false);
+        }
+    });
+
     if (!hasValidSavedTheme() && systemThemeQuery) {
         const syncWithSystemTheme = (event) => {
             applyTheme(event.matches ? 'dark' : 'light', false);

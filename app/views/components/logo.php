@@ -4,7 +4,7 @@ $logoTextClass = $logoColorMode === 'white' ? 'text-white' : '';
 $logoSede = isset($sede) && is_string($sede) ? strtoupper(trim($sede)) : '';
 $isIUSF = $logoSede === 'IUSF';
 ?>
-<div id="Logo" class="group flex items-center justify-center gap-5 mt-auto w-auto h-20 ">
+<div id="Logo" class="group flex items-center justify-center gap-1 @[250px]:gap-3  w-auto h-20 ">
     <div class="flex items-center justify-center leading-none [&>svg]:w-auto [&>svg]:h-18  [&>svg]:block @[200px]:[&>svg]:h-10 @[400px]:[&>svg]:h-14 <?php echo $logoTextClass; ?>">
         <?php include ROOT_PATH . '/assets/svg/' . ($isIUSF ? 'IUSF.svg' : 'IUJO.svg'); ?>
     </div>

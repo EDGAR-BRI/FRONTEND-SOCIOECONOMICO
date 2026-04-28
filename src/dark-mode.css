@@ -87,9 +87,10 @@
   color: rgb(241 245 249);
 }
 
-.dark body.admin-shell .bg-white {
+.dark body.admin-shell .admin-surface {
   background-color: rgb(15 23 42);
   color: rgb(241 245 249);
+  border-color: rgb(51 65 85);
 }
 
 .dark body.admin-shell .border,

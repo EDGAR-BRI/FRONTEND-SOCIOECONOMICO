@@ -14,8 +14,6 @@
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-700: oklch(50.5% 0.213 27.518);
     --color-red-800: oklch(44.4% 0.177 26.899);
-    --color-red-900: oklch(39.6% 0.141 25.723);
-    --color-red-950: oklch(25.8% 0.092 26.042);
     --color-orange-500: oklch(70.5% 0.213 47.604);
     --color-yellow-50: oklch(98.7% 0.026 102.212);
     --color-yellow-100: oklch(97.3% 0.071 103.193);
@@ -572,6 +570,9 @@
   .w-24 {
     width: calc(var(--spacing) * 24);
   }
+  .w-32 {
+    width: calc(var(--spacing) * 32);
+  }
   .w-64 {
     width: calc(var(--spacing) * 64);
   }
@@ -592,6 +593,12 @@
   }
   .max-w-6xl {
     max-width: var(--container-6xl);
+  }
+  .max-w-55 {
+    max-width: calc(var(--spacing) * 55);
+  }
+  .max-w-56 {
+    max-width: calc(var(--spacing) * 56);
   }
   .max-w-120 {
     max-width: calc(var(--spacing) * 120);
@@ -1040,6 +1047,12 @@
   .p-8 {
     padding: calc(var(--spacing) * 8);
   }
+  .px-1 {
+    padding-inline: calc(var(--spacing) * 1);
+  }
+  .px-1\.5 {
+    padding-inline: calc(var(--spacing) * 1.5);
+  }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
   }
@@ -1057,6 +1070,9 @@
   }
   .py-1 {
     padding-block: calc(var(--spacing) * 1);
+  }
+  .py-1\.5 {
+    padding-block: calc(var(--spacing) * 1.5);
   }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
@@ -1614,6 +1630,13 @@
       }
     }
   }
+  .hover\:bg-gray-100 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-100);
+      }
+    }
+  }
   .hover\:bg-gray-500 {
     &:hover {
       @media (hover: hover) {
@@ -1983,6 +2006,16 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
+  .\@\[200px\]\:gap-3 {
+    @container (width >= 200px) {
+      gap: calc(var(--spacing) * 3);
+    }
+  }
+  .\@\[250px\]\:gap-3 {
+    @container (width >= 250px) {
+      gap: calc(var(--spacing) * 3);
+    }
+  }
   .\@\[500px\]\:hidden {
     @container (width >= 500px) {
       display: none;
@@ -2003,24 +2036,19 @@
       object-position: top;
     }
   }
-  .dark\:border-red-900 {
-    @media (prefers-color-scheme: dark) {
-      border-color: var(--color-red-900);
-    }
-  }
   .dark\:border-slate-700 {
     @media (prefers-color-scheme: dark) {
       border-color: var(--color-slate-700);
     }
   }
+  .dark\:bg-gray-800 {
+    @media (prefers-color-scheme: dark) {
+      background-color: var(--color-gray-800);
+    }
+  }
   .dark\:bg-indigo-600 {
     @media (prefers-color-scheme: dark) {
       background-color: var(--color-indigo-600);
-    }
-  }
-  .dark\:bg-red-950 {
-    @media (prefers-color-scheme: dark) {
-      background-color: var(--color-red-950);
     }
   }
   .dark\:bg-slate-800 {
@@ -2038,14 +2066,14 @@
       background-color: var(--color-slate-950);
     }
   }
+  .dark\:text-gray-200 {
+    @media (prefers-color-scheme: dark) {
+      color: var(--color-gray-200);
+    }
+  }
   .dark\:text-primary-300 {
     @media (prefers-color-scheme: dark) {
       color: var(--color-primary-300);
-    }
-  }
-  .dark\:text-red-200 {
-    @media (prefers-color-scheme: dark) {
-      color: var(--color-red-200);
     }
   }
   .dark\:text-red-300 {
@@ -2056,11 +2084,6 @@
   .dark\:text-slate-100 {
     @media (prefers-color-scheme: dark) {
       color: var(--color-slate-100);
-    }
-  }
-  .dark\:text-slate-200 {
-    @media (prefers-color-scheme: dark) {
-      color: var(--color-slate-200);
     }
   }
   .dark\:text-slate-300 {
@@ -2083,15 +2106,6 @@
       --tw-shadow-color: color-mix(in srgb, oklch(12.9% 0.042 264.695) 40%, transparent);
       @supports (color: color-mix(in lab, red, red)) {
         --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-slate-950) 40%, transparent) var(--tw-shadow-alpha), transparent);
-      }
-    }
-  }
-  .dark\:hover\:bg-indigo-700 {
-    @media (prefers-color-scheme: dark) {
-      &:hover {
-        @media (hover: hover) {
-          background-color: var(--color-indigo-700);
-        }
       }
     }
   }
@@ -2264,9 +2278,10 @@
   background-color: rgb(2 6 23);
   color: rgb(241 245 249);
 }
-.dark body.admin-shell .bg-white {
+.dark body.admin-shell .admin-surface {
   background-color: rgb(15 23 42);
   color: rgb(241 245 249);
+  border-color: rgb(51 65 85);
 }
 .dark body.admin-shell .border, .dark body.admin-shell .border-b, .dark body.admin-shell .border-t, .dark body.admin-shell .border-y {
   border-color: rgb(51 65 85);

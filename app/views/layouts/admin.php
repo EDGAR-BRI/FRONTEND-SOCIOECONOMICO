@@ -36,16 +36,11 @@ if ($cssVersion !== null) {
     <title><?php echo isset($title) ? htmlspecialchars($title) : 'Panel de Administración'; ?></title>
     <link rel="icon" href="<?php echo $assetBase; ?>/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="<?php echo $assetBase; ?>/favicon.ico" type="image/x-icon">
-    <?php
-    $themeComponentMode = 'bootstrap';
-    include __DIR__ . '/../components/theme-toggle.php';
-    unset($themeComponentMode);
-    ?>
     <link rel="stylesheet" href="<?php echo $cssHref; ?>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
-<body class="admin-shell bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal flex h-screen overflow-hidden transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+<body class="admin-shell font-sans leading-normal tracking-normal flex h-screen overflow-hidden ">
 
     <?php
     if (session_status() === PHP_SESSION_NONE) {
@@ -113,27 +108,26 @@ if ($cssVersion !== null) {
 
     $isReportesSection = ($current_page === 'reportes' || strpos($current_page, 'reportes_') === 0);
     ?>
-
     <!-- Sidebar -->
-    <aside id="mobile-sidebar" class=" w-64 bg-white h-screen hidden fixed inset-y-0 left-0 z-50 md:grid md:grid-rows-[auto_1fr_auto] md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700">
-        <a class="border-b flex justify-center h-full items-center gap-3 dark:border-slate-700" href="<?php echo BASE_URL; ?>/">
-            <?php include APP_PATH . '/views/components/logo-short.php'; ?>
+    <aside id="mobile-sidebar " class="bg-white w-64 h-screen text-gray-800 hidden fixed inset-y-0 left-0 z-50 md:grid md:grid-rows-[auto_1fr_auto] md:fixed md:inset-y-0 md:left-0 md:z-30 overflow-y-auto">
+        <a class="flex border-b justify-center h-24 w-full px-1.5 items-center @container"  href="<?php echo BASE_URL; ?>/">
+            <?php include APP_PATH . '/views/components/logo.php'; ?>
         </a>
         <nav class="p-4 space-y-2">
-            <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>">
+            <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
                 <i class="fas fa-home w-5 text-center"></i> Panel Principal
             </a>
             <div class="space-y-1" data-dropdown data-open="<?php echo $isReportesSection ? '1' : '0'; ?>">
                 <button
                     type="button"
-                    class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo $isReportesSection ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>"
+                    class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo $isReportesSection ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-100'; ?>"
                     aria-expanded="<?php echo $isReportesSection ? 'true' : 'false'; ?>"
                     data-dropdown-btn>
                     <span class="flex items-center gap-3">
                         <i class="fas fa-chart-pie w-5 text-center"></i>
                         <span>Reportes</span>
                     </span>
-                    <i class="fas fa-chevron-down text-xs transition-transform duration-200 <?php echo $isReportesSection ? 'rotate-180' : ''; ?>" data-dropdown-icon></i>
+                    <i class="fas fa-chevron-down text-xs transition-transform duration-200 <?php echo $isReportesSection ? 'rotate-180' : ''; ?> text-gray-500 " data-dropdown-icon></i>
                 </button>
 
                 <div class="pl-6" data-dropdown-menu>
@@ -146,7 +140,7 @@ if ($cssVersion !== null) {
                         ?>
                             <a
                                 href="<?php echo htmlspecialchars($itemHref); ?>"
-                                class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-colors duration-200 <?php echo $isActive ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>">
+                                class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-colors duration-200 <?php echo $isActive ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
                                 <span class="w-5 text-center">•</span>
                                 <span><?php echo htmlspecialchars($itemLabel); ?></span>
                             </a>
@@ -155,22 +149,22 @@ if ($cssVersion !== null) {
                 </div>
             </div>
             <?php if ($isSuperAdmin): ?>
-                <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'users') ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>">
+                <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'users') ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100'; ?>">
                     <i class="fas fa-users w-5 text-center"></i> Usuarios
                 </a>
             <?php endif; ?>
-            <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'responses') ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>">
+            <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'responses') ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
                 <i class="fas fa-file-alt w-5 text-center"></i> Respuestas
             </a>
             <?php if ($isSuperAdmin): ?>
-                <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium dark:bg-slate-800 dark:text-primary-300' : 'text-gray-600 hover:bg-gray-50 dark:text-slate-300 dark:hover:bg-slate-800'; ?>">
+                <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100  '; ?>">
                     <i class="fas fa-list w-5 text-center"></i> Configuración
                 </a>
             <?php endif; ?>
         </nav>
         <!-- Form para Logout -->
-        <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="p-4 text-sm border-t mt-2 dark:border-slate-700">
-            <button type="submit" class="text-red-500 hover:text-red-700 font-medium flex items-center gap-2 dark:text-red-300 dark:hover:text-red-200">
+        <form action="<?php echo BASE_URL; ?>/logout" method="POST" class="p-4 text-sm border-t mt-2 border-gray-200">
+            <button type="submit" class="text-red-500 hover:text-red-700 font-medium flex items-center gap-2  ">
                 <i class="fas fa-sign-out-alt"></i> <span class="hidden sm:inline">Cerrar Sesión</span>
             </button>
         </form>
@@ -182,12 +176,12 @@ if ($cssVersion !== null) {
     <!-- Main Content wrapper -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 md:ml-64">
         <!-- Top Navbar -->
-        <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6 sticky top-0 z-20 shrink-0 transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700 h-24 border-b dark:shadow-slate-950/40">
+        <header class="bg-white shadow-sm flex items-center justify-between px-8 py-6 sticky top-0 z-20 shrink-0 transition-colors duration-300  h-24 border-b ">
             <div class="flex items-center h-10">
                 <button id="mobile-menu-btn" class="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none" aria-controls="mobile-sidebar" aria-expanded="false">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
-                <h2 class="text-xl font-semibold text-gray-800 ml-4 md:ml-0 dark:text-slate-100">
+                <h2 class="text-xl font-semibold text-gray-800 ml-4 md:ml-0">
                     <?php
                     $titles = [
                         'dashboard' => 'Panel Principal',
@@ -206,12 +200,12 @@ if ($cssVersion !== null) {
 
             <div class="flex items-center gap-4">
 
-                <div class="text-right leading-tight max-w-[14rem]">
-                    <div class="text-sm font-semibold text-gray-700 truncate dark:text-slate-100" title="<?php echo htmlspecialchars((string)$headerUserName); ?>">
+                <div class="text-right leading-tight max-w-56">
+                    <div class="text-sm font-semibold text-gray-700 truncate " title="<?php echo htmlspecialchars((string)$headerUserName); ?>">
                         <?php echo htmlspecialchars((string)$headerUserName); ?>
                     </div>
                     <?php if ($headerUserMeta !== ''): ?>
-                        <div class="text-xs text-gray-500 truncate dark:text-slate-400" title="<?php echo htmlspecialchars((string)$headerUserMeta); ?>">
+                        <div class="text-xs text-gray-500 truncate " title="<?php echo htmlspecialchars((string)$headerUserMeta); ?>">
                             <?php echo htmlspecialchars((string)$headerUserMeta); ?>
                         </div>
                     <?php endif; ?>
@@ -233,9 +227,9 @@ if ($cssVersion !== null) {
             </div>
 
             <!-- Footer -->
-            <footer class="bg-white border-t py-4 text-center text-sm text-gray-500 transition-colors duration-300 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-400">
+            <!-- <footer class="bg-white border-t py-4 text-center text-sm text-gray-500 transition-colors duration-300 ">
                 &copy; <?php echo date('Y'); ?> IUJO - Sistema de Administración Socioeconómico. Todos los derechos reservados.
-            </footer>
+            </footer> -->
         </main>
     </main>
 
