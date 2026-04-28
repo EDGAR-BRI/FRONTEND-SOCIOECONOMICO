@@ -114,13 +114,13 @@ if ($cssVersion !== null) {
             <?php include APP_PATH . '/views/components/logo.php'; ?>
         </a>
         <nav class="p-4 space-y-2">
-            <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'dashboard') ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
+            <a href="<?php echo BASE_URL; ?>/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'dashboard') ? 'bg-primary2-50 text-primary2-600 font-medium ' : 'hover:text-gray-800 hover:bg-gray-100 '; ?>">
                 <i class="fas fa-home w-5 text-center"></i> Panel Principal
             </a>
             <div class="space-y-1" data-dropdown data-open="<?php echo $isReportesSection ? '1' : '0'; ?>">
                 <button
                     type="button"
-                    class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo $isReportesSection ? 'bg-primary-50 text-primary-600 font-medium' : 'text-gray-700 hover:bg-gray-100'; ?>"
+                    class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo $isReportesSection ? 'bg-primary2-50 text-primary2-600 font-medium' : 'text-gray-700 hover:bg-gray-100'; ?>"
                     aria-expanded="<?php echo $isReportesSection ? 'true' : 'false'; ?>"
                     data-dropdown-btn>
                     <span class="flex items-center gap-3">
@@ -140,7 +140,7 @@ if ($cssVersion !== null) {
                         ?>
                             <a
                                 href="<?php echo htmlspecialchars($itemHref); ?>"
-                                class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-colors duration-200 <?php echo $isActive ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
+                                class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-colors duration-200 <?php echo $isActive ? 'bg-primary2-50 text-primary2-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
                                 <span class="w-5 text-center">•</span>
                                 <span><?php echo htmlspecialchars($itemLabel); ?></span>
                             </a>
@@ -149,15 +149,15 @@ if ($cssVersion !== null) {
                 </div>
             </div>
             <?php if ($isSuperAdmin): ?>
-                <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'users') ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100'; ?>">
+                <a href="<?php echo BASE_URL; ?>/admin/usuarios" class="flex items-center gap-3 px-4 py-3 rounded-lg <?php echo ($current_page === 'users') ? 'bg-primary2-50 text-primary2-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
                     <i class="fas fa-users w-5 text-center"></i> Usuarios
                 </a>
             <?php endif; ?>
-            <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'responses') ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
+            <a href="<?php echo BASE_URL; ?>/admin/respuestas" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'responses') ? 'bg-primary2-50 text-primary2-600 font-medium ' : 'text-gray-700 hover:bg-gray-100 '; ?>">
                 <i class="fas fa-file-alt w-5 text-center"></i> Respuestas
             </a>
             <?php if ($isSuperAdmin): ?>
-                <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'catalogs') ? 'bg-primary-50 text-primary-600 font-medium ' : 'text-gray-700 hover:bg-gray-100  '; ?>">
+                <a href="<?php echo BASE_URL; ?>/admin/catalogos" class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 <?php echo ($current_page === 'catalogs') ? 'bg-primary2-50 text-primary2-600 font-medium ' : 'text-gray-700 hover:bg-gray-100  '; ?>">
                     <i class="fas fa-list w-5 text-center"></i> Configuración
                 </a>
             <?php endif; ?>
