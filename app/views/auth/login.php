@@ -1,21 +1,14 @@
-<div class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-8 overflow-hidden">
-    <div class="absolute top-12 right-20 hidden lg:grid grid-cols-6 gap-4 opacity-45" aria-hidden="true">
-        <?php for ($i = 0; $i < 36; $i++): ?>
-            <span class="w-1.5 h-1.5 rounded-full bg-indigo-300"></span>
-        <?php endfor; ?>
-    </div>
+<canvas id="bg-canvas"></canvas>
 
-    <div class="absolute bottom-12 left-16 hidden lg:grid grid-cols-6 gap-4 opacity-45" aria-hidden="true">
-        <?php for ($i = 0; $i < 36; $i++): ?>
-            <span class="w-1.5 h-1.5 rounded-full bg-indigo-300"></span>
-        <?php endfor; ?>
-    </div>
+<main class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-8 overflow-hidden">
 
-    <div class="w-full max-w-[480px] rounded-xl bg-white shadow-md p-8 sm:p-10 relative z-10">
+    <div class="w-full max-w-120 rounded-xl bg-white dark:bg-slate-800 dark:text-slate-100 shadow-md p-8 sm:p-10 relative z-10">
         <div class="mb-8">
-            <img class="h-16 w-auto mb-6" src="<?php echo BASE_URL; ?>/assets/iujo.png" alt="IUJO Logo">
-            <h1 class="text-4xl leading-tight text-slate-700 font-medium mb-2">Bienvenido al socio economico! 👋</h1>
-            <p class="text-slate-500 text-lg">Por favor, coloca tu usuario y contraseña</p>
+            <div class="w-full mb-3 @container">
+                <?php include APP_PATH . '/views/components/logo.php'; ?>
+            </div>
+            <h1 class="text-4xl leading-tight text-slate-700 dark:text-slate-100 font-medium mb-2">Login Socio Economico </h1>
+            <p class="text-slate-500 dark:text-slate-300 text-lg">Por favor, coloca tu usuario y contraseña</p>
         </div>
 
         <?php if (!empty($error)): ?>
@@ -52,7 +45,7 @@
                     <button
                         id="togglePassword"
                         type="button"
-                        class="absolute inset-y-0 right-0 px-4 text-slate-500 hover:text-slate-700"
+                        class="absolute inset-y-0 right-0 px-4 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         aria-label="Mostrar u ocultar contraseña">
                         <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
@@ -68,12 +61,12 @@
                 </div>
             </div>
 
-            <button type="submit" class="w-full rounded-md bg-indigo-500 hover:bg-indigo-600 text-white text-xl font-semibold py-2.5 transition duration-200 shadow-sm">
+            <button type="submit" class="w-full rounded-md bg-indigo-500 dark:bg-indigo-600 hover:bg-indigo-600 text-white text-xl font-semibold py-2.5 transition duration-200 shadow-sm">
                 Login
             </button>
         </form>
     </div>
-</div>
+</main>
 
 <script>
     (function() {
@@ -94,3 +87,5 @@
         });
     })();
 </script>
+
+<script src="<?php echo BASE_URL; ?>/assets/js/login-particles.js"></script>
