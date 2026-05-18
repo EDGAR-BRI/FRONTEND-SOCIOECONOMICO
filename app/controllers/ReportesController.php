@@ -152,10 +152,13 @@ class ReportesController extends Controller
         if ($carreraId !== null && $carreraId > 0) {
             $apiFilters['carrera_id'] = $carreraId;
         }
-
+        
+        // echo 'ReportesController::buildViewContext - API Filters: ' . json_encode($apiFilters) . "\n";
+        
         $filtrosResponse = $this->reportesService->getFiltros($apiFilters);
+        //echo 'ReportesController::buildViewContext - Filtros Response: ' . json_encode($filtrosResponse) . "\n";
         $filtrosPayload = $this->unwrapPayload($filtrosResponse);
-
+        
         return [
             'is_super_admin' => $isSuperAdmin,
             'filtros' => [
