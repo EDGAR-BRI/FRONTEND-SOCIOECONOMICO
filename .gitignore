@@ -16,3 +16,7 @@ Thumbs.db
 
 # Archivos de configuración local
 config.local.php
+
+
+.agents
+skills-lock.json
